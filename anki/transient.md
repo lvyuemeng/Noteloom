@@ -1,4 +1,4 @@
-![alt text](image.png)
+![alt text](/assets/transient2.png)
 
 deduce $i_2(t)$
 
@@ -8,10 +8,10 @@ plugin into
 
 $i(t) = 0 \quad t<0$
 $i(t) = i_1(t) \quad 0 < t < t_0$
-$i(t) = i_1(t) + i_2(t) = \frac{V_0}{R}e^{-Rt/L}(e^{Rt_0/L} - 1) \quad t > t_0 $
+$i(t) = i_1(t) + i_2(t-t_0) = \frac{V_0}{R}e^{-Rt/L}(e^{Rt_0/L} - 1) \quad t > t_0 $
 
 <figure>
-  <img src="image-1.png" alt="alt text" width="70%" height="auto">
+  <img src="/assets/transient1.png" alt="alt text" width="70%" height="auto">
 </figure>
 
 $$
@@ -25,7 +25,7 @@ v_c &= 20 + 80 e^{-t/1.2}
 \end{align}
 $$
 
-![alt text](Screenshot_20250322_094901_edit_653717308000105.jpg)
+![alt text](/assets/transient3.jpg)
 before:
 $$
 \begin{align}

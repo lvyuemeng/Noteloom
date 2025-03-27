@@ -32,7 +32,7 @@ if in spherical coordinate($\sigma$ is for many image charge with $r_{outer}$ ou
 $$
 \phi_{boundary} = \sum_{\sigma}\sum_l(A_l r^l+B_l r^{-(l+1)})P_l(cos\theta) \\
  or \\
-\phi_{boundary} = \delta(r-r_{outer}) \\
+\nabla^2\phi_{boundary} = \delta(r-r_{outer}) \\
 \phi_{boundary} +\phi_{inner}|_s = f(r)
 $$
 
