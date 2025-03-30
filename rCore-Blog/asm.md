@@ -100,7 +100,7 @@ Example:
 
 - `.quad`: store 64-bit int or addr in memory layout.(like `.quad 7`)
 
-- `.incbin`: embed binary file in memory layout.(like ".incbin "../user/build/bin/ch2b_bad_address.bin")
+- `.incbin`: embed binary file in memory layout.(like `".incbin "../user/build/bin/ch2b_bad_address.bin"`)
 
 In RISC-V, stacks grow from higher addr to lower addr(push data will decrease `sp`), so **syntax** will be logic consistent as the **memory layout**.
 
@@ -119,8 +119,6 @@ boot_stack_lower_bound:  # Label for the start of the stack space
 .globl boot_stack_top
 boot_stack_top:          # Label for the top of the stack
 ```
-
-### Practice
 
 
 
