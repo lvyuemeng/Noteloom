@@ -1,4 +1,6 @@
-## Lab4
+## Chapter 4
+
+### Inroduction
 
 We don't want a fixed physical addr for allocation, rather, we want a unified abstract interface for dynamic memory layout for app storage. We call it **Virtual Address**
 
@@ -9,6 +11,10 @@ Efficiency: Every app can coexist in same time without demand of reading outer p
 We need **MMU**(Memory Management Unit) to achieve **Address Translation** for interview from virtual to physical.
 
 Different designs occur.
+
+---
+
+### Design
 
 ### Segment Design
 
@@ -174,6 +180,8 @@ fn push(&mut self, mut map_area: MapArea, data: Option<&[u8]>) {
 ```
 
 In Each `MapArea` allocated for some key-value for virtual-physical addr, it will allocate the same for `PageTable` for **Frame**.
+
+---
 
 
 ## Allocation Space

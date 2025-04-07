@@ -1,4 +1,4 @@
-## Lab3
+## Chapter 3
 
 ### Introduction
 

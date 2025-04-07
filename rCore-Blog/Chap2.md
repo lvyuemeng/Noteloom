@@ -1,4 +1,4 @@
-## Lab2
+## Chapter 2
 
 ### Introduction 
 
