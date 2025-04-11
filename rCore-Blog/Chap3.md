@@ -6,6 +6,8 @@ We need to place multiple app to multiple memory address to run app in cycle. Ra
 
 First We want to place each app to each isolated addr, due to our kernel restriction, we need to load it with `build.py`.
 
+---
+
 ### Task
 
 Task: a workflow process

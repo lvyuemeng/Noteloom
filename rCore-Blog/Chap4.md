@@ -1,6 +1,6 @@
 ## Chapter 4
 
-### Inroduction
+### Introduction
 
 We don't want a fixed physical addr for allocation, rather, we want a unified abstract interface for dynamic memory layout for app storage. We call it **Virtual Address**
 

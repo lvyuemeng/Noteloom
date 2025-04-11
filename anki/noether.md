@@ -28,7 +28,7 @@ $$
 
 Notice that:
 $$
-\partial_\mu D\phi^i(x) = \partial_\mu \delta\phi^i(x) + \partial_\mu\partial_v \phi^i(x)\delta x^v
+\partial_\mu D\phi^i(x) = \partial_\mu \delta\phi^i(x) + \partial_\mu(\partial_v \phi^i(x)\delta x^v)
 $$
 
 So:
@@ -58,6 +58,7 @@ and results:
 $$
 T^\mu_v a^v = (\frac{\partial \mathcal{L}}{\partial(\partial_\mu \phi^i)}\partial_v\phi^i - \mathcal{L}\delta^\mu_v)a^v
 $$
+
 ### Discrete
 
 Then $\phi^i$ would be $q^i$, and the coordinates $x^\mu$ would be restricted to $t$, then each partial for $\mu$ becomes for $t$, sum each coordinates, finally as $T^0_0 = H$.
