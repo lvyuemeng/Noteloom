@@ -276,7 +276,7 @@ unsafe fn second() -> ! {
 
 ### Conditional Variable
 
-If we want one thread owns the ability of release lock for others, we need the `CondVar`. We have to dispatch operation in `wait_queue`, if one thread `signal` others, it will pop out a thread, which means trigger it **You are free!**. And if one thread `wait`, it will push itself to queue to **wait**. We won't encapsulate condition check to `CondVar` because it should leave to user to design it, we only leave out interface for user.
+If we want one thread owns the ability of release lock for others, we need the `CondVar`. We have to dispatch operation in `wait_queue`, if one thread `signal` others, it will pop out a thread, which means trigger it **You are free!**. And if one thread `wait`, it will push itself to queue to **wait**, The unlock and lock is important because in wait operation, it allow other thread to modify **condition**, but it should be after of the push operation, in case that the signal is before the push, then we can never receive the signal again! We won't encapsulate condition check to `CondVar` because it should leave to user to design it, we only leave out interface for user.
 
 ```rust
 pub fn signal(&self) {
@@ -285,13 +285,13 @@ pub fn signal(&self) {
 		add_task(task);
 	}
 }
-pub fn wait(&self, mutex:Arc<dyn Mutex>) {
-	mutex.unlock();
-	let mut inner = self.inner.exclusive_access();
-	inner.wait_queue.push_back(current_task().unwrap());
-	drop(inner);
-	block_current_and_run_next();
-	mutex.lock();
+pub fn wait(&self, mutex: Arc<dyn Mutex>) {
+    let mut inner = self.inner.exclusive_access();
+    inner.wait_queue.push_back(current_task().unwrap());
+    drop(inner);
+    mutex.unlock();                 
+    block_current_and_run_next();
+    mutex.lock();
 }
 ```
 

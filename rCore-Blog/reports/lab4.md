@@ -16,6 +16,35 @@ Thanks to:
 
 Root inode is denoted as the root dir of our file system. If part of content(`DirEntry`) lost, it lost ability to route to the correct data.
 
+## Lab 5
+
+Thanks to:
+- AI: DeepSeek(Thanks to give a finer design of shared message queue for each process)
+
+### Q1
+
+`|` is used to pipe output as input.
+
+For example: `cat file.txt | wc -l`
+
+However, we could directly use `wc <filename> -l` to get line counts.
+
+---
+
+How to design a new structure to build communication for each process?
+
+Introduce a new central queue. Each process will send each message to the queue rather to each other.
+
+**Workflow**:
+
+- process will send its message and target `pid` to the queue.
+- queue identify message and write to buffer of each process.
+- process will read its buffer.
+
+We need to design atomic operation for each process and maximally reduce possible collision.
+So, handling loop will send data to each process while a identification atomic boolean is false.(However I don't know how to implement this concretely, which may be in next chapter :( )
+Or **Sharding**, divide to multiple sub queue; **Batching**, do multiple operations in lock or one atomic operation.
+
 ## 荣誉准则
 
 1. 在完成本次实验的过程（含此前学习的过程）中，我曾分别与 以下各位 就（与本次实验相关的）以下方面做过交流，还在代码中对应的位置以注释形式记录了具体的交流对象及内容：
