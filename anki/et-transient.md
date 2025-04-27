@@ -1,8 +1,8 @@
-![alt text](/assets/transient2.png)
+![alt text](/anki/assets/transient2.png)
 
 deduce $i_2(t)$
 
-$i_2(t) = -\frac{V_0}{R}(1-e^{Rt/L}) \quad t > t_0$
+$i_2(t) = -\frac{V_0}{R}(1-e^{-Rt/L}) \quad t > t_0$
 
 plugin into
 
@@ -11,7 +11,7 @@ $i(t) = i_1(t) \quad 0 < t < t_0$
 $i(t) = i_1(t) + i_2(t-t_0) = \frac{V_0}{R}e^{-Rt/L}(e^{Rt_0/L} - 1) \quad t > t_0 $
 
 <figure>
-  <img src="/assets/transient1.png" alt="alt text" width="70%" height="auto">
+  <img src="/anki/assets/transient1.png" alt="alt text" width="70%" height="auto">
 </figure>
 
 $$
@@ -25,7 +25,7 @@ v_c &= 20 + 80 e^{-t/1.2}
 \end{align}
 $$
 
-![alt text](/assets/transient3.jpg)
+![alt text](/anki/assets/transient3.jpg)
 before:
 $$
 \begin{align}
