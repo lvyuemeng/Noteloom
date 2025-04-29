@@ -40,7 +40,7 @@ $$
 
 ## 3 Phase
 
-![](/anki/assets/3phase1.png)
+![](/md/assets/3phase1.png)
 
 $V_{LN}$ is the neutral voltage, we call each is **line-neutral** voltage, we call each voltage difference is the **line-line** voltage, both concept can be applied to load side.
 
@@ -56,13 +56,13 @@ V_{ca} &= \sqrt{3}V_{N}\angle 150 \degree
 $$
 
 Permutation relation:
-![alt text](/anki/assets/3phase2.png)
+![alt text](/md/assets/3phase2.png)
 
-![alt text](/anki/assets/3phase3.png)
+![alt text](/md/assets/3phase3.png)
 
-![alt text](/anki/assets/3phase4.png)
+![alt text](/md/assets/3phase4.png)
 
-![alt text](/anki/assets/3phase5.png)
+![alt text](/md/assets/3phase5.png)
 
 You see that for Line current:
 in Y-connected load:
@@ -89,5 +89,5 @@ $$
 
 Constant real power!
 
-![alt text](/anki/assets/3phase6.png)
-![alt text](/anki/assets/3phase7.png)
+![alt text](/md/assets/3phase6.png)
+![alt text](/md/assets/3phase7.png)

@@ -28,11 +28,11 @@ $$
 
 Which is the internal impedance of transistor. Usually we approximate in daily temperature and yields $r_e = \frac{26\text{mV}}{I_e}$
 
-![alt text](/anki/assets/transistor1.png)
+![alt text](/md/assets/transistor1.png)
 
 ## MOSFET
 
-![](/anki/assets/mosfet1.png)
+![](/md/assets/mosfet1.png)
 
 $V_{TN}$ is the truncated voltage to set the channel.
 
@@ -74,7 +74,7 @@ $$
 
 Now we conclude the final model.
 
-![alt text](/anki/assets/mosfet2.png)
+![alt text](/md/assets/mosfet2.png)
 
 
 
