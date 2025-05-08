@@ -25,7 +25,7 @@
 	set text(
 		size:normal-size, 
 		font:(
-			(name: "Cambria", covers: "latin-in-cjk"),
+			(name: "Times New Roman", covers: "latin-in-cjk"),
 			"Microsoft YaHei"
 		)
 	)
@@ -80,35 +80,46 @@
 
   // Configure headings.
   set heading(numbering: "1.")
+
   show heading: it => {
-    // Create the heading numbering.
     let number = if it.numbering != none {
       counter(heading).display(it.numbering)
-      h(7pt, weak: true)
+      h(8pt)
     }
 
-    // Level 1 headings are centered and smallcaps.
-    // The other ones are run-in.
-    set text(size: normal-size, weight: 400)
-    set par(
-			first-line-indent: 0em,
-		)
     if it.level == 1 {
-      set align(center)
-      set text(size: normal-size)
-      smallcaps[
-        #v(15pt, weak: true)
-        #number
-        #it.body
-        #v(normal-size, weak: true)
-      ]
-      counter(figure.where(kind: "theorem")).update(0)
-    } else {
-      v(11pt, weak: true)
+      set text(size: 1.2em, weight: "bold")
+      set par(
+        first-line-indent: 0em,
+        spacing: 0.8em,
+      )
+      set align(left)
+      v(1.0em, weak: true)
       number
-      let styled = if it.level == 2 { strong } else { emph }
-      styled(it.body + [. ])
-      h(7pt, weak: true)
+      it.body
+      v(0.6em, weak: true)
+    } else if it.level == 2 {
+      set text(size: 1.0em, weight: "bold")
+      set par(
+        first-line-indent: 0em,
+        spacing: 0.6em,
+      )
+      set align(left)
+      v(1.8em, weak: true)
+      number
+      it.body
+      v(1em, weak: true)
+    } else {
+      set text(size: 0.8em, weight: 400)
+      set par(
+        first-line-indent: 0em,
+        spacing: 0.4em,
+      )
+      set align(left)
+      v(1.2em, weak: true)
+      number
+      emph(it.body)
+      v(0.8em, weak: true)
     }
   }
 	
@@ -146,7 +157,7 @@
 	// Display the title and authors.
   v(35pt, weak: true)
   align(center, {
-    text(size: 17pt, weight: 700, title)
+    text(size: 2.2em, weight: "bold", title)
     v(25pt, weak: true)
     text(size: footnote-size, author-string)
 	})
