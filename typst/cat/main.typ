@@ -30,6 +30,29 @@
 
 = Category
 
+For category $cal(C)_1$ and $cal(C)_2$, we define $"Fun"(cal(C_1),cal(C_2))$ as the category of functors from $cal(C_1)$ to $cal(C_2)$. The objects are functors and morphisms are natural transformations. Is that well defined? Usually, we should ensure that morphisms of this category is a set. This can be achieved if $cal(C_1)$ and $cal(C_2)$ is small, a.k.a the objects are in a set. Then for $F_1(cal(C_1)) ->^eta F_2(cal(C_1))$, we know $cal(C_2)^cal(C_1)$ defines the maximal set of possible functors between them. Then the power set of $cal(C_2)^cal(C_1)$ is a set, which is the set of all possible morphisms between them, gives a set of natural transformations. So indeed, $"Fun"(cal(C_1),cal(C_2))$ is a category.
+
+We can also define a functor $"Env"(cal(C_1), "Fun"(cal(C_1),cal(C_2)))$, given by $"Env"(A,F) -> F(A)$ which is called *evaluation functor*.
+
+Given a pair that $(A,F) in cal(C_1) times "Fun"(cal(C_1),"Set")$, we give a correspondence $"Hom"_cal(C_1)(A,A) -> F(A)$. Naturally, we can define generally $"Hom"_cal(C_1)(A,-) -> F(-)$. Which usually, the left term is also a object in $"Fun"(cal(C_1), "Set")$ because $"Hom"_cal(C_1)(A, -)$ is a functor from $cal(C_1)$ to Set of morphisms, which is a functor. We can see indeed, the map that $"Hom"(I_A,f)("Hom"_cal(C_1)(A,A)) -> "Hom"_cal(C_1)(A,B)$ while $F(f)(F(A)) -> F(B)$. Now suppose various $"Hom"(I_A, f)(g) -> "Hom"(I_A,f cdot g)$ corresponds to $F(g)F(f)$. And finally  $"Hom"(I_A, I_A) -> F(I_A)$ which is identity. It seems that we construct a relation between these two objects in $"Fun"(cal(C_1),"Set")$.
+
+Now a deep sight is every map of object $B,C...$ is a morphism from $A ->^f B$ or $A ->^g C$, which is just a *representation* by $f, g...$ from $"Hom"_cal(C_1)(A, -)$ mapping to $F(B) = F(f(A)), F(C) = F(g(A))...$, we define the morphism or the natural transformation as $Theta_(A,B,C...) = Theta$. For every $x,y ... in A$, we can define each different $Theta', Theta'' ...$ given by $Theta(f) -> F(f)(x)$ which repeat above process.
+
+So for every possible natural transformations, we assign it to a unique element $x in A$ by $Theta(I_A) = F(x)$. Gives a bijection.
+$
+  "Hom"_("Fun"(cal(C_1),"Set"))("Hom"_cal(C_1)(A, -),F(-)) = Theta_(\(-\)) -> F(A)
+$
+is a bijection.
+
+Comment: Reader may confuse about $Theta$ as many components as $Theta_A, Theta_B...$, they are the same thing. Rather, the different thing is $Theta, Theta'$ assign to different $x,y in F(A)$.
+
+A useful application or corollary is Given:
+$
+  "Hom"("Hom"_(cal(C_1))(A, -),"Hom"_cal(C_1)(B, -)) -> "Hom"_cal(C_1)(B,A)
+$
+
+Is a bijection. That's a indication that a object is nothing but the relation of other objects. The formally statement should be the relations of two objects are just the possible connections of their relations to other objects.
+
 == Additive/Abelian
 
 Additive category is a category $cal(C)$ for which that, given any pair $A$,$B$ as object, the $text("Hom")(A,B)$ inherit abelian group law.
@@ -170,6 +193,16 @@ Above observation implies that rather for object and its suboject relation, ever
 
 == $delta$-Functor
 
+Commonly, a functor isn't exact, it may be half exact, left or right exact, which means the sequence isn't fully decomposed by morphism.
+
+Consider a functor $F$ from an abelian category to a additive category and at least half exact, apply to a short exact sequence:
+
+$
+  ? -> F(A) ->^F(u) F(M) ->^F(v) F(A') -> ?
+$
+
+$F(v)$ isn't surjective now, if we want to measure the failure of surjectivity, we can define $F(A')/"Im"(F(v))$. Rather, a general question is whether or not the definition is canonical? If M is injective, the original exact sequence exactness indicates the definition of $A'$ is always defined by $M$ itself. So $F(A')/"Im"((F(v))) -> F(A')/"Coker"(F(u))$ is well defined. Then we can seek a general definition by choose many possible $M$ as injective object, information of $A$ can always be preserved by various $M$. Indicating that $F(A')/"Coker"(F(u))$ is invariant under the choice of $M$, we denote it as $S F(A)$. If the category has enough injective objects, we can always define such object for every possible $A$, giving a canonical functor definition as $S F(alpha): S F(A) -> S F(B)$. We are close to a general definition...
+
 We denote a system of functors $T = (T_i)$ from an abelian category to a addtive category. Where $T_i: cal(C) -> cal(C')$, together with special connecting morphsims named as boundary maps $delta\/partial: T_i (A'') -> T_(i+1) (A')$ for every short exact sequence $0 -> A' -> A -> A'' -> 0$ in each relevant degree $i$.
 
 To maintain consistency of a functor, if T applies to sequence-$A$, it can applies to sequence-$B$, while maintaining commutative property.
@@ -180,10 +213,39 @@ An exact $delta$-functor contains a stronger second condition which is indeed th
 
 We could reverse arrow to get contravariant $delta$-functor, or decrease the degree to get $delta^*$-functor, however, they are all symmetric representation.
 
-Among all $delta$-functors, universal $delta$-functor are particularly important, which means for any $delta$-functor $T' = (T'^i)$ and any natural transformation $f^0: T^0 -> T'^0$, there exist *unique* morphism of $delta$-functors $f = (f^i): T -> T'$ given by $f^0$. It means the whole behavoir is determined by its behavoir at degree 0!(Apply identity natural transformation to itself.)
+If a category has enough injective objects, we can always construct a exact sequence by $0 -> A ->^u M -> "Coker"(u) -> 0 $. Where $M$ is a injective object. Even, this could be applied to $M$ itself that $0 -> M_0 -> M_1 -> M_2 -> ...$ or simpler $0 -> M -> M -> 0$ as a self injection. This indicates that all rest of $M_i$ will be a trivial object for self injection of $M$. Take a $delta$-functor, we know $F(M_i) ->^(F(0)) F(M_(i+1))$, which means $T^i (M) = 0$  for $i>0$ as *effacable*. We call such object is *acyclic* stemming from the zero map.
+
+Use a simpler notation that $0 -> A ->^u M ->^v  A' -> 0$ for a injection.
+
+We apply exact $delta$-functor to the sequence, we know $... -> T^0(M) ->^(T^0(v)) T^0(A') ->^delta T^1(A) ->^(T^1(u)) T^1(M) -> ...$. By exactness, we know $T^i (M) = 0$, so $delta$ is surjective as $"Im"(delta) = "Ker"(0)$.
+
+Given another $T'^i$, we could construct a sequence morphism:
+
+#align(center)[#commutative-diagram(
+  node((0, 0), $T^0(M)$),
+  node((0, 1), $T^0(A')$),
+  node((0, 2), $T^1(A)$),
+  node((0, 3), $T^1(M)$),
+  node((1, 0), $T'^0(M)$),
+  node((1, 1), $T'^0(A')$),
+  node((1, 2), $T'^1(A)$),
+  arr((0,0),(0,1), $T^0(v)$),
+  arr((0,1),(0,2), $delta$),
+  arr((0,2),(0,3), $0$),
+  arr((0,0),(1,0), $f^0(M)$),
+  arr((0,1),(1,1), $f^0(A')$),
+  arr((0,2),(1,2), $f^1(A)$),
+  arr((1,0),(1,1), $T'^0(v)$),
+  arr((1,1),(1,2), $delta'$),
+)]
+
+Based on a usual design of commutative diagram, we want to exploit the benefit of $M$ for each $T^i$ and $T'^i$. If we already know $f^0(...)$ is a natural transformation, which is commutative, exploiting that $delta' cdot f^0(A') cdot T^0(v) = delta' cdot T'^0(v) cdot f^0(M) = 0 cdot f^0(M) = 0$, with $"Ker"(delta) = "Im"(T^0(v))$, we can get $"Ker"(delta' cdot f^0(A')) supset.eq "Ker"(delta)$. Thus we can factor $delta' cdot f^0(A') cdot "ker"(delta) = 0$ by Coker universal property, which means $"Im"(delta' cdot f^0(A')) subset.eq "Coker"("ker"(delta)) = "Im"(delta)$, giving $delta' cdot f^0(A') = g cdot "coker"("ker"(delta)) = g cdot im(delta)$ for a unique morphism $g$. Recall that $delta$ is surjective, a.k.a $"im"(delta) = "coker"("ker"(delta)) = delta$. Thus $g = f^1(A)$ is the unique morphism we want to find, making the diagram commutative.
+
+The final technique we use is often common to construct a unique morphism making such diagram commutative. The dual technique is also useful, which just assert that if $"coker"(f) cdot h = 0$, a.k.a $h = "ker"("coker"(f)) cdot g -> "Coim"(h) subset.eq "Coim"(f)$, we can decompose $h = "coim"(f) cdot g = "im"(f) cdot g$ for a unique morphism $g$. If f is also a monomorphism, we get $h = f cdot g$.
+
+Now cease the stray, we see that by the above construction, we can always form a sequence natural transformations from the given condition $T^i$ and $f_0$, continuing building the sequence of $T^i$ and $T'^i$ by $f^i$ if and only if $T^i$ is effacable and with enough injective objects. Thus we can define universal $delta$-functor, which means for any $delta$-functor $T' = (T'^i)$ and any natural transformation $f^0: T^0 -> T'^0$, there exist *unique* morphism of $delta$-functors $f = (f^i): T -> T'$ given by $f^0$. It means the whole behavoir is determined by its behavoir at degree 0!(Apply identity natural transformation to itself.)
 
 Therefore, we define universal $delta$-functor by $F = T^0$ and right satellite functors of $F$ by $S^i F = T^i$. We can apply same routine to $delta^*$ as decreasing degree, or reverse arrow to define in contravariant $delta$-functors.
-
 
 = Simplex
 
