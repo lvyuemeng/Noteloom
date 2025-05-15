@@ -239,3 +239,57 @@ $$
 $$
 
 Even in static frame we don't have second term, but actually we need to take derivative of $\mathbf{I}_{O}(t)$! So usually we apply in co-rotation frame.
+
+## Orbit
+
+$$
+\frac{1}{2}m(\dot{r}^2 + r^2 \dot{\theta}^2) - \frac{k}{r} = E
+$$
+
+Take $mr^2\dot{\theta} = J$
+$$
+\frac{1}{2}m\dot{r}^2 + \frac{J^2}{2mr^2} - \frac{k}{r} = E \\
+$$
+
+
+Take $\dot{r} = 0$
+$$
+\frac{J^2}{2mr} - k = Er \\
+$$
+
+Now back to case where:
+$$
+r^2 + \frac{k}{E}r - \frac{J^2}{2mE} = 0
+$$
+
+We know that there's two root:
+$$
+r_1 + r_2 = - k/E \\
+a = \frac{-k}{2E} \\
+r_1r_2 = \frac{-J^2}{2mE} = a^2(1-(\frac{c}{a})^2) \\
+\frac{c}{a} = \epsilon
+$$
+
+We can see if $r_1 = r_2 = r$
+$$
+r = \frac{-k}{2E} \\
+r^2 = \frac{-J^2}{2mE} \\
+r = \frac{J^2}{mk} \\
+$$
+Now back to:
+$$
+a^2 = \frac{k^2}{4E^2} \\
+1-\epsilon^2 = \frac{2J^2E}{mk^2} = \frac{-J^2}{mka}
+$$
+So we get the form of kepler third law:
+$$
+\pi^2 a^2 b^2 = \pi^2 a^4(1-\epsilon^2) \\
+= \pi^2 a^4 \frac{-J^2}{mka} \\
+= \pi^2 a^3\frac{-J^2}{mk} \\
+= \frac{(JT)^2}{4m^2}
+$$
+
+$$
+T^2 = a^3\frac{4m\pi^2}{k}
+$$
+
