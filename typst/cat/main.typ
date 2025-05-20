@@ -1,30 +1,19 @@
 #import "@preview/commute:0.3.0": node, arr, commutative-diagram
 #import "@preview/theorion:0.3.3": *
-#import "../conf.typ": mine
+#import "../lib.typ": *
 
-#show: mine.with(title: [Cat-Hom])
+#let cdot = $circle.small$
 
 #show: show-theorion
 
-#set heading(numbering: "1.1")
+#show: mine.with(title: [Cat-Hom], eq-numbering: "(1.1)", eq-chapterwise: true)
+
 #set par(
   first-line-indent: (
     amount: 1em,
     all: true,
   ),
 )
-
-#let bind(txt, symbol) = text(txt) + "(" + symbol + ")"
-#let cdot = $circle.small$
-// #align(center)[#commutative-diagram(
-//   node((0, 0), $X$),
-//   node((0, 1), $Y$),
-//   node((1, 0), $X \/ "ker"(f)$, "quot"),
-//   arr($X$, $Y$, $f$),
-//   arr((0,1), "quot", $tilde(f)$, label-pos: right, "dashed", "inj"),
-//   arr($X$,(1,0), $pi$),
-// )]
-//
 
 = Category
 
@@ -92,7 +81,7 @@ Rather, the definition of Im($f$) is second in category. We see by $c: B -> text
 
 We could define in same routine for Coim($f$), which is $c: text("Ker")(f) -> A quad f: A->B$. Coim($f$) = Coker($c$).
 
-Then we factor out a morphism by $f: f = im(f) circle.small "factor" cdot "coim"(f)$. Which means we decompose $f$ as the information from source object $A$ as coim($f$) to target $B$ as im($f$). But what about "factor"? That's the reason of definition *abelian category*, derived from the uncertainty of equivalence relation of coim($f$) and im($f$). We should ensure they are isomorphism but only in intuition.
+Then we factor out a morphism by $f: f = im(f) circle.small "factor" cdot "coim"(f)$. Which means we decompose $f$ as the information from source object $A$ as coim($f$) to target $B$ as im($f$). But what about "factor"? That's the reason of definition *abelian category*, derived from the uncertainty of equivalence relation of coim($f$) and im($f$). We want to ensure they are isomorphism but only left in intuition.
 
 #definition[
   abelian category is an additive category with following additional conditions:
@@ -127,6 +116,12 @@ This functor maps every object in $cal(C)$ to $"Hom"(X,cal(C)) quad X in cal(C)$
 What property could be preserved? We see in original exact sequence that $u$ is monomorphism s.t. $u_*(f) = u circle.small f$ implies that if $u circle.small f = u circle.small 0$, then $f = 0$. Which still preserves the property(Same operation could be reversed to prove original category left exactness). We can do the same to prove $"Ker"(v_*) = "Im"(u_*)$. However, we can see directly that left operation can't ensure right property which is epimorphism, resulting only left exactness.
 
 Finally, there are also *half exact* functor which only preserves $"Ker"(F(v)) = "Im"(F(v))$. Everything can also be reversed as in $cal(C)^op$ as a reversed factor(epi to mono, mono to epi, then reverse the arrow).
+
+$
+  "Hom"(A,X) <-^(u_*) "Hom"(B,X) <-^(v_*) "Hom"(C,X) <- 0
+$
+
+Which is still left *monomorphism* exact. We notice $v_*(f) = f cdot v$, giving us the map from $B$ to $X$. If $v$ is epimorphism, we know $f cdot v = 0$ indicating $f = 0$, resulting the monomorphism of $v_*(-)$. How can we ensure $u_*$ as epimorphism, we gains nothing unless additional property is given.
 
 == Generators and Cogenerators
 

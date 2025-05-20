@@ -1,3 +1,23 @@
+## amplifying circuit
+
+Input Impedance:
+$$
+Z_i = \frac{V_i}{I_i}
+$$
+Output Impedance:
+$$
+Z_{eq} = \frac{V_{oc}}{I_{sc}}
+$$
+But the easier way is to pause all source and deduce $Z_{eq}$ directly.
+
+In amplifying circuit, ground $V_{CC}$ and take short circuit on capacitance.
+
+We usually know the voltage $v_g$ or current $i_b$. With the current or voltage relation. Deduce $V_i$ relation by $U = RI$.
+
+We deduce outer side same, $\beta i_b$ or $g_{gm} V_g$, then use current relation.
+
+Usually, we split part that input voltage on left side, and output current on right side with no relation together.
+
 ## Transistor
 
 For a small signal $\widetilde{v_{be}}$ gives:
@@ -22,13 +42,24 @@ $$
 We define $r_\pi = \widetilde{v_{be}}/i_b$ Then:
 $$
 r_\pi = \frac{\beta}{g_m} = \frac{V_T}{I_b} \\
+$$
+In room temperature, roughly: $r_\pi = \frac{26\text{mV}}{I_b}$
+$$
 r_e = \frac{\widetilde{v_{be}}}{i_e} = \frac{\beta+1}{\beta g_m} \approx \frac{1}{g_m} \\
 r_\pi = (\beta+1)r_e \approx \beta r_e
 $$
 
 Which is the internal impedance of transistor. Usually we approximate in daily temperature and yields $r_e = \frac{26\text{mV}}{I_e}$
 
-![alt text](/md/assets/transistor1.png)
+Sum the base impedance that $r_{be} = r_{bb'} + r_{\pi}$ which $r_{bb'}$ is the impedance of material itself, roughly $100 - 300 \Omega$.
+
+To deduce static point, we usually:
+$$
+U_B = \frac{V_{cc} R_2}{R_1 + R_2} \\
+I_{EQ} = (U_{BQ} -  U_{BEQ})/R_E = U_{E}/R_E \\
+U_{CEQ} = V_{CC} - I_{CQ}(R_C + R_E) \\
+I_{CQ} = \frac{\beta}{\beta+1}I_{EQ} \approx I_{EQ}
+$$
 
 ## MOSFET
 
@@ -273,6 +304,27 @@ $$
 
 Which is a reduction, but also Slow down the rate of decline, extending the bandwidth.
 
+For example, $R_L = R_1 + R_2 || R_o || R_D$:
+$$
+\beta = \frac{V_f}{V_o} = \frac{-R_2}{R_1 + R_2} \\
+A_f = \frac{-g_m R_L}{1 + \beta (g_m R_L)}
+$$
+if $A\beta >> 1$, $A_f \approx \frac{1}{\beta} = - \frac{R_1 + R_2}{R_2}$.
+
+![alt text](assets/analog-6.png)
+
+Now we have $VI$ that $A_f = \frac{I_o}{V_i}  = \frac{- h_{fe} i_b}{i_b(h_{ie} + R_E)}$
+
+$$
+\beta = \frac{V_f}{I_o} = \frac{-i_oR_E}{i_o} = -R_E
+$$
+$$
+A_f = \frac{-h_{fe}}{h_{ie}+R_E + h_{fe}R_E} \approx \frac{-h_{fe}}{h_{ie}+ h_{fe}R_E} \\
+A_{vf} = A_f R_C \\
+$$
+
+If $h_{fe}R_E >> 1$, we get $A_{vf} = -R_C/R_E$.
+
 ### Stability
 
 To systematically analyze stability across all frequencies, the Nyquist method is a widely used technique. It provides a graphical way to determine stability based on the frequency response of the loop gain $\beta A$.
@@ -296,3 +348,45 @@ A larger positive GM indicates greater stability.
 If PM > 0°, the amplifier is stable (at the frequency where ∣βA∣=1, the phase shift is less than 180°).
 If PM < 0°, the amplifier is unstable (at the frequency where ∣βA∣=1, the phase shift is greater than 180°).
 A larger positive PM indicates greater stability.
+
+---
+
+## Op Amp
+
+For opamp, we list out:
+- 1 is inverting input terminal(-), 2 is non-inverting input terminal(+), op amp only responds to a difference signal, resulting $A(v_2 - v_1)$ in 3 output terminal.
+- infinite frequency domain
+- infinite amplification $A = \infty$(that's means we exploit **feedback** rather $A(v_2 - v_1) = \infty$)
+- infinite input impedance($i_{op} = 0$, $v_1 = v_2$)
+- zero output impedance
+
+![alt text](assets/analog-7.png)
+
+$$
+v_2 = 0 = v_1 \quad i_{op} = 0 \\
+i_1 = \frac{v_I - v_1}{R_1} = \frac{v_i}{R_1}  \\
+i_2 = i_1 \quad v_o = - v_{R_2} - 0 =  \frac{R_2}{R_1}v_o
+$$
+
+If $A \neq \infty$, then:
+$$
+v_1 - v_2 = v_o/A \quad i_{op} = 0 \\
+v_2 = 0 \\
+v_1 = v_o/A \\
+i_1 = i_2 = \frac{v_I - (-v_o/A)}{R_1} = \frac{v_I + v_o/A}{R_1} \\
+v_{1} - v_o = i_2 R \\
+v_o = v_{1} - i_2 R = -v_o/A - \frac{v_I + v_o/A}{R_1} \\
+v_o = -\frac{\frac{R_2}{R_1} }{1 + \frac{1+ \frac{R_2}{R_1}}{A}} v_I\\
+$$
+If $A \gg 1$, we get $v_o = -\frac{R_2}{R_1}v_I$
+
+A useful examples is we parallelize input resistance.
+Called **weighted summer**.
+
+$$
+v_o = - R_2/R_I v_I = - R_2(\sum_i 1/R_i) v_I
+$$
+
+456=321
+
+![alt text](assets/analog-8.png)
