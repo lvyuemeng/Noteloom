@@ -1,3 +1,4 @@
+#import "deps.typ": *
 #import "utils.typ": *
 
 // Sizes used across the template.
@@ -6,6 +7,11 @@
 #let small-size = 9.24994pt
 #let normal-size = 10.00002pt
 #let large-size = 17pt
+
+#let title-size-zh = zh(3)
+#let normal-size-zh = zh(-4)
+#let head-size-zh = zh(4)
+#let script-size-zh = zh(5)
 
 #let mine(
   /// Set Language
@@ -82,28 +88,20 @@
       )
     },
 
+    // Deprecated:
     // The page header should show the page number and list of
     // authors, except on the first page. The page number is on
     // the left for even pages and on the right for odd pages.
     header-ascent: 14pt,
     header: context {
       let i = counter(page).get().first()
-      if i == 1 { return }
-      set text(size: script-size)
-      grid(
-        columns: (6em, 1fr, 6em),
-        align: (start, center, end),
-        if calc.even(i) [#i], upper(if calc.odd(i) { title } else { author-names-s }), if calc.odd(i) { [#i] },
-      )
     },
 
     // On the first page, the footer should contain the page number.
     footer-descent: 12pt,
     footer: context {
       let i = counter(page).get().first()
-      if i == 1 {
-        align(center, text(size: script-size, [#i]))
-      }
+      align(center, text(size: script-size, [#i]))
     },
   )
 
@@ -116,42 +114,39 @@
 
   // Configure headings.
   set heading(numbering: heading-numbering)
-
   show heading: it => {
     let number = if it.numbering != none {
       counter(heading).display(it.numbering)
       h(8pt)
     }
+    set text(weight: "bold")
+    set par(first-line-indent: 0em)
+    set align(left)
+    if lang == "zh" {
+      set text(font: "SimHei", lang: "zh", region: "cn")
+    }
 
     if it.level == 1 {
-      set text(size: 1.2em, weight: "bold")
-      set par(
-        first-line-indent: 0em,
-        spacing: 0.8em,
-      )
-      set align(left)
+      if lang == "zh" {
+        set text(size: head-size-zh)
+      } else {
+        set text(size: 1.2em)
+      }
+      set par(spacing: 0.8em)
       v(1.0em, weak: true)
       number
       it.body
-      v(0.6em, weak: true)
+      v(1.0em, weak: true)
     } else if it.level == 2 {
-      set text(size: 1.0em, weight: "bold")
-      set par(
-        first-line-indent: 0em,
-        spacing: 0.6em,
-      )
-      set align(left)
+      set text(size: 1em)
+      set par(spacing: 0.6em)
       v(1.8em, weak: true)
       number
       it.body
-      v(1em, weak: true)
+      v(1.0em, weak: true)
     } else {
-      set text(size: 0.8em, weight: 400)
-      set par(
-        first-line-indent: 0em,
-        spacing: 0.4em,
-      )
-      set align(left)
+      set text(size: 0.8em, font: "SimHei")
+      set par(spacing: 0.4em)
       v(1.2em, weak: true)
       number
       emph(it.body)
@@ -192,48 +187,69 @@
   align(
     center,
     {
-      text(size: 2.2em, weight: "bold", title)
-      v(25pt, weak: true)
-      text(size: footnote-size, author-names-s)
-      v(8pt)
-      text(size: footnote-size, author-addtions)
+      if lang != "zh" {
+        text(size: 2.2em, weight: "bold", title)
+        v(25pt, weak: true)
+        text(size: footnote-size, author-names-s)
+        v(8pt)
+        text(size: footnote-size, author-addtions)
+      } else {
+        set par(leading: 1.5em)
+        text(size: title-size-zh, font: "SimHei", title)
+        v(1.5em, weak: true)
+        text(size: normal-size-zh, font: "KaiTi", author-names-s)
+        v(1.5em, weak: true)
+        text(size: normal-size-zh, font: "KaiTi", author-addtions)
+      }
     },
   )
 
   // Configure paragraph properties.
   set par(spacing: 1.2em, first-line-indent: 1.2em, justify: true, leading: 0.8em)
+  if lang == "zh" {
+    set par(leading: 1.5em)
+  }
 
   // Display the abstract
   if abstract != none {
     v(20pt, weak: true)
-    set text(script-size)
     show: pad.with(x: 35pt)
     let label = label-diff-lang("abstract", lang: lang)
     if lang != "zh" {
+      set text(script-size)
       smallcaps(label)
+      abstract
     } else {
-      text(weight: "semibold", label)
+      set text(script-size-zh)
+      text(font: "SimHei", label)
+      text(font: "SimSun", abstract)
     }
-    abstract
   }
 
   if keywords != none {
     v(20pt, weak: true)
-    set text(script-size)
     show: pad.with(x: 35pt)
     let label = label-diff-lang("keywords", lang: lang)
+    let keywords = keywords.join("; ")
     if lang != "zh" {
+      set text(script-size)
       smallcaps(label)
+      keywords
     } else {
-      text(weight: "semibold", label)
+      set text(script-size-zh)
+      text(font: "SimHei", label)
+      text(font: "SimSun", keywords)
     }
-    let keywords = keywords.join(", ")
-    keywords
   }
 
   // Display the article's contents.
   v(29pt, weak: true)
-  body
+  if lang == "zh" {
+    set text(font: "SimSun", size: normal-size-zh)
+    body
+  } else {
+    body
+  }
 }
 
 #let mine-author-detail(
