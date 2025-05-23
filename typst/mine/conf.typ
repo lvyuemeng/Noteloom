@@ -28,7 +28,7 @@
   abstract: none,
   /// Keywords
   /// -> none | array(str)
-  keywords: (),
+  keywords: none,
   /// Paper Size
   /// -> str
   paper-size: "us-letter",
