@@ -1,5 +1,5 @@
 #import "../lib.typ": *
-
+#import "../info.typ": *
 // utils functions
 #let cdot = $circle.small$
 #let inpro(l: none, r: none) = {
@@ -28,7 +28,7 @@
 #show: mine.with(
   lang: "zh",
   title: "基于李群的伽利略不变性与刚体转动动力学研究",
-  authors: ((name: "吕粤蒙", addtion: "202326002086   物理学(2)班"),),
+  authors: authors,
   abstract: abstract,
   keywords: keywords,
   eq-numbering: "(1.1)",
