@@ -63,7 +63,7 @@
   set text(
     size: text-size,
     font: (
-      (name: "Times New Roman", covers: "latin-in-cjk"),
+      (name: "Libertinus Serif", covers: "latin-in-cjk"),
       "Microsoft YaHei",
     ),
     lang: lang,
@@ -157,7 +157,6 @@
   // Configure lists and links.
   set list(indent: 24pt, body-indent: 5pt)
   set enum(indent: 24pt, body-indent: 5pt)
-  show link: set text(font: "New Computer Modern Mono")
 
   // Configure citation and bibliography styles.
   set std.bibliography(style: "springer-mathphys", title: [References])

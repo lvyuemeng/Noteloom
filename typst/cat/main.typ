@@ -1,4 +1,5 @@
 #import "@preview/commute:0.3.0": node, arr, commutative-diagram
+#import "@preview/fletcher:0.5.8" as fletcher: diagram, node as fnode, edge
 #import "@preview/theorion:0.3.3": *
 #import "../lib.typ": *
 
@@ -6,7 +7,7 @@
 
 #show: show-theorion
 
-#show: mine.with(title: [Cat-Hom], eq-numbering: "(1.1)", eq-chapterwise: true)
+#show: mine.with(title: [Category And Homology], eq-numbering: "(1.1)", eq-chapterwise: true)
 
 #set par(
   first-line-indent: (
@@ -16,6 +17,239 @@
 )
 
 = Category
+
+== Abstract and Concrete
+
+What is category? Once god said there will be light, there will be. We aren't god, but concept are material that could affect other concept by picturing on it. We gives a bunch of effect as $f,g,h...$, that's means we have a indication of do-nothing effect, which means we have a effect as $1_(\(..\))$, display itself which called *object*.
+
+Summarize, we have *morphism*, each can be composite as effect chain $f g h...$. Then $f: X -> Y$ send effect one to another, as $1_Y f 1_X = f$. For simplicity, we write as $X -> Y$. Such system is nominated as *Category*.
+
+Usually, we start a _concrete_ objects constructed on sets.
+
+#example[
+  - $sans("Group")$ has groups has objects and homomorphisms as morphisms.
+  - $sans("Set")$ has sets as object and functions as its morphisms
+]
+
+These objects are sets with specified mathematical structure. However, we can also define abstractly, we only consider object as relation of morphism.
+
+#example[
+  - A poset $(P, <=)$ whose elements of $P$ are the objects, with a unique morphism $x -> y$ if and only if $x <= y$. With identity picturing as $x = y$ if also $x >= y$.
+  - A group $G$(or more generally, a monoid) defines a category $B G$ as a single object, whose morphism is self-mapping, or endomorphism, as $g(h) = g h$, with $e in G$ as identity as $e f e = f$.
+]
+
+Russell's paradox tells us that there's no set whose elements are "all sets", for example, a "set" not in the set! That's the reason we don't lay out our basis on set. We distinguish "small" set and "large" set as set and class, with a abundant outcome from logic-theorist we won't explore here.
+
+#definition[
+  A category is *small* if morphisms formed a set.
+]
+
+A small category is a category everything should be in *a set*, which is a global condition. That's indeed means every do-nothing identity is *in* a set, which means object are also in a set.
+
+However, $sans("Group")$ or $sans("Set")$ indeed are set of sets. So there aren't small. However, we know each map on each objects is a set.
+
+#definition[
+  A category is *locally small* if pick any pair of objects as morphisms form a set.
+]
+
+We denote as $"C"(X,Y)$ or $"Hom"(X,Y)$ borrowed from group homomorphism. Notes, indeed, that's means for $"C"(X,X)$ on the same object, formed a set, indicating a single object is a set. However, we can't guarantee everything as a whole is *a set*!
+
+Now we evaluate morphisms. We can't rely on set concept, however we can rely on identity concept. We want to know which extent the effect retain informations on itself and the target.
+
+The key is *natural*, a concept is valid or natural if it doens't depend on the selection of a way or object. Thus, if for any composite $f h = f g = f ...$ for $g,h$ and many as a selection, $f$ doesn't care about selection would give us $g = h = ...$, evaluate that it retains the informations of every equal mapping from source, so we call it *monomorphism*.
+
+Similarly, if $h f = g f = ... f$ giving us $h =g=...$, it means $f$ retains the informations of every equal mapping to target, so we call it *epimorphism*.
+
+A morphism is a effect on other effect, as below, it means every morphism can be reformulate as a map on other map.
+
+We can format that $f^*:"C"(A,B) -> "C"(A,C)$ as a post-composition or $f_*:"C"(B,A) -> "C"(C,A)$ as a pre-composition, giving us that $f^*(h) = f^*(g) -> h = g$ is a injection for monomorphism and epimorphism if such morphism set exist, as in locally small category.
+#footnote[Some book denote locally small category as category.]
+
+Now, what if morphism as composition is a surjection? Suppose for $forall h in C, exists g in B quad$ $s.t. f^*(g) = f g = h$. Indeed, it suggest that $1_C$ still in there with $f^* (g') h = 1_C h = h quad exists g' in B$. Then $f^*(g) = h = f^*(g') h = f^*(g') f^*(g)$.
+
+Now exploit that if $f g = 1_C$ always, $f$ must map all information back to $C$ integrally, we call it *split epimorphism*, also, reversely, we know $g$ must map all information of $C$ without loss, so we call it *split monomorphism*. Why? Because $h' f = h f -> h' f g = h f g -> h' = h$. That's what we seek, a stronger declaration.
+#footnote[Note the definition is reverse in split version!]
+
+The key is due to the do-nothing effect of $1_(\(...\))$, a looser condition is for any composition $(...)f h_1 = (...) f h_2$ as monomorphism, we can derive that:
+
+$
+  h_1 = h_2 <- (...) f h_1 = (...) f h_2 <- f h_1 = f h_2
+$
+
+With $f$ as a monomorphism, and vice versa.
+
+We delve further, a mirror copy or do-nothing which we call it *isomorphism*, can reverse back to original without loss. Then such morphism must, as a composition of morphism set, is a bijection.
+
+Suppose $f$ as composition $f^*$ is a bijection, it means it's a monomorphism as injection and split epimorphism as surjection. Reversely, it must define a $g$ with $f g = 1 -> f g f = f -> f (g f) = f -> f (g f)= f 1_A -> g f = 1_A$. Therefore we define $g = f^(-1)$, the reverse of $f$ uniquely as two side reverse.
+
+A rather hindsight on $sans("Set")$ is indeed, every object is a set and also morphism betweens form a set, so morphism corresponds to set concept of injection, surjection, bijection. However, in element view, we can construct split epimorphism in epimorphism by choice axiom.
+
+It's rather simple, $f(a) = b$ for all $b$, then we define a reverse $s.t.$ $g(b) = a$ for $forall b in B$. Choice axiom guarantee its existence, then $forall b in B$, we has $f g(b) = f(a) = b$, indeed, that's the definition of surjection actually. Same procedure can be done to derive for monomorphism as injection.
+
+A caveat, in different category, monomorphism and epimorphism doesn't correspond to injection and surjection. For example, in $sans("Ring")$, ring category with all ring as objects and ring homomorphism as morphism, we has $bb(Z) -> bb(Q)$ as inclusion $s.t.$, every $f(p)\/f(q) = f(p)f(q)^(-1) = f(p / q)$ Which means every element in $bb(Q)$ is uniquely defined in such homomorphism which is a monic and epic. However, inclusion isn't surjection obviously. This means we can't find $p / q -> n in bb(Z)$ to reversely construct split epimorphism.
+
+Above analysis indicates that a duality of morphism, suppose we have a operation which only reverse composition:
+
+$
+  (f g)^("op") = g^("op") f^("op") \
+$
+Deduce that:
+$
+  (...)^("op"): Y -> X <-> (...): X-> Y
+$
+
+Indeed, this indicating that monomorphism becomes epimorphism and vice versa in composition meaning, with a invariant inclination on both-side invariance, for example, isomorphism.
+
+In such view, we can evaluate on one side and reverse arrows to get a dual evaluation. In general, the concrete morphism in opposite meaning is vague for example, a set function $f: {1,2} -> {3}$ is a epimorphism, but its reverse is vague to choose $1$ or $2$ as a concrete monomorphism, but indeed its a monomorphism.
+
+== Diagram and Functor
+
+What's the relation between category? If such relation exsit, just like morphism, it must map each morphism and object, or just morphism, but globally rather pairwise! Into another category. Such map must be composable and maintain identity as $F(1_C) = 1_(F(C))$ which is just object mapping.
+
+We call above as *functor*. List example below:
+
+#example[
+  - endofunctor, which is self mapping of category, $P: sans("Set") -> sans("Set")$ send a set to its power set and $f: A->B$ to its $F(f): P A -> P B$.
+
+  - *forgetful functor*, for every concrete category, define to forget the mathematical structure while maintaining as set function. $U:sans("Group") -> sans("Set")$ sends a group to underlying set.
+]
+
+This gives that a *concrete category* is a category equipped with forgetful functor.
+
+How to acquire a measurement of functor? We thus need to divide concept locally and globally. Follow our routine for morphism and smallness, we could give a version of epimorphism and monomorphism in functor.
+
+#definition[
+  \
+  - *full* if for pair's morphisms $"C"(A,B) -> "D"(F (A), F(B))$ is surjection. \
+  - *faithful* if for pair's morphisms $"C"(A,B) -> "D"(F (A), F(B))$is injection.
+]
+
+Indeed, we see it's a local condition, So above condition doesn't guarantee across pair's morphisms, for example, two morphisms in different source and target could be map to a same morphism set, which could also be *faithful* or *full*.
+
+#example[
+  Category $F:bb(2) -> bb(1)$ with $F(1\/2_(bb(2))) = 1_bb(1)$. We analyze that:
+  - $bb(2)(1,1)\/bb(2)(2,2) -> bb(1)(1,1)$ is a ${1_(1\/2)} -> {1_(1)}$ which is injection.
+  - $bb(2)(1,2) -> bb(1)(1,1)$ is a ${f} -> {1_1}$ which is also a injection
+]
+
+Then we conclude above is a faithful and even full functor! The local condition doesn't ensure element shrinkage situation. At least, we know forgetful functor is *faithful*.
+
+Thus, we introduce a global condition:
+#definition[
+  - *essentially full* #footnote[Or *essentially surjective on objects*, but that's lengthy actually] if map of each morphisms is surjective.
+  - *embedding* if map of each morphisms is injective.
+]
+
+Sorry to abuse terms here, we can formulate this as if $F(f_1) = F(f_2)$ then $f_1 = f_2$ globally for *embedding* and similarly, if $F(f) = g quad forall g in "D"$ for *essentially full*. That's the violation of above example. We see it's not *embedding*. A refrain of above is to account of object rather only pair morphism, so we can say a functor is essentially full if $F(A) = B quad B in "D"$.
+
+Commonly, we call a *embedding* of a category to another is a *subcategory*, and a *full embedding* of a category is a *full subcategory*, which preserve all morphisms between objects.
+
+Now given a special functor, which called *diagram*, or we want to make it a functor. It maps a index category which has bunch of vertices in a set as objects and its corresponding morphism as edges, which are also in a set. Thus it's a small category. What's the role? Suppose the diagram functor $F: "J" -> "C"$ maps into a category to mimic the relation of such category, we realize that index category equipped with a preorder which means any composite of morphism as routes or paths from same source to same target give a "same" morphism. Rephrase, it means any routes as composition is unique because of preorder property. In its codomain or C, we acquire that any morphisms composition would yield the same results. We call such property is *commutative*, and diagram as *commutative diagram*.
+
+In general, morphisms isn't commutative, but a few emerged if we seek:
+
+#align(center)[#commutative-diagram(
+    node((0, 0), $a$),
+    node((0, 1), $b$),
+    node((0, 2), $c$),
+    node((1, 0), $a'$),
+    node((1, 1), $b'$),
+    node((1, 2), $c'$),
+    arr($a$, $b$, $f$),
+    arr($b$, $c$, $j$),
+    arr($a$, $a'$, $g$),
+    arr($b$, $b'$, $h$),
+    arr($c$, $c'$, $l$),
+    arr($a'$, $b'$, $k$),
+    arr($b'$, $c'$, $m$),
+  )]
+
+If we know outer rectangle is commutative, how about inner? Indeed, a whole path is commutative can't ensure inner path is too unless:
+
+$
+  g h_n ... h_1 f = g k_m ... k_1 f
+$
+We know if $g$ is monomorphism and $f$ is epimorphism giving the *cancellable* to infer inner path is commutative.
+
+Then a given selection of inner rectangle could infer commutative?
+Suppose we know left or right rectangle is commutative, and also the outer:
+
+$
+  "outer": l j f = m k g\
+  "left": h f = k g \
+  -> l j f = m h f
+$
+
+Now we know if $f$ is epimorphism yielding the right square commutativity. Reverse arrow to deduce that $m$ must be monomorphism to yield the left square commutativity.
+
+A other useful consequence is that if commutativity is just a equality between different morphisms composition, then injection suggests that if image is same, preimage must be also same too. It shows that a faithful functor always preserve commutativity if codomain is, then domain is too.#footnote[If domain is, then codomian is. Such proposition is trivial indeed.]
+
+== Naturality
+
+Any finite-dimensional $bb(k)$-vector space $V$ is isomorphic to is linear dual. We achieve this by a explicit dual basis with $"Hom"(V, bb(k))$. A double dual is, with $"Hom"("Hom"(V,bb(k)), bb(k))$. Which is also isomorphic to original vector space. A insight is we have to construct dual basis with a given basis, but we don't need to do such for double dual, revealing a arbitrary selection independence which is naturality.
+
+For a vector space at any dimension, the map $(...)^(**): V -> V^(**)$ send $v -> v^(**): V^* -> bb(k)$ its linear function. We clarify as $v^(**) (f) = f(v)$. Now, we apply a linear transformation to $V^(**)$:
+
+$
+  (phi.alt(v))^(**)(f) = f(phi.alt(v)) \
+  phi.alt^(**)(v^(**))(f) = f(phi.alt(v)) \
+  (phi.alt(v))^(**) = phi.alt^(**)(v^(**))
+$
+This is the key of arbitrary selection independence comes from. We do nothing on a toil of basis selection. So, put it distinct, one space selection give a same effect on double dual space, apply on dual space we yielding the same results.
+
+#align(center)[#commutative-diagram(
+    node((0, 0), $V$),
+    node((0, 1), $V^(**)$),
+    node((1, 0), $W$),
+    node((1, 1), $W^(**)$),
+    arr($V$, $V^(**)$, $**_V$),
+    arr($V$, $W$, $phi.alt$),
+    arr($V^(**)$, $W^(**)$, $phi.alt^(**)$),
+    arr($W$, $W^(**)$, $**_W$),
+  )]
+We now know it's commutative. Generalize this, We identify vertical lines are categories between different functor and horizonal lines are *morphism of functor*#footnote[the term in french actually], we call it *natural transformation*.
+
+#align(center)[#commutative-diagram(
+    node((0, 0), $F(A)$),
+    node((0, 1), $G(A)$),
+    node((1, 0), $F(B)$),
+    node((1, 1), $G(B)$),
+    arr($F(A)$, $G(A)$, $alpha_A$),
+    arr($F(A)$, $F(B)$, $F(f)$),
+    arr($G(A)$, $G(B)$, $G(f)$),
+    arr($F(B)$, $G(B)$, $alpha_B$),
+  )]
+
+Such morphism system with $alpha_A, alpha_B ... := alpha$ called natural transformation.
+
+In category level, we denote as:
+
+#align(center)[#diagram(
+    spacing: 2cm,
+    {
+      let (A, B) = ((0, 0), (1, 0))
+      fnode(A, $"C"$)
+      fnode(B, $"D"$)
+      edge(A, B, $F$, "->", bend: +35deg)
+      edge(A, B, $G$, "->", bend: -35deg)
+      let h = 0.2
+      edge((.5, -h), (.5, +h), $alpha$, "=>")
+    },
+  )]
+
+If $alpha$ as a morphism system identify each as a isomorphism, we call it *natural transformation*.
+
+#example[
+  (a categorification of the natural numbers). For set $A$ and $B$, let $A times B, A + B, A^B$ as products, union and set of functions of $B$ to $A$. \
+  $
+    A times (B + C) =^alpha A times B + A times C \
+    (A times B)^C =^beta A^C times B^C \
+  $
+  You can list rest, suppose each operation as a functor, then $=$ gives a natural isomorphism for each different functor like: $B + C -> F(B+C)\/G(B+C)$. \
+  Given functor cardinality: $|-|: "Fin"_("iso") -> bb(N)$ carrying the natural isomorphism into natural numbers.
+]
+
+
 
 For category $cal(C)_1$ and $cal(C)_2$, we define $"Fun"(cal(C_1),cal(C_2))$ as the category of functors from $cal(C_1)$ to $cal(C_2)$. The objects are functors and morphisms are natural transformations. Is that well defined? Usually, we should ensure that morphisms of this category is a set. This can be achieved if $cal(C_1)$ and $cal(C_2)$ is small, a.k.a the objects are in a set. Then for $F_1(cal(C_1)) ->^eta F_2(cal(C_1))$, we know $cal(C_2)^cal(C_1)$ defines the maximal set of possible functors between them. Then the power set of $cal(C_2)^cal(C_1)$ is a set, which is the set of all possible morphisms between them, gives a set of natural transformations. So indeed, $"Fun"(cal(C_1),cal(C_2))$ is a category.
 
@@ -196,7 +430,7 @@ $
   ? -> F(A) ->^F(u) F(M) ->^F(v) F(A') -> ?
 $
 
-$F(v)$ isn't surjective now, if we want to measure the failure of surjectivity, we can define $F(A') / "Im"(F(v))$. Rather, a general question is whether or not the definition is canonical? If M is injective, the original exact sequence exactness indicates the definition of $A'$ is always defined by $M$ itself. So $F(A') / "Im"((F(v))) -> F(A') / "Coker"(F(u))$ is well defined. Then we can seek a general definition by choose many possible $M$ as injective object, information of $A$ can always be preserved by various $M$. Indicating that $F(A') / "Coker"(F(u))$ is invariant under the choice of $M$, we denote it as $S F(A)$. If the category has enough injective objects, we can always define such object for every possible $A$, giving a canonical functor definition as $S F(alpha): S F(A) -> S F(B)$. We are close to a general definition...
+$F(v)$ isn't surjective now, if we want to measure the failure of surjectivity, we can define $F(A') / "Im"(F(v))$. Rather, a general question is whether or not the definition is canonical? If $M$ is injective, the original exact sequence exactness indicates the definition of $A'$ is always defined by $M$ itself. So $F(A') / "Im"((F(v))) -> F(A') / "Coker"(F(u))$ is well defined. Then we can seek a general definition by choose many possible $M$ as injective object, information of $A$ can always be preserved by various $M$. Indicating that $F(A') / "Coker"(F(u))$ is invariant under the choice of $M$, we denote it as $S F(A)$. If the category has enough injective objects, we can always define such object for every possible $A$, giving a canonical functor definition as $S F(alpha): S F(A) -> S F(B)$. We are close to a general definition...
 
 We denote a system of functors $T = (T_i)$ from an abelian category to a addtive category. Where $T_i: cal(C) -> cal(C')$, together with special connecting morphsims named as boundary maps $delta\/partial: T_i (A'') -> T_(i+1) (A')$ for every short exact sequence $0 -> A' -> A -> A'' -> 0$ in each relevant degree $i$.
 
@@ -249,7 +483,7 @@ Due to lower sequence, we know we can map $"Ker"(f^1(A)) -> T'^0(M)$. Further, a
 Place all thing $"Ker"(T^0(M)) -> "Ker"(T^0(A')) -> "Ker"(T^1(A))$ is exact because they are just part of the above upper sequence, we can give a restriction by $pi$ on every component, which gives the same results. Second, $"Coker"(T'^0(M)) -> "Coker"(T'^0(A')) -> "Coker"(T'^1(A))$ is same.
 
 $
-  "Ker"(T^0(M)) -> "Ker"(T^0(A')) -> "Ker"(T^1(A)) ->^d "Coker"(T'^0(M)) -> "Coker"(T'^0(A')) -> "Coker"(T'^1(A))
+  "Ker"(T^0(M)) -> "Ker"(T^0(A')) -> "Ker"(T^1(A)) ->^d \ "Coker"(T'^0(M)) -> "Coker"(T'^0(A')) -> "Coker"(T'^1(A))
 $
 
 Is a exact sequence, also, if $T^0(v)$ is monomorphism, then $"Ker"(T^0(M)) -> "Ker"(T^0(A'))$ is monomorphism for the same reason above. If $delta'$ is a epimorphism, yielding $"Coker"(T'^0(A')) -> "Coker"(T'^1(A))$ is epimorphism.
@@ -259,6 +493,14 @@ However, such astonishing consequence is we can link each short exact sequence t
 Now cease the stray, we see that by the above construction, we can always form a sequence natural transformations from the given condition $T^i$ and $f_0$, continuing building the sequence of $T^i$ and $T'^i$ by $f^i$ if and only if $T^i$ is effacable and with enough injective objects. Thus we can define universal $delta$-functor, which means for any $delta$-functor $T' = (T'^i)$ and any natural transformation $f^0: T^0 -> T'^0$, there exist *unique* morphism of $delta$-functors $f = (f^i): T -> T'$ given by $f^0$. It means the whole behavoir is determined by its behavoir at degree 0!(Apply identity natural transformation to itself.)
 
 Therefore, we define universal $delta$-functor by $F = T^0$ and right satellite functors of $F$ by $S^i F = T^i$. We can apply same routine to $delta^*$ as decreasing degree, or reverse arrow to define in contravariant $delta$-functors.
+
+Given this, we chain each exact sequence by higher degree functors.
+
+$
+  0 -> F(A) -> F(M) -> F(A') ->^(delta_0) S^1 F(A) -> S^1 F(M) ->...
+$
+
+For acyclic object $M$, this gives $S^i F(A) = S^(i-1)F(A')$ due to $S^i F(M) = 0$. Then we know $S^1 F(A) =$
 
 = Simplex
 
