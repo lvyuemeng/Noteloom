@@ -197,6 +197,7 @@ $
 $
 This is the key of arbitrary selection independence comes from. We do nothing on a toil of basis selection. So, put it distinct, one space selection give a same effect on double dual space, apply on dual space we yielding the same results.
 
+$
 #align(center)[#commutative-diagram(
     node((0, 0), $V$),
     node((0, 1), $V^(**)$),
@@ -207,8 +208,10 @@ This is the key of arbitrary selection independence comes from. We do nothing on
     arr($V^(**)$, $W^(**)$, $phi.alt^(**)$),
     arr($W$, $W^(**)$, $**_W$),
   )]
+$
 We now know it's commutative. Generalize this, We identify vertical lines are categories between different functor and horizonal lines are *morphism of functor*#footnote[the term in french actually], we call it *natural transformation*.
 
+$
 #align(center)[#commutative-diagram(
     node((0, 0), $F(A)$),
     node((0, 1), $G(A)$),
@@ -219,11 +222,12 @@ We now know it's commutative. Generalize this, We identify vertical lines are ca
     arr($G(A)$, $G(B)$, $G(f)$),
     arr($F(B)$, $G(B)$, $alpha_B$),
   )]
-
+$
 Such morphism system with $alpha_A, alpha_B ... := alpha$ called natural transformation.
 
 In category level, we denote as:
 
+$
 #align(center)[#diagram(
     spacing: 2cm,
     {
@@ -236,7 +240,7 @@ In category level, we denote as:
       edge((.5, -h), (.5, +h), $alpha$, "=>")
     },
   )]
-
+$
 If $alpha$ as a morphism system identify each as a isomorphism, we call it *natural transformation*.
 
 #example[
