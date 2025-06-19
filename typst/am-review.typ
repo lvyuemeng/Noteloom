@@ -2,7 +2,7 @@
 
 
 #show: mine.with(
-  title: "am-hamilton",
+  title: "Review of Classical Mechanics",
   eq-numbering: "(1.1)",
   eq-chapterwise: true,
 )

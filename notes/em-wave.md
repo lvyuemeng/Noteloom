@@ -136,6 +136,17 @@ $\hat{n} \times (\mathbf{E_2} - \mathbf{E_1}) = 0$.
 
 In incidence, transmition/refracted, reflection wave:$\mathbf{E}_i \sim \tilde{E}_i e^{ikr}$.
 
+It's useful to notice that, for normal condition(Same for electric field):
+$$
+\bold{H_1} = \sqrt{\epsilon_1/\mu_0} (E_i \sin \theta_1 + E_r \sin \theta_1) \hat(z) \\
+\bold{H_2} = \sqrt{\epsilon_2/\mu_0} (E_t \sin \theta_2) \\
+E_i + E_r = E_t \\
+\to \mu_1 \sqrt{\epsilon_1/\mu_1} \sin \theta_1 = \mu_2 \sqrt{\epsilon_2/\mu_2}\sin \theta_2 \\
+\to n_1 \sin theta_1 = n_2 \sin theta_2
+$$
+
+So we only consider tangent boundary condition.
+
 In media with $z=0$ boundary:
 
 $$
@@ -160,6 +171,27 @@ e^{ik_{tz}z} = e^{-k_0\sqrt{sin^2\theta(\frac{n_2}{n_1})^2 - 1}\, z}
 $$
 
 Which becomes decaying wave with $\kappa^{-1} z = (...)z$ as a characteristic distance.
+
+Then, we can calculate energy flow:
+$$
+	\braket{S} = E \times H \\
+	\braket{S}_x = E_y H_z - E_z H_y \\ 
+$$
+For $E \perp$ incident plane, we know $E_z = 0, E = E_y$, and $H \parallel$ incident plane, and we suppose it's on the $x-z$ plane, so $H_y$ = 0.
+
+Then we know in the media:
+$$
+	E = E_0 e^{-\kappa z} e^{i(k_x x - \omega t)} = E_y\\
+	H_z = \sqrt{\epsilon_2/\mu_2 } k \times E = (...) (k_x = \sin \theta) E_0(...) \\
+	H_y = (...) i \sqrt{(\sin^2 theta)/(n^2_{21}) - 1} (...)
+$$
+Where $\kappa z$ is the decay wave, and $H_y$ is imagination part.
+
+In the transmission media:
+$$
+	\braket{S}_x =  1/2 \sqrt{\epsilon_2/\mu_2} |E''|^2 e^{-2 \kappa z} \sin \theta/n_{2 1} \\
+	\braket{S}_z = E_y H_x = 0
+$$
 
 We can decompose the incident wave $E_i = E_{i s} + E_{i p}$ which component perpendicular and parallel to the incident plane.
 
@@ -235,3 +267,57 @@ k_I = (\frac{\omega \mu \sigma}{2})^{\frac{1}{2}} \\
 $$
 
 Usually, for cooper in room temperature, it corresponding to a wave length much greater 50 $\mu \text{m}$, with roughly 10 MHZ frequency as infrared light. So in radio frequency, the interaction between vaccum wave and metal will focus on the surface mainly.
+
+## Resonant Cavity/Wave Guide
+
+Suppose in media, insulator for electromagnetic wave, which is metal for high frequency. We has:
+
+$$
+	e_n \times (E_1 - E_2) = 0 \\
+$$
+We know metal has $E_2 = 0$ almost, so:
+$$
+	e_n \times E = 0 \\
+	e_n \times H = \alpha \\
+	e_n \cdot B = 0
+$$
+
+We could suppose it's ideal wave model for it's excellent reflection property.
+
+$$
+	E(t, x) = E_0(x,y,z) e^{-i \omega t + i k x}
+$$
+
+We list the maxwell equation, could yield:
+$$
+	(\frac{-1}{c^2} \frac{\partial^2}{\partial t^2} + \nabla^2 ) E = 0 \\
+	\omega^2/c^2 E_0 + \nabla^2 E_0 = 0 \\
+	k^2 E_0 + \nabla^2 E_0 = 0
+$$
+
+For example, the $x$ plane, the corresponding boundary condition on one side must be like:
+$$
+	E_{y/z}|_{x=0/a} = 0 \\
+$$
+With divergence condition for normal:
+$$
+	\frac{\partial E_x}{\partial x}|_{x=0/a} = 0 \\
+$$
+
+For general $E_n$ on normal direction $n$.
+
+Then above would give the integer-mode for $k$:
+$$
+	k_i = (m \pi)/(L_i) \quad m \in \bf{Z}
+$$
+With divergence, we know it must has, for amplitude:
+
+$$
+	k_i A_i = 0 \\
+	\omega = c \pi \sqrt{(\frac{n_i}{L_i})^2}
+$$
+
+Notice, from divergence we know there's no $001$ eigenvalue because two defines all three mode, so the final is also zero.
+
+The thing could be simpler for wave guide, because one directions the boundary condition disappear, then for any kinds of $k$ is fine, so it could be a arbitrary $m,n$ and a independent $l$ for a direction.
+

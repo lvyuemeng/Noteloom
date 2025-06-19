@@ -88,10 +88,6 @@
       )
     },
 
-    // Deprecated:
-    // The page header should show the page number and list of
-    // authors, except on the first page. The page number is on
-    // the left for even pages and on the right for odd pages.
     header-ascent: 14pt,
     header: context {
       let i = counter(page).get().first()
@@ -130,7 +126,7 @@
       if lang == "zh" {
         set text(size: head-size-zh)
       } else {
-        set text(size: 1.2em)
+        set text(size: 1.4em)
       }
       set par(spacing: 0.8em)
       v(1.0em, weak: true)
@@ -138,18 +134,18 @@
       it.body
       v(1.0em, weak: true)
     } else if it.level == 2 {
-      set text(size: 1em)
+      set text(size: 1.2em)
       set par(spacing: 0.6em)
       v(1.8em, weak: true)
       number
       it.body
       v(1.0em, weak: true)
     } else {
-      set text(size: 0.8em, font: "SimHei")
+      set text(size: 1.2em)
       set par(spacing: 0.4em)
       v(1.2em, weak: true)
       number
-      emph(it.body)
+      it.body
       v(0.8em, weak: true)
     }
   }
