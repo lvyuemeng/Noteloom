@@ -1,6 +1,4 @@
-Minkowski:
-
-Symmetry:
+## Symmetry
 $$
 t' = \gamma(t - \frac{v}{c^2}x) \\
 x' = \gamma(x - vt)
@@ -67,7 +65,7 @@ $$
 
 Gives: $t' = t/\gamma$.
 
-Comment:
+### Implicit Condition
 
 Another exposition, which is rather common, is to choose $x = 0$ rather $x' = 0$. indicating the clock is comoving with the original frame, which results $t' = \gamma t$, a.k.a the clock time in original frame measured by measure frame is longer, giving us time dilation.
 
@@ -174,7 +172,7 @@ We have two frame, first is comoving with medium $\Sigma$, and second is comovin
 
 list condition:
 $$
-\Sigma: v = \frac{c}{n}, x = vt \\
+\Sigma: v_0 = \frac{c}{n}, x = v_0t \\
 \Sigma': x' = l_0
 $$
 
@@ -191,6 +189,8 @@ $$
 Which is correct.
 
 ---
+
+### Angle
 
 Now we extend to situation involving angle or multiple directions.
 
@@ -241,24 +241,42 @@ $$
 
 Second, extend the previous S-R problem, what if the medium moving in another direction perpendicular to $x$?
 
+Suppose the frame comoving with S-R is $\Sigma'$ and comoving with media is $\Sigma$.
 $$
-x' = l_0 = x = v_x' t' = v_x t\\
-y' = 0 = v_y' t'\\
-y = v_y t \\
-v_x^2 + v_y^2 = (\frac{c}{n})^2 \\
+\Sigma': x' = l_0 = v'_x t' \\
+y' = 0 = v'_y t'\\
+x' = (c/n) t' = v_x' t'
+$$
+$$
+\Sigma: x = l_0 = v_x t\\
+y = v_y t
 $$
 
-With:
+With final condition on total velocity(This can be applied to every frame):
 $$
+v_x^2 + v_y^2 = (c/n)^2 \\
+$$
+
+$$
+x = x' \\
 y = \gamma(y' - vt') \\
 t = \gamma(t' - \frac{v}{c^2}y') \\
 $$
 
+Solve it by directly plugin $t = l_0/(v_x)$:
+$$
+t' = l_0/(\gamma v_x) \\
+y = v_y t = v_y l_0/v_x = \gamma v t' = \gamma v l_0/v_x' \\
+v_y/v_x = \gamma v/v_x' \\
+v_x^2 (1 + (\frac{\gamma v}{v_x'})^2) = (c/n)^2
+$$
+Pluin the $v_x$ into $t$ we yield the final results.
+
 We should notice that in $\Sigma$, S-R is moving in $y$ direction with velocity $-v$ could be derived in the first equation. Therefore the problem could be reformulated that what if S-R is moving in $y$ direction.
 
-Gives the correct answer which is:$\frac{l_0}{v_x \gamma}$.
-
 ---
+
+##
 
 $d\tau = dt/\gamma(v) = dt'/\gamma(v') $ is a invariance.
 
@@ -305,16 +323,17 @@ $$
 
 Another confusion is that why we didn't define $F^\mu = \frac{d^2 x^\mu}{d t^2} $, we see that due to second differentiation, it doesn't fully match. 
 
-I agree, it only works that:
+It only works that, in electromagnetics, the force proportional to $u_v$.
 
 $$
 f^\mu = \frac{dp^\mu}{d\tau} = q F^{\mu\nu}u_\nu \\
 = q(\frac{u^0}{c}\mathbf{E} + \mathbf{u} \times \mathbf{B}) = q \gamma (\mathbf{E} + \mathbf{v} \times \mathbf{B})
 $$
 
-Now we see if we define $F^\mu = 1/\gamma(v) f^\mu$ is consistent that:
+Now we see if we define $F^\mu = 1/\gamma(v) f^\mu$ is consistent:
 $$
-\frac{d p^\mu}{d t} = q(E^i + \epsilon_{ijk}v_j B_k)
+\frac{d p^i}{d t} = q(E^i + \epsilon_{ijk}v_j B_k) \\
+\frac{d p^0}{d t} = q E^i v_i
 $$
 
 ---

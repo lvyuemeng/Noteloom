@@ -544,6 +544,8 @@ $
 
 The final situation is related to response of bounded current. A magnetic conductor will be magnetized in magnetic field.
 
+Another 
+
 Suppose no free current, we has $nabla times H = 0$.
 Then $H = nabla phi$ also.
 
@@ -659,6 +661,8 @@ $
   (phi.alt , bold(A)) -> (phi.alt + (partial theta)/(partial t), bold(A) - nabla theta) quad "invariant" -> "lorentz"...
 $
 
+Here it can be more intuitive...
+
 = Radiation
 
 $
@@ -768,7 +772,7 @@ $
   &= |up(j)|^2 - c^2|rho(...)|^2 \
 $
 
-= Low-Frequency Limit
+== Low-Frequency Limit
 
 In $#e_p$, we see that $|x'| < d$, if we want to expand this term, we should restrict that $(omega' d) / c << 1$. Which go quickly to zero for large $omega'$.
 
@@ -780,10 +784,10 @@ $
 
 Suppose we only localize the source with $delta(t' - (t - r / c))$, turn $-i omega ~ partial_t$. Expand the term $#e_p$:
 $
-  sum_k integral d^3 x' (partial_t hup(n) dot up(x') / c)^k up(j)_perp (t-r / c, up(x')) \
-  sum_k (hup(n) dot )^k (partial_t)^k integral d^3 x' up((x' / c))^k up(j)_perp (t-r / c, up(x')) \
+  partial_t sum_k integral d^3 x' 1/(n!) (partial_t hup(n) dot up(x') / c)^k up(j)_perp (t-r / c, up(x')) \
+  partial_t sum_k (hup(n) dot )^k  (partial_t)^k integral d^3 x' 1/(n!) up((x' / c))^k up(j)_perp (t-r / c, up(x')) \
 $
-Thus we expand those terms like $n_i + x_i$, $n_i n_j + x_i x_j$, $n_i n_j n_k + x_i x_j x_k$ and so on...
+Thus we expand those terms like $n_i \/ x_i$, $n_i n_j \/ x_i x_j$, $n_i n_j n_k \/ x_i x_j x_k$ and so on...
 
 $
   up(j)_perp (t-r / c, up(x')) &= up(j)(t - r / c, up(x')) - hup(n) (hup(n) dot up(j)(t - r / c, up(x'))) \
@@ -792,11 +796,11 @@ $
 
 Notice a addtional $partial_t$ in front of resulting $partial_t^(k+1)$
 
-A useful check is that $up(j) ~ v q; 1 / c^2 partial_t up(j) ~ (omega_s q v) / c^2 ~ q / d (v / c)^2$ is already second order, and $c partial_t rho$ is zero due to whole integral. Thus start from $1 / c^3 c partial_t^2 rho n_i ~ 1 / c^2 dot.double(d) ~ (omega_s^2 q d) / c^2 ~ q / d v^2 / c^2$ again second order.
+A useful check is that $up(j) ~ v q; 1 / c^2 partial_t up(j) ~ (omega_s q v) / c^2 ~ q / d (v / c)^2$ is already second order, and $c partial_t rho$, one order, is zero because whole integral is a constant. Thus start from $1 / c^3 c partial_t^2 rho x'_i ~ 1 / c^2 dot.double(d) ~ (omega_s^2 q d) / c^2 ~ q / d v^2 / c^2$ again second order.
 
-That's means all radiation terms start from $(v / c)^2$ order and disappers in $v -> 0$.
+That's means all radiation terms start from $(v / c)^2$ order and disappers in $v -> 0$ for static limit.
 
-We check the second order which is first term:
+We check the second order which is the first term:
 
 $
   integral d^3 x' up(j)(t,up(x')) &= integral d^3 x' j_k (t,up(x')) partial_k x^i
@@ -810,3 +814,109 @@ $
   up(E)(t,up(x)) = - (1) / (4 pi epsilon_0 c^2) 1 / r (dot.double(up(d))(t - r / c) - hup(n) (hup(n) dot dot.double(up(d))(t - r / c))) \
 $
 
+Then, for third order:
+$
+  partial^3_t integral d x'^3 rho(...) x'_i x'_j = dot.triple(Q)_(i j)
+$
+Where $nabla dot j = - partial_t rho$
+$
+  partial^2_t integral d^3 x' j_i x_j &= partial^2_t - integral d^3 x x_i partial_k (x_j j_k) \ &= partial^2_t (- integral d^3 x x_i j_j  + partial_t integral d^3 x' rho x_i x_j) \
+$
+
+We split into symmetric and antisymmetric part corresponding to:
+$
+  (...) n_j = n_j (1/2 dot.triple(Q)_(i j) - epsilon_(i j k) dot.double(m)_k) \
+$
+
+If we choose $Q_(i j)n_j = Q_i $, just to get with:
+
+$
+  1/(4pi epsilon_0 c^3 r^2) (1/2dot.triple(Q)_(perp)) "or" (...) 1/6 dot.triple(D)
+$
+
+== Problem
+
+It's easy to calculate approximation four-potential by removing the additional $partial_t$, and the corresponding $perp$.
+
+For example, $dot.double(d)_perp = hat(n) times (hat(n) times dot.double(d))$ for $E$, then it's useful to notice that:
+$
+  B = 1/c hat(n) times E &= 1/c hat(n) times - (dot.double(d) - hat(n) (hat(n) dot dot.double(d))) \
+  &= 1/c dot.double(d) times hat(n) 
+$
+
+So usual problem is to calculate corresponding order of $p \/ d$ and even higher order $D$ to acquire $E\/B$ and $S$ energy flow.
+
+Some problem will also makes you calculate $p$ first and then gives it a small vibration to yielding a radiation.
+
+- Suppose a $p_0$ with a small vibration, calculate the radiation and energy flow.
+
+$
+  p(t,x) = e_z p_0 e^(i omega t) quad dot.double(p) = - omega^2 p = -omega^2 p_0 e^(i omega t)e_z  \
+$
+
+For magnetic field, it's second order, so must has $1/c^2$, but we also know it should be $1/c E$, which is $1/c^3$ indeed, second, we should be careful that the time is $t-r/c$ rather $t$ solely.
+$
+  B = -1/(4 pi epsilon_0 c^3 r) omega^2 e^(i omega (t - r/c)) p_0 e_z times e_r
+$
+
+$
+  e_r = sin theta cos phi.alt e_x + sin theta sin phi.alt e_y + cos theta e_z \
+  e_phi.alt =1/(sin theta)(sin theta (- sin phi.alt) e_x + sin theta cos phi.alt e_y) \
+  e_z times e_r = sin theta e_phi.alt
+$
+#footnote[Use cylindrical is simpler, but the results is different, which is not $sin theta$ here.]
+
+$
+  B = (...) sin theta e_phi.alt \
+  E = c B times e_r = (...) sin theta e_theta \
+$
+
+Then, the energy flow is:
+$
+  angle.l S angle.r  &= 1/2 (epsilon_0 E times B) \
+  &= (omega^4 p_0^2)/(32 pi^2 epsilon_0 c^5 r^2) sin^2 theta e_r
+$
+
+You can integrate this to yielding total radiation power.
+
+Then, the basic starting point, how to calculate $p$ is somehow need to be pondered.
+
+For example, a circling electron:
+$
+  p = e r_0 (cos omega t e_x + sin omega t e_y) \ 
+  p = e r_0 (e_x - i e_y) e^(i omega t) \
+  dot.double(p) = - omega^2 e r_0 (e_x - i e_y) \
+$
+
+Or else, you may encounter $m$ as magnetic dipole:
+$
+  m = 1/2 integral d l x times j \
+$
+
+However, based on previous we know:
+$
+  integral d^3 x j_i (t,x) = - integral d^3 x x_i partial_k j_k (t, x) = partial_t integral d^3 x rho(t, x) x_i = dot(d)_i (t)
+$
+
+So, we can derive it as(the summation is for many dipoles, rather coordinates):
+$
+  m &= 1/2 sum_alpha x_alpha times dot(d)_alpha \
+  d_alpha &= plus.minus p_0 e^(i omega t) e_x \
+  x_alpha &= plus.minus a/2 e_z \
+  m &= 1/2 (a/2 e_z times d_1 - a/2 e_z times d_2) \
+  m &= a/2 e_z times d = a/2 e_y i omega p_0 e^(i omega t)
+$
+
+For quadruple, you should calculate as tensor, and then apply:
+$
+  Q_(i j) n_j = Q_(i j) e_i e_j dot e_r \ 
+  n_j = e_r \
+  e_r = sin theta cos phi.alt e_x + sin theta sin phi.alt e_y + cos theta e_z \
+$
+
+To yield correct results.
+
+The final comments is, for static current or charge, it won't radiates, at least, it should has acceleration! Also, just like static multipole expansion, if the distribution of charge is symmetric, it won't contribute to the final answer:
+$
+  p_1 + p_2 = (p_0 - p_0) e^(i omega t) = 0
+$
