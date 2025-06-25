@@ -105,17 +105,16 @@ Where $dot(q)$ is unrelated to $q$.
 $
   inpro(l: dot(q), r: dot(q))_M(q) =1 / 2 integral rho(q) dot(q)^2 d q \
   = 1 / 2 dot(q)^2 integral rho(q) d q \
-  U(q) = integral U_rho(q) d q \
+  U(q) = integral U_rho (q) d q \
 $
 
-For rocket, we has a general force upon $Q = (d m) / (d t) u$ which is momentum flux. However, the subtle reason comes from a weird fact that we shift a dependent term to another independent term.
+For rocket, we has a general force upon $Q = (d m) / (d t) u = - (d M)/(d t) u$ which is momentum flux, causing the energy non-conservative, which can be considered as convection. Therefore, for environment, we has no $M dot(u)$ for its acceleration, and due to inelastic collision:
 
 $
-  m_1 dot(v)_1 + m_2 dot(v)_2 + dot(m_1) v_1 + dot(m_2) v_2 = F_("ext") \
-  dot(m_1) + dot(m_2) = 0
+  - (d M)/(d t) u + p = p' = p + (d p)/(d t) \
+  (d p)/(d t) = Q \
+  (d p)/(d t) = - (partial H)/(partial q) + Q
 $
-
-Now, separate that $m_2 dot(v)_2 = F_("ext" 2)$ giving us the original equation. But that means a shift of momentum flux. Original case would be $m_2 dot(v)_2 + dot(m_2) v_2 = F_("ext" 2)$. So it's undetermined and we prescribe such ideal condition so.
 
 The chain above is $M = rho y$, thus giving us $T = 1 / 2 (rho y) dot(y)^2$:
 
@@ -230,6 +229,64 @@ That's constant indeed in rotation system. But its energy increases due to the c
 $
   E_("rot") = (p_theta)^2 / (2 I)
 $
+
+== Gyro
+
+Suppose a gyro affected by gravitation.
+
+$
+  tau_s = (d sin phi.alt hat(r) + d cos phi.alt hat(k)) times (m g - hat(k)) = m g d sin phi.alt hat(theta)
+$
+
+We know the self rotation is:
+$
+  omega_s = - omega_s sin phi.alt hat(r) - omega_s cos phi.alt hat(k) \
+  L_("cm") = I_"cm" omega_s \
+$
+
+Now, the rotation of angular momentum of mass center is:
+$
+  (d L_("cm"))/(d t) = - I_"cm" omega_s sin phi.alt (d hat(r))/(d t) = (...) omega_z hat(theta) = tau_s
+$
+
+Equal both side yield:
+$
+  omega_z = - (m g d)/(I_("cm") omega_s)
+$
+
+So when the self angular velocity is very high, the precession is actually slower.
+
+== Instant Center
+
+We often comes, in rigid body we need to decompose the solely rotation effect:
+$
+  v_s = v_0 + omega times (r_s - r_0) \
+$
+
+If $v_s = 0$:
+
+$
+  v_0 = omega times (r_0 - r_s) \
+$
+
+That's we only need to know where $r_s$ is to acquire it, it's often useful in 2-dim because two lines intersect one points, which, given two velocity of two points in rigid body, from equation we know it must be perpendicular to the $r_0 - r_s$, and $omega$ must be in $e_z$ direction, thus, $r_0 - r_s$ must be in the plane and perpendicular to both velocity.
+
+For example, a rolling disk, assume a comoving coordinates with disk center:
+
+$
+  v_"bottom" = v_0 hat(x) + (-v_0) hat(x') = v_0 hat(x) - v_0 hat(x') = 0
+$
+
+So it's the instant point here.
+
+It's also common to solve the instant center trajectory, and expressing both in fixed coordinates and comoving coordinates in rigid body.
+
+$
+  x_"bottom" = omega R t hat(x) - R hat(y)\
+  x_"bottom" = 0 hat(x)' - R hat(y)
+$
+
+Sometimes, it's rather a geometry problem to solve this, because using parameter function may be redundant here.
 
 == Problem Sheet
 
@@ -399,6 +456,37 @@ Is the separation. We exploit that separation is to choose $W_i (q_i;P)$ with so
 
 Take a further step, if there's only explicit $p_i$ in $H$, we know that separation can factor solely constant related to $p_i = P_i = (ptl W) / (ptl q_i)$. Thus take $W_i (q_i;P_i) = P_i q_i = p_i q_i$ is constant.
 
+== Poisson Bracket
+
+$
+  {f g, h} = f {g, h} + {f , h} g \
+$
+$
+  D_[a,b](c) = D_a D_b (c) - D_b D_a (c) \
+  {{f,g}, h} = {f, {g, h}} - {g, {f, h}} \
+  {{f,g}, h} + {{g,h},f} + {{h,f},g} = 0 
+$
+
+Suppose angular momentum:
+
+$
+  {L_1,L_2} &= {r_2 p_3 - r_3 p_2, r_3 p_1 - r_1 p_3} \
+  &= {r_2 p_3, r_3 p_1} + {r_3 p_2, r_1 p_3} \
+  &= {r_2, r_3}p_3 p_1 + r_3{r_2, p_1}p_1 + ... \
+  &+ r_1{r_3, p_3}p_2 + ... \
+  &= -r_2 p_1 + r_1 p_2 = L_3
+$
+It's useful to check that:
+$
+  {L_i, L_j} &= {epsilon_(i l m) r_l p_m, epsilon_(j k n) r_k p_n} \
+  &= r_k {r_l, p_n}p_m + r_l {p_m, r_k}p_n + ... \
+  &= -epsilon_(i l m) epsilon_(j k n) r_k p_m delta_(l n) + epsilon_(i l m) epsilon_(j k n) r_l p_n delta_(m k) \
+  &= - (delta_(i j) delta_(m k) - delta_(i k) delta_(j m)) r_k p_m + ... \
+  &= - (r_m p_m  - r_i p_j) + (r_l p_l - r_j p_i) \
+  &= r_i p_j - r_j p_i = epsilon_(i j k) L_k
+$
+Which is the pesudo-vector.
+
 == Problem Sheet
 
 - A bowl with a rod leaning on the edge, with one side out of bowl, the length inside is $c$, prove its whole length.
@@ -447,4 +535,140 @@ $
   - x/y = 3 \
   - x = 3 y != y = 3 x != d y = 3 d x\
 $
-Indeed here.
+
+The usual problem about solving a system by langrange is mainly geometric, the mainly restriction is about fixed length and no-slip rotation:
+
+$
+  Delta x^2 + Delta y^2 = l \
+  Delta x = l cos theta \ 
+  Delta y = l sin theta
+$
+
+$
+  R theta = v
+$
+
+Above should be also used with basic translation and rotation addition property throughout different frame:
+
+$
+  v = v_1 + v_2 + ... \
+  omega = omega_1 + omega_2 + ...\
+$
+
+- Suppose a cleavage and a block on it, the ground and surface on the cleavage is smooth.
+
+Many problems need you to decompose throughout various frame. Like above, we decompose to the fixed frame on cleavage and the comoving frame with block, which is parallel with the slope.
+
+Suppose $r_1$ is cleavage position, $r_2$ is the block:
+$
+  r_1 = x_1 hat(x)_1 \
+  r_2 = r_1 + x_2 hat(x)_2 \
+$
+
+$
+  dot(r)_1 = dot(x_1) hat(x)_1 \
+  dot(r)_2 = dot(x_1) hat(x)_1 + dot(x)_2 hat(x)_2 \
+  hat(x)_1 dot hat(x)_2 = cos theta \
+  hat(y)_1 dot hat(x)_2 = sin theta
+$
+
+$
+  T_1 = 1/2 M dot(x)_1^2 \
+  T_2 = 1/2 m (dot(x)_1^2 + 2 dot(x)_1 dot(x)_2 cos theta + dot(x)^2_2 ) \
+  U = m g (r_2 dot y)= m g x_2 sin theta \
+$
+
+Now we turn to rotation:
+- Suppose a circle rotated around a point in the circle, a mass point smoothly rotates on the circle.
+
+Decomposition is first, the fixed point rotation frame, and then the circle center rotation frame.
+
+$
+  r = r_1 + r_2 = rho_1 hat(rho)_1 + rho_2 hat(rho)_2 \
+  dot(r) = rho_1 dot(theta)_1 hat(theta)_1 + rho_2 (dot(theta)_1 + dot(theta)_2) hat(theta)_2 \
+  rho_1 = rho_2 = R \
+$
+
+It should be noticed that, the $(d r_2)/(d t)$ is a composition of angular velocity, equal to $(omega_1 + omega_2) times hat(r)_2 = (dot(theta)_1 + dot(theta)_2) hat(k) times hat(r)_2 = (...) hat(theta)_2$. The angle of $theta_1$ and $theta_2$ is because $(d hat(r)_2)/(d t) = ((d hat(r)_2)/(d t))_(O_2) + dot(theta)_1 hat(k) times hat(r)_2 $. Thus, $cos theta_2$ is the angle difference of fixed rotation and comoving rotation frame.
+
+$
+  hat(theta)_2 dot hat(theta)_1 = (hat(k) times hat(r)_2) dot hat(theta)_1 = - (hat(k) times hat(theta)_1) dot hat(r)_2 = hat(r)_1 dot hat(r)_2 = cos theta_2\
+  hat(theta)_1 dot hat(theta)_2 = cos theta_2 \
+$
+
+$
+  T = 1/2 m R^2(dot(theta)_1^2 + (dot(theta)_1 + dot(theta)_2)^2 + 2 cos theta_2 dot(theta)_1 (dot(theta)_1 + dot(theta)_2))
+$
+
+There're also the angular velocity relation due to self-rotation and revolution, we often denote former as $I_("cm") omega_2^2$ and latter as $I_"re" omega_1^2$.
+
+- Suppose a small smooth rolling placed on the top of a big smooth rolling, when the small rolling tends to fall, there are non-slip rotation between them.
+
+Suppose small rolling with $theta$, $r$ and big rolling with $phi.alt$, $R$, based on the non-slip, the revolution speed and rotation speed is same.
+$
+  r phi.alt = (R + r) theta
+$
+
+The common confusion is to identify the arc length on the big rolling, which is wrong. Because the identification should be the small rolling mass center velocity, from non-slip rotation, it has $v = r dot(phi.alt)$, we also know revolution, which means it has $(R+r) dot(theta)$ is same. This is due to that the contacted point, the bottom of the rolling is actually with speed $0 = v_c - dot(phi.alt) r$ with the basic knowledge of no-slip rotation and within the fixed frame of big rolling, $v_c = (R+r) dot(theta)$, which yield the answer here.
+
+We then identify rotation on each different coordinates, the principle to do this is to identify each rotation inertia with its corresponding angular velocity in its coordinates.
+
+$
+  L &= (r_"cm" + r_0) times m (v_"cm" + v_0) \
+    &= r_"cm" times m v_"cm" + r_0 times m v_0 \
+    &= L_("orbit") + L_("spin") 
+$
+
+Indeed, for inertia, the former is actualy:
+$
+  L_"orbit" = (m r^2_"cm") omega_"O" -> T_"orbit" = 1/2 (m r_"cm"^2) omega^2_O \
+  L_"spin" = I_"cm" omega_O_"cm" -> T_"spin" = 1/2 I_"cm" omega^2_O_"cm"
+$
+Where the confusion is $I_"cm"$ is the mass inertia in center matter frame and $r_"cm"$ is the position of center mass.
+
+$
+  T = 1/2 (I_1 dot(theta)^2 + m (R+r)^2 dot(theta)^2 + I_(2 "cm") dot(phi.alt)^2)
+$
+
+Where the second term is $T_"orbit"$ which is rotation of whole in fixed rotation frame with angular velocity $theta$, and $T_"spin"$ is the comoving rotation frame with angular velocity $phi.alt$.
+
+The another information about rolling is the disk or ball's other point related to center mass. Which as a additional angular velocity.
+
+Rolling disk or a ball with fixed plane movement on the ground, would give its center:
+$
+  x_c, y_c = R
+$
+
+For any other point on the disk, would be:
+
+$
+  x = x_c + x, y = y_c + y \
+  r = x_c hat(x) + y_c hat(y) + r_O' hat(r)_O' \
+  dot(r) = dot(x)_c hat(x) + r_O' dot(theta) hat(theta)_O' \
+  hat(theta)_O' dot hat(x) = cos theta
+$
+
+Where the final equation is based on the rotation of center as before. Note that this is one point on the rolling disk, but beside this addtional mass point, there are also the whole disk rotation inertia.
+
+$
+  T_"disk" = 1/2 M dot(x)_c^2 + 1/2 I_"cm" dot(theta)^2 \
+  R dot(theta) = dot(x)_c
+$
+
+After this, if there's another rigid body embedded in the disk, we has also:
+$
+  T_"rigid" = 1/2 M' dot(x)^2 + 1/2 I'_"cm" dot(theta)^2
+$
+
+Suppose a stick with length $2 a sin alpha$ which $alpha$ is a constant. Then the length related to disk center is $rho = a cos alpha$.
+
+$
+  T_"rigid" = 1/2 m (dot(x)_c^2 + a^2 cos^2 alpha dot(theta)^2 + 2 dot(x)_c a cos alpha dot(theta)  cos theta) + 1/2 I'_"cm" dot(theta)^2 \
+  I'_"cm" = 1/12 m 4 a^2 sin^2 alpha  = 1/3 m a^2 sin^2 alpha
+$
+
+$
+  U = m g rho hat(rho) dot hat(y) = m g a cos alpha cos theta
+$
+
+Which can be apply to any rigid body embedded problem, even half disk is also too, decompose into rotation and translation to derive answer.

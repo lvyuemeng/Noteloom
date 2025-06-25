@@ -384,28 +384,23 @@ Suppose a variation of $j$, this gives the effect of potential on $j$.
 
 $
   delta U &= A delta j + j delta A \
-  &= A delta j - F delta x \
+  &= A delta j + j_i partial_j A_i delta x_j \
+  &= A delta j + j_i 1/2 (partial_j A_i - (i <-> j)) delta x_j \
+  &= A delta j + j_i epsilon_(k j i) B_k delta x_j\
+  &= A delta j + epsilon_(j i k) j_i B_k delta x_j\
+  &= A delta j + F_j delta x_j \ 
+$
+$
+  (- ( -((partial U)/(partial x_j))_(j))) = F_j
 $
 
-$
-  integral d^3 x partial_j j_i &= integral d^3 x partial_j (j_k) partial_k (x_i) \
-  &= - j_k partial_j partial_k (x_i) \
-  &= - j_k partial_k partial_j (x_i) \
-  &= partial_k j_k partial_j (x_i) = 0
-$
+We can see the force indeed, isn't negative here.
 
 $
-  A delta j = A partial_j (j_i) delta x_j != 0
+  delta hat(U) &= - j delta A + F delta x = delta U - delta(j A) \
 $
 
-Which, cause a variation on $j$ and we have no longer the equality, and also the unstable state of potential providing to $j$. So, for mechanical potential:
-$
-  delta hat(U) &= j delta A - F delta x = delta U - delta(j A) \
-  
-$
-Is the mechanical potential, that's reversal compared to charges situation, we should take a fixed current and a changed vector potential.
-
-Now we back to solve problem, too.
+Is the potential with fixed external potential.
 
 The main idea is about coils, sometimes, we should take care that for a small range on cross section of a coil, we have $n d l = N$ is the total coil density. For example, on a hemisphere, we can round on it. Then the cross section is semi-circle, that's: $n d l = n R d theta -> n R integral d theta = n R pi/2 = N -> n = (2N)/(R pi)$. So it should be take care in this problem.
 
@@ -432,8 +427,7 @@ $
   &= nabla^2 A'^j e'_j + (2 nabla A'^j nabla R^i_j R^(j -1)_i) e'_j + (nabla^2(R^i_j) A'^j R^(j -1)_i) e'_j 
 $
 
-Which is, a messy. And such is only for Cartesian form expanding, it's not corresponding to other coordinates indeed.
-
+Thus, the transformation suggests that:
 $
   nabla^2(A^i e_i) &= nabla^2(A^i)e_i + 2 nabla (A^i) dot nabla (e_i) + A^i nabla^2(e_i) \
 $
@@ -444,6 +438,8 @@ $
 // 
 We introduce below the calculation, which you may familiar if you know connection and Christoffel symbol:
 $theta^i (e_j) = delta^i_j$, and $tau^i = d theta^i + omega^i_j and theta^j = 0$, with $omega^i_j = - omega^j_i$.
+
+Whith $theta^i$ the one-form basis. And the matrix $omega^i_j$ the matrix styled connection.
 
 $
   d r^2 + r^2 d theta^2 + d z^2 = d s^2 \
@@ -501,7 +497,7 @@ Then you can calculate the vector Laplacian in spherical coordinates too.#footno
 
 So generally, we can't deduce it easily for specific coordinates. Even previous is actually very fast compared to directly calculate the identity: $nabla^2 A = nabla(nabla dot A) - nabla times (nabla times A)$.
 
-It's reasonable to copy previous experience, we know $(r, theta + theta', z + z') equiv (r, theta, z)$, the invariance telling us that $A = A_z (r)$ indeed, that's, no *transformation* of $z$ in the process, so we apply it directly.
+It's reasonable to follow previous experience, we know $(r, theta + theta', z + z') equiv (r, theta, z)$, the invariance telling us that $A = A_z (r)$ indeed, that's, no *transformation* of $z$ in the process, so we apply it directly.
 
 // $
 //   nabla (R^x_r + R^y_r ) = 1/r (partial)/(partial theta)(cos theta + sin theta) \
@@ -526,9 +522,6 @@ It's reasonable to copy previous experience, we know $(r, theta + theta', z + z'
 //   h_k kappa^(-1) epsilon_(k i j) epsilon_(j m l) (2 partial_i (h_j) kappa^(-1) partial_m (h_l A_l) + h_j^2 partial_i (kappa^(-1) partial_m (h_l A_l)) \
 // $
 
-
-Back to the problem, we solve below:
-
 $
   1/r (partial )/(partial r)(r (partial A_z)/(partial r)) = -mu_0 J 
 $
@@ -544,14 +537,11 @@ $
 
 The final situation is related to response of bounded current. A magnetic conductor will be magnetized in magnetic field.
 
-Another 
-
-Suppose no free current, we has $nabla times H = 0$.
-Then $H = nabla phi$ also.
+Suppose there's no free current, we has $nabla times H = 0$. Then $H = nabla phi$ for a unknown scalar potential.
 
 $
-  nabla times B = nabla times (mu_0 (H + M)) = 0 \
-  nabla^2 phi = nabla dot M = rho_("bound")
+  nabla dot B = nabla dot (mu_0 (H + M)) = 0 \
+  nabla^2 phi = - nabla dot M = rho_("bound") \
 $
 Which is *magnetic charge*, we know the current is $nabla times M$.
 
