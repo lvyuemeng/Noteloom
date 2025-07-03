@@ -186,12 +186,7 @@ We use normalization, that's, choose the higher bound and lower bound to acquire
 ```rust
 impl PrioScheduler {
     pub fn adjust_cur_prio(&mut self, prio: Prio) {
-        let (active, all) = self.get_prio_status(prio);
-        let (_, norm_active) = Prio::norm_factor((all as u64, 0), active as u64);
-
-        let (highest, lowest) = self.prio_range();
-        let (norm_prio, _) = Prio::norm_factor((highest, lowest), prio);
-
+        ...
         let prio: u64 = prio.into();
         let cur_prio = self.cur_prio.into();
         let factor = (Prio::weight(norm_prio, Prio::PRIO_EFFECT)
@@ -212,17 +207,7 @@ impl PrioScheduler {
 /// - `norm_pos` indicates closeness to the lower bound (higher for values closer to low).
 /// - `norm_neg` indicates closeness to the upper bound (higher for values closer to high).
 pub fn norm_factor<F: Into<u64>, G: Into<u64>>(bound: (F, F), cur: G) -> (u64, u64) {
-    let (mut low, mut high) = (bound.0.into(), bound.1.into());
-    if low > high {
-        core::mem::swap(&mut low, &mut high);
-    }
-    let cur = cur.into();
-
-    if high == low {
-        // Avoid division by zero if bounds are the same
-        return (Prio::CLAMP_MAX, Prio::CLAMP_MAX);
-    }
-
+    ...
     let range = high - low;
     let norm_pos = ((cur - low).saturating_mul(Prio::CLAMP_MAX) / range)
         .clamp(Prio::CLAMP_MIN, Prio::CLAMP_MAX);
