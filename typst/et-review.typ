@@ -1,6 +1,5 @@
 #import "lib.typ": *
 
-
 #show: mine.with(
   title: "Review of Electronic Tech",
   eq-numbering: "(1.1)",
