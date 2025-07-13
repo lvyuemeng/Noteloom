@@ -62,21 +62,21 @@ macro_rules! work_loop {
 
 We fix `busy_work` iterations as `1e^3` to acquire `delay` as below:
 
-![](charts/preempt-iter-delay/iter-volume.png)
+![](iter-volume.png)
 
 Here the blue(high) and green(low) is **async task**, while orange is **thread task**. We see a increasing trend of async task much higher than thread, comes from the burden of poll in linear data structure of embassy executor for the sole thread, while thread is preemptive to interrupt in time slice, introduce a nearly constant time here.
 
-![](charts/preempt-iter-delay/iter-works.png)
+![](iter-works.png)
 
 Here the blue and orange is **async task**, while orange is **thread task**. With logarithm horizontal and vertical axis, we see both a linear and roughly close linear growth.
 
 We try to test higher iterations on it and shows below:
 
-![](charts/preempt-iter-delay/iter-works-extend.png)
+![](iter-works-extend.png)
 
 That's we extend the test time to 300 seconds to acquire a full data on rather lengthy iterations. We can see a rather higher increase on thread task, rather, async task maintains linear growth.
 
-![](charts/preempt-iter-delay/counts-volume.png)
+![](counts-volume.png)
 
 We see a linear growth both for thread task and async task with fixed `busy_works` iterations and increase of volume. We see that even the delay of async task is much higher than thread, its iteration counts aren't curbed.
 
@@ -95,7 +95,7 @@ With the assemble experiment construction, we list few adaptation for this.
 
 - We varying `volume` to acquire `sum per secs`. Because iterations increase cause the same effect and huge level will break the original intention of such experiment.
 
-![](charts/preempt-atomic-sum/atomic-volume.png)
+![](../charts/preempt-atomic-sum/atomic-volume.png)
 
 The reason of thread task only reaching `175` in volume is due to the memory restriction. However, we can see a evident decrease of thread task due to collision. However, async task retains a roughly constant throughput per seconds due to the mechanism of async task in single thread.
 
