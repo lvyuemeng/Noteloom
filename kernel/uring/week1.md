@@ -24,6 +24,16 @@ Completion:
 
 [uring ref]: https://www.skyzh.dev/blog/2021-06-14-deep-dive-io-uring/
 
+## What is a lock free ring buffer?
+
+[ring][ring ref]
+
+![](ring.png)
+
+Reserve commit to retain space before really modifying. 
+
+[ring ref]: https://kmdreko.github.io/posts/20191003/a-simple-lock-free-ring-buffer/
+
 ## Design IPC
 
 [IPC][IPC ref] (Refactored by AI to reduce redundant design.)
@@ -148,5 +158,7 @@ enum Lifecycle {
 [Evering ref][Evering ref]
 
 ### Uring
+
+
 
 [Evering ref]: https://github.com/loichyan/openoscamp-2025s/tree/main/evering

@@ -419,7 +419,7 @@ Now we can say that $e^(i lambda x)$ is the general eigenfunction of operator $i
 $
   integral e^(i lambda x) e^(-i lambda' x) d mu(x) = e^(i(lambda - lambda')x)/(i(lambda - lambda'))|^(+infinity)_(-infinity) = 2 pi delta(lambda - lambda')
 $
-By contour integral.
+By contour integral. Or $delta(x) = integral (delta(x),e^(i lambda x)) e^(i lambda x) d mu(lambda) = integral e^(i lambda x) d mu(lambda)$
 
 With the summation of spectrum:
 $
@@ -484,8 +484,9 @@ Where given $partial_x$ we has:
 $
   1/(2pi i)integral.cont_C e^(t partial_lambda) (lambda I - partial_x)^(-1)(f(x)) d mu(lambda) = D(t)(f(x)) = f(x+t)
 $
-Choose $x = 0$ gives us *Inverse Laplace Transform*.
+Choose $x = 0$ gives us *Inverse Laplace Transform*. The projection isn't orthogonal but still span completely.
 
+= Special is Bad
 $
   (L_1(r_i,...,r_n) + L_2(r_i,...,r_n'))psi = 0
 $
@@ -511,3 +512,64 @@ $
   sin theta (partial)/(partial theta)(sin theta (partial psi)/(partial theta)) + ((lambda_1/(kappa)+lambda_2) sin^2 theta + lambda_4))psi = 0
 $
 Where we should know that the equality will reduce the number of known, so we choose $f(lambda_1,lambda_2,lambda_3,lambda_4) = lambda_1/kappa + lambda_2 + lambda_3 + lambda_4 = 0$, or other way you want to reduce the number of knowns. 
+
+Suppose ODE:
+
+$
+  sigma(z) y'' + tau(z) y' + lambda y = 0 \
+  sigma(z) y''' + (tau(z) + sigma'(z)) y'' + (lambda + tau'(z)) y' = 0 \
+$
+Take $y' = v$
+$
+  lambda v = lambda y' = - (tau(z) v'' + (tau(z) + sigma'(z))v' + tau'(z)v) \
+  lambda y = - (sigma(z) v'' + tau(z) v) = integral v d z \
+$
+That said:
+$
+  L y = lambda y \
+  (L' y = L' y') + L y' = lambda y' \
+  (L^((n)) + L^((n-1))) y^((n-1)) = lambda y^((n-1)) \
+$
+Where $y'$ is also the original solution derivative. We thus take a recursion on it with a form $v_n$.
+
+Then we write as self-adjoint form by a suitable function $sigma(z)$:
+$
+  (sigma rho y')' + lambda rho y = 0 \
+  (sigma rho_n v_n')' + mu_n rho v_n = 0 \
+  (sigma rho)' = tau rho \
+  (sigma rho_n)' = tau_n rho_n \
+$
+Then, observe that:
+$
+  tau_n (z) = tau(z) + n sigma' (z) \
+  (sigma rho_n)' = (tau + n sigma') rho_n = ((sigma rho)'/rho + n sigma') rho_n \
+$
+Hence:
+$
+  rho'_n/rho_n = rho'/rho + (n sigma')/sigma \
+  ln rho_n = ln rho + n ln sigma \
+  rho_n = rho sigma^n \
+$
+The recursion said that:
+$
+  rho_n v_n = - 1/mu_n (rho_(n+1) v_(n+1))' = product_n^m 1/mu_n (rho_m v_m)^((m - n))
+$
+If $y(z)$ is a polynomial of degree $n$, or simply put a finite recursion that $v_n = "const"$, we has:
+$
+  v_n = y^((n)) = "const" \
+  rho y = product^n_0 1/mu_n (sigma^n rho)^(n)  
+$
+is the answer.
+
+Suppose 
+$
+  (1-x^2)d/(d x) P(x) - 2 x d/(d x) P(x) + lambda P(x) = 0 \
+  d/(d x) ((1-x^2) P(x)) + lambda P(x) = 0 \
+$
+$
+  sigma = 1 \
+  rho = (1-x^2)
+$
+$
+  P_n = 1/C_n (d/(d x))^((n)) ((1-x^2)^n)
+$
