@@ -453,10 +453,11 @@ $
 Usually the terms $L$ or $2 pi$ will be placed on one side like inverse Fourier transform or evenly placed as $1/sqrt(*)$.
 #footnote[You can choose many conditions as long as it forms a self-adjoint operator. Usually, they are Dirichlet or periodic boundary condition, or Neumann boundary condition that $partial_x f(a) = partial_x f(b)$, or Robin boundary condition that $alpha_1 f(a) + alpha_2 partial_x f(a) = beta_1 f(b) + beta_2 partial_x f(b)$ for some constants $alpha_i,beta_i$ where the operator is self-adjoint. The key is to ensure the operator is self-adjoint, then the spectrum is real and the eigenfunction is orthogonal.]
 
-Actually, because $i partial_x <-> partial_x$, the $partial_x$ all spectrum should be $bb(C)\/bb(R)$. Thus $(A - lambda I)^(-1)$ is well defined as $G(lambda)$,$lambda in bb(R)$:
+Actually, because $i partial_x <-> partial_x$, the $partial_x$ all spectrum should be $"Im"(bb(C))$. Thus $(A - lambda I)^(-1)$ is well defined as $G(lambda)$,$lambda in bb(R)$:
+
 $
-  (lambda - partial_x') G(x,x') = delta(x - x') \
-  G(x,x') = e^(-lambda (x-x')) Theta(x-x')
+  (lambda - partial_x') G(lambda)(x,x') = delta(x - x') \
+  G(lambda)(x,x') = e^(-lambda (x-x')) Theta(x-x')
 $
 Where $T u = f$ gives:
 $
@@ -511,7 +512,12 @@ As for $theta$, we multiply $r^2$ and separate all unrelated terms, we leave onl
 $
   sin theta (partial)/(partial theta)(sin theta (partial psi)/(partial theta)) + ((lambda_1/(kappa)+lambda_2) sin^2 theta + lambda_4))psi = 0
 $
-Where we should know that the equality will reduce the number of known, so we choose $f(lambda_1,lambda_2,lambda_3,lambda_4) = lambda_1/kappa + lambda_2 + lambda_3 + lambda_4 = 0$, or other way you want to reduce the number of knowns. 
+Where we should know that the equality will reduce the number of known, so we choose $f(lambda_1,lambda_2,lambda_3,lambda_4) = lambda_1/kappa + lambda_2 + lambda_3 + lambda_4 = 0$, or other way you want to reduce the number of knowns.
+
+$
+  (partial^2 psi)/(partial phi^2) + (lambda_1/kappa + lambda_2 + lambda_3)psi = 0 \
+  (...) - lambda_4 psi = 0
+$
 
 Suppose ODE:
 
@@ -530,46 +536,565 @@ $
   (L' y = L' y') + L y' = lambda y' \
   (L^((n)) + L^((n-1))) y^((n-1)) = lambda y^((n-1)) \
 $
-Where $y'$ is also the original solution derivative. We thus take a recursion on it with a form $v_n$.
+Where $y'$ is also the original solution derivative. We thus take a recursion on it with a form $v_n = y^((n))$.
 
-Then we write as self-adjoint form by a suitable function $sigma(z)$:
+Then we write as self-adjoint form by a suitable function $rho(z)$:
 $
-  (sigma rho y')' + lambda rho y = 0 \
-  (sigma rho_n v_n')' + mu_n rho v_n = 0 \
-  (sigma rho)' = tau rho \
-  (sigma rho_n)' = tau_n rho_n \
+  (sigma rho y')' + lambda rho y &= 0 \
+  (sigma rho_n v'_n)' + mu_n rho_n v_n &= 0 \
 $
-Then, observe that:
+With:
 $
-  tau_n (z) = tau(z) + n sigma' (z) \
-  (sigma rho_n)' = (tau + n sigma') rho_n = ((sigma rho)'/rho + n sigma') rho_n \
+  sigma y'' + &tau y' + lambda y = 0 \
+  (sigma rho)' = &tau rho \
+  (sigma rho_n)' = &tau_n rho_n \
 $
-Hence:
+
+After such transformation, the orthogonal property rely on the new ODE rather the old:
+
 $
-  rho'_n/rho_n = rho'/rho + (n sigma')/sigma \
-  ln rho_n = ln rho + n ln sigma \
-  rho_n = rho sigma^n \
+  L = (sigma y'' + tau y') \
+  integral y_1 rho L (y_2) d mu = integral y_1 lambda_2 rho y_2 d mu = integral rho L (y_1) y_2 d mu = integral rho lambda_1 y_1 y_2 d mu = 0
+$
+
+That's, we has a additional weight function $rho$ compared to original $L v = lambda v$ spectrum orthogonality.
+
+The recursion can be taken:
+$
+  tau_n (z) &= tau(z) + n sigma' (z) \
+  (sigma rho_n)' &= tau_n rho_n =  (tau + n sigma') rho_n = ((sigma rho)'/rho + n sigma') rho_n \
+$
+$
+  sigma' rho_n + sigma rho'_n &= sigma' rho_n + (n sigma' + rho'/rho) rho_n \
+  rho'_n/rho_n &= rho'/rho + (n sigma')/sigma \
+  ln rho_n &= ln rho + n ln sigma \
+  rho_n &= rho sigma^n \
+$
+$
+  mu_n = lambda + n tau' + n(n-1)/2 sigma'' \
 $
 The recursion said that:
 $
-  rho_n v_n = - 1/mu_n (rho_(n+1) v_(n+1))' = product_n^m 1/mu_n (rho_m v_m)^((m - n))
+  (sigma rho_n v'_n)' = (rho sigma^(n+1) v_(n+1))' = (rho_(n+1) v_(n+1))' = - mu_n rho_n v_n \
 $
-If $y(z)$ is a polynomial of degree $n$, or simply put a finite recursion that $v_n = "const"$, we has:
+$
+  rho_n v_n = - 1/mu_n (rho_(n+1) v_(n+1))' => (product_n^m 1/mu_n) (rho_m v_m)^((m - n))
+$
+If $y(z)$ is a polynomial of degree $n$, or simply with a finite recursion that $v_n = "const"$, we has:
 $
   v_n = y^((n)) = "const" \
-  rho y = product^n_0 1/mu_n (sigma^n rho)^(n)  
+  rho y = (product^n_0 1/mu_n) (sigma^n rho)^((n)) = C_n (sigma^n rho)^((n))
 $
-is the answer.
+$
+  mu_n = 0 -> lambda = - n tau' - n(n-1)/2 sigma'' \
+$
 
-Suppose 
+Such form called *Rodrigue polynomial* in recursion.
+
+We has the tool to solve the *Legendre* polynomial:
 $
-  (1-x^2)d/(d x) P(x) - 2 x d/(d x) P(x) + lambda P(x) = 0 \
-  d/(d x) ((1-x^2) P(x)) + lambda P(x) = 0 \
-$
-$
-  sigma = 1 \
-  rho = (1-x^2)
+  (1-x^2)d/(d x) P(x) - 2 x d/(d x) P(x) + lambda P(x) &= 0 \
+  d/(d x) ((1-x^2) P(x)) + lambda P(x) &= 0 \
 $
 $
-  P_n = 1/C_n (d/(d x))^((n)) ((1-x^2)^n)
+  sigma &= 1 \
+  rho &= (1-x^2)
+$
+$
+  P_n = C_n (d/(d x))^(n) (1-x^2)^n \
+  lambda = - n tau' - n(n-1)/2 tau' = n(n+1)
+$
+
+For general second order ODE, we want to first transform it into *Rodrigue* form by parameter transformation.
+$
+  u'' + gamma/sigma u' + theta/sigma u = 0 \
+$
+We can take a parameter transformation which is also a second order ODE.
+$
+  u = phi.alt y \
+  y'' + (2 phi.alt'/phi.alt + gamma/sigma)u' + (phi.alt''/phi.alt + phi.alt'/phi.alt gamma/sigma + theta/sigma) u = 0
+$
+
+We then want to encompass the denominator of $sigma$ into $phi.alt'/phi.alt$.
+$
+  phi.alt'/phi.alt &= pi/sigma \
+  2 phi.alt'/phi.alt + gamma/sigma &= tilde(gamma)/sigma \
+  pi &= 1/2(tilde(gamma) - gamma)
+$
+
+Thus one has:
+$
+  phi.alt''/phi.alt = (phi.alt'/phi.alt)' + (phi.alt'/phi.alt)^2 = (pi/sigma)' + (pi/sigma)^2
+$
+
+In order to absorb the denominator of the third term, which is of $sigma^2$ in denominator, we have to transform $theta/sigma ~> theta/sigma^2$ for original $theta$ for ease.
+
+We has the final form:
+$
+  tilde(gamma) = gamma + 2 pi \
+  tilde(theta) = theta + pi^2 + pi(gamma-sigma') + pi' sigma
+$
+$
+  y'' + (tilde(gamma)/sigma)y' + (tilde(theta)/sigma)y = 0
+$
+
+In order to transform into Rodrigue form, one has $tilde(theta) = lambda sigma$. To determine this, we need to determine the new variable function $pi$ first.
+
+Do some algebra into the quadratic form:
+$
+  pi^2 + (gamma - sigma') pi + theta - (lambda - pi')sigma = 0
+$
+
+If we assume $lambda - pi'$ is known:
+$
+  pi = (sigma' - gamma)/2 plus.minus sqrt(((sigma'-gamma)/2)^2 - theta + (lambda - pi')sigma)
+$
+Current consequence is the final answer, a highly non-trivial equation hard to solve. 
+
+However, for a polynomial form, or any arbitrary polynomial expansion:
+$
+  deg(pi) < max(deg(theta), deg(sigma))/2 \
+  deg(pi') = deg(pi) - 1 \
+$
+We must has a square term is also a polynomial too. Thus its discriminant is also zero.
+
+Thus we get:
+$
+  &Delta((sigma' - gamma)/2 - theta + (lambda - pi') sigma) = 0 \
+  &tilde(gamma) = gamma + 2 pi \
+  &tilde(theta) = theta + pi^2 + pi(gamma-sigma') + pi' sigma \
+  &lambda = tilde(theta)/sigma \
+  &phi.alt'/phi.alt = (ln (phi.alt))' = pi/sigma
+$
+Is the final answer.
+
+We will use above technique to solve $Theta = psi(theta)$ part. First, we will transform it into a finite polynomial form, or you should notice that $sin^2 theta = 1 - cos^2 theta$ is a general polynomial relation:
+
+$
+  sin theta (d)/(d theta) = sin theta ((d cos theta)/(d theta))(d)/(d cos theta) = - sin theta^2 (d)/(d theta) \
+$
+
+$
+  (d)/(d x)[(1-x^2) (d Theta)/(d x)] + (mu + m/(1-x^2))Theta = 0 \
+$
+We choose below constant representation:
+$
+  mu &= lambda_1/kappa + lambda_2 \
+  m &= lambda_4
+$
+
+We can inspect that $sigma = 1-x^2, gamma = -2x, theta = mu(1-x^2) +m$. We can derive $pi$:
+
+$
+  pi = (sigma' - gamma)/2 plus.minus sqrt(((sigma'-gamma)/2)^2 - theta + (lambda - pi')sigma)
+$
+$
+  (sigma' - gamma)/2 &= 1/2 (-2x + 2x) = 0 \
+  lambda - pi' &= k \
+$
+$
+  Delta &= k(1-x^2) - m - mu(1-x^2) = 0\
+  &= (mu - k)x^2 - m + k - mu
+$
+We inspect that we has non-trivial solution by taking $lambda - pi' = k = "const"$ that:
+$
+  pi = cases(
+    plus.minus sqrt(m) quad k = mu,
+    plus.minus sqrt(m)x quad k = mu + m
+  ) \
+  pi' = lambda - k = lambda - mu - m = plus.minus sqrt(m) \ lambda = mu + sqrt(m)(sqrt(m) plus.minus 1)
+$
+Which is consisten answer.
+
+$
+  phi.alt'/phi.alt = (ln (phi.alt))' = pi/sigma
+$
+
+$
+  tilde(gamma) &= gamma + 2 pi = -2x plus.minus 2 sqrt(m) x = 2(plus.minus sqrt(m)-1)x \
+$
+$
+  ln(phi.alt)' &= plus.minus sqrt(m)x/(1-x^2) \
+  phi.alt &= (1-x^2)^(plus.minus sqrt(m)/2) \
+$
+
+In order to take Rodrigue form, we need to take a self-adjoint form first, with new parameter $rho$:
+$
+  (sigma rho)' &= tilde(gamma) rho \
+  sigma' rho + sigma rho' &= tilde(gamma) rho \
+  (sigma' - tilde(gamma))rho + sigma rho' &= 0 \
+$
+$
+  (-2x - 2(sqrt(m) - 1)x) rho + (1-x^2) rho' &= 0 \
+  (1-x^2) rho' &= 2 plus.minus sqrt(m)x rho \
+  rho &= C_m (1-x^2)^(plus.minus sqrt(m))
+$
+Thus we has:
+$
+  (rho sigma y')' + lambda rho y = 0 \
+$
+$
+  rho &= (1-x^2)^(plus.minus sqrt(m)) \
+  sigma &= (1-x^2) \
+$
+Choose $sqrt(m) ~ m$ to ease burden:
+$
+  y_n = C_(n m)/((1-x^2)^(m)) ((d)/(d x))^n ((1-x^2)^(n+ m))
+$
+
+$
+  Theta = phi.alt y = C_(l m) (1-x^2)^(-m/2) (d/(d x))^(l-m)(1-x^2)^(l) quad l = (n+m) \
+  lambda = mu + m(m plus.minus 1)
+$
+Is the final answer.
+
+We can inspect that for a self-adjoint form ODE, we has $sigma' = gamma$. Thus we only has:
+
+$
+  pi &= sqrt((lambda - pi') sigma - theta) = sqrt(k sigma - theta) \
+$
+
+We then try to develop the operator induction form on $Phi = psi(phi)$. For a operator $D psi = lambda psi$ we gain a spectrum. However it's actually a reduced form of component of general $f(D)psi = f(lambda)psi$. Such function set, can reduce to $D psi = lambda psi$. Thus for $partial psi = lambda psi$, one has $psi = e^(lambda x)$. In angular part, we has $phi ~ (0,2pi)$ with periodic form $psi(phi + 2pi) = psi(phi)$ forming a skew-symmetric operator, where all spectrum is imaginary and integer form.
+
+$
+  D^2 psi &= partial^2 psi = lambda^2 psi \
+  lambda &= i lambda' quad lambda' in bb(Z) \
+  psi &= e^(i lambda x) \
+$
+
+It should be clarified that $Theta = P_(l m)$ is only orthogonal in $l$ rather in $m$, unless we encompass the $Phi$ part too. It's because the coefficient dependence of $m$ which is external to the ODE rather as the spectrum. Generally $nabla^2 v = lambda v$ will construct the whole basis, and indeed, $nabla^2 v = 0$ only construct a part of it, which the radial part forms no orthogonal basis.
+
+Thus we reduce any form into algebraic equation for certain operator $D$. Especially many coefficients derivatives polynomial form $f(partial_x)$ must has a general form $e^(lambda x)$ where there may not exist a self-adjoint form, thus resolvent must intervene with $R(D)(f)(lambda)$ for certain special function with special solution, it's a generalization of linear algebra that one has rank and null for vector expansion, we call it *Fredholm theory*. Now we gonna develop a derivative operator form:
+
+$
+  p y' + y &= q \
+  p(partial+1) y &= q \
+  y &= 1/(p partial + 1) q \
+$
+If we expand it as:
+$
+  y ~ sum_(n=0)^(infinity) (-1)^n (p partial)^n q
+$
+
+For spectrum:
+$
+  p partial v &= lambda v \
+  (d v)/v &= lambda/(p) d x \
+  v &= C exp(integral lambda/p d x)
+$
+Is unbounded for many function set $p$. Actually we know $p partial$ is a unbounded operator as we developed before, choose $p = 1$:
+$
+  norm(partial e^(i lambda x)) ~ lambda^2 norm(e^(i lambda x)) = lambda^2 -> infinity
+$
+Thus generally, we can only acquire a part of solution upon $p partial$ operator with $norm(lambda) <= 1$ for above series expansion. However, integral operator is compact:
+
+$
+  integral^x p v d x &= lambda v \
+  p v &= lambda v' \
+  v &= C exp (integral^x p/lambda d x) \
+$
+
+We inspect that given a finite boundary initial condition e.g. $v(c) = C$, we has:
+
+$
+  integral^x_c p v d x &= lambda v \
+  v(c) &= integral^c_c p v d x = 0 = C exp(integral^c_c p/lambda d x) = C \
+$
+Giving that $v = 0$ for general $lambda$, thus we only has $lambda = 0$ in $L_1[c, infinity]$, indicating a inverse always exist, where we restrict the function all into the domain of integral operator where the function should be bounded after integral.
+
+Thus for many initial condition ODE, we has a better behavoir on integral operator rather differential operator, we denote as $1/partial = partial^(-1)$:
+
+$
+  y' + p y = q \
+  y + (partial^(-1) p) y + C = partial^(-1) q \
+  y = 1/(1+ partial^(-1)p) (C + partial^(-1) q)
+$
+Because it has a zero spectrum, we can always expand without worrying.
+$
+  y = sum_(n=0)^(infinity) (-1)^n (partial^(-1)p)^n (C + partial^(-1) q) \
+$
+
+// For second order, one has:
+// $
+//   y'' + p y' + q y = f \
+// $
+// Take integral:
+// $
+//   y' + p y + partial^(-1)(p' y) + partial^(-1)(q y) + C &= partial^(-1) f \
+//   y + partial^(-1)(p y) + partial^(-2)(p' y) + partial^(-2)(q y) + C_2 + C_1 x &= partial^(-2) f \
+//   (1 + (partial^(-1)p) + partial^(-2) (p' + q')) y &= partial^(-2)f + C_2 + C_1 x \
+// $
+// We has:
+// $
+//   y = (1 + (partial^(-1)p) + partial^(-2) (p' + q'))^(-1)(partial^(-2)f + C_2 + C_1 x))
+// $
+// Certainly not a pleasant procedure. We only denote a shift property for general case on $D psi = lambda psi$
+
+$
+  D (psi u) &= psi (D + lambda) u \
+  psi^(-1) D (psi u) &= (D + lambda) u \
+$
+Or, if there exist a inverse:
+$
+  u &= psi^(-1) D^(-1)(psi (D+lambda) u) \
+$
+$
+  psi^(-1) D^(-1) (psi (*)) ~ (D+lambda)^(-1) \
+  psi^(-1) D^(-n) (psi (*)) ~ (D+lambda)^(-n) \
+$
+/* For example:
+$
+  cal(F)(e^(i a x) f) = T_a (cal(F) f) \
+  e^(i a x)(f) = cal(F)^(-1) T_a cal(F) (f) \
+$ */
+Thus, one has #footnote[You should notice that we only has $U A = Sigma U$ but we don't have $U A U^(-1) = Sigma$ to transform back without losing information, for example, partial will remove constant related information.]:
+$
+  p partial (e^(integral lambda/p d x)u) = e^(integral lambda/p d x)(p partial + lambda)u
+$
+Which solve as:
+$
+  y' + p y &= q \
+  (1/p partial + 1) y &= q/p \
+  e^(- integral p d x) 1/p partial e^(integral p d x) u &= q/p \
+  u &= e^(- integral p d x)(integral q e^(integral p d x) + C)
+$
+
+Now, if $lambda_1/kappa = 0$, we can acquire a Euler differential equation:
+
+$
+  (r^2 R'(r))' + mu R(r) = 0 \
+$
+It's hard to observe it's actually a polynomial form of a single operator.
+$
+  (x partial)^2 = x (partial x partial) = x (partial + x partial^2) = x^2 partial^2 + x partial \
+$
+Where we can thus formulate the spectrum:
+$
+  x partial v &= lambda v \
+  (ln v)' &= lambda / x \
+  v &= x^(lambda) \
+$
+Then we take the solution set:
+$
+  lambda (r^2 r^(lambda - 1))' + mu r^lambda = 0 \
+  lambda (lambda - 1) r^lambda + mu r^(lambda) = 0 \
+  mu = -lambda (lambda - 1)
+$
+We should observe that $mu$ is a integer form in $Theta$ part, thus $lambda$ is integer.
+
+We could also formulate the folded part $(D - lambda)^n y = 0$:
+$
+  (D - lambda)^n (psi y) = psi D^n y = 0\
+$
+Thus we can inductively deduce the form:
+$
+  D^n y = 0
+  D y_n = y_(n+1) ~> 0
+$
+As for case $partial$, we has:
+$
+  y = sum_0^(n-1) c_i x^i \
+  psi y = e^(lambda x) y
+$
+Or in $x partial$, we has:
+$
+  x partial y &= 0 \
+  y &= c = c x^0 \
+$
+$
+  x partial y &= c \
+  y &= ln x \
+$
+$
+  x(partial y) &= ln x \
+  partial y &= ln x (ln x)' \
+  y &= 1/2 ln^2 x \
+  ~> psi y &= x^(lambda) sum_0^(n-1) c_i ln^i x
+$
+
+We evaluate Rodrigue further:
+
+$
+  Phi(z,t) = sum_(n=0)^(infinity) y_n/(n!) t^n \
+  y_n = 1/rho (d/(d z))^n (sigma^n rho) = 1/rho n!/(2 pi i) integral_C (sigma^n (s) rho (s))/(s - z)^(n+1) d s
+$
+
+$
+  Phi(z,t) = 1/(2 pi i rho) integral_C rho(s)/(s - z) [sum_(n=0)^(infinity) ((sigma(s)t)/(s - z))^n] d s \
+$
+We interchange summation and interaction because if $Phi(z,t)$ is not convergent, there's no need to evaluate a concrete form indeed. We apply geometric series too:
+
+$
+  sum_(n=0)^(infinity)((sigma(s)t)/(s - z))^n = 1/(1- (sigma(s)t)/(s-z)) = (s-z)/(s-z- sigma(s) t) \
+$
+$
+  Phi(z,t) = 1/(2pi i rho) integral_C rho(s)/(s - z - sigma(s) t) d s
+$
+Where we can evaluate on single pole of $s-z-sigma(s)t$ which must be $(s-xi)f'(s) = (s-xi)(1-sigma'(s)t)$:
+$
+  C_(-1) = rho(s)/(1 - sigma'(s)t) \
+  Phi(z,t) = rho(s)/rho(z) 1/(1-sigma'(s)t)bar_(s=xi(z,t))
+$
+
+For Legendre polynomial, we can check that:
+$
+  sigma(s) &= 1-s^2 \
+  s - z - sigma(s) t &= s - z - (1-s^2) t = 0\
+$
+
+$
+  t s^2 + s - z - t = 0 \
+  s = (-1 + sqrt(1+4t(t+z)))/(2 t) \
+$
+
+$
+  Phi(z,t) = 1/(1+2s t)|_(s=xi(z,t)) = 1/(sqrt(1+4 t z + 4t^2)) = sum_(n=0)^(infinity) (P_n (z))/n! t^n \
+  P_n = (d/(d z))^n (1-z^2)^n
+$
+Normalize to determine the coefficients:
+$
+  t &-> t/2 \
+  (P_n (z))/(2^n n!) &-> P_n (z) \
+  sum_(n=0)^(infinity) P_n (z) t^n &= 1/sqrt(1+ 2 t z + t^2)
+$
+
+For $z = cos theta in (-1,1)$, $abs(t) < 1$ is the convergence condition, if we want to expand a distance:
+
+$
+  1/(abs(r_1 - r_2)) = 1/(sqrt(r_1^2 + r_2^2 - 2  r_1 r_2 cos theta))
+$
+You can take out the denominator to normalize it as you want $r_1/r_2$ or $r_2/r_1$ as long as $r_1 < r_2$ or $r_1 > r_2$.
+
+We know back to the general part, where addition time part will give the freedom of radial part as:
+
+$
+  r^2 ((partial)/(partial r))^2 psi + 2r (partial)/(partial r)psi + (k r^2 + alpha) psi = 0
+$
+
+$
+  z^2 u'' + z u' + (z^2 - v^2) u = 0 \
+$
+$
+  &sigma = z \
+  &gamma = 1 \
+  &theta = z^2 - v^2 \
+$
+
+$
+  &pi = sqrt(k sigma - theta) = sqrt(k z - z^2 + v^2) \
+  &Delta = k^2 + 4 v^2 = 0 -> k = plus.minus 2 i v \
+  &pi = plus.minus (i z + v) \
+$
+
+$
+  (ln (phi.alt))' &= plus.minus(i z + v)/(z) = plus.minus(i + v/z) \
+  phi.alt &= z^(plus.minus v)e^(plus.minus i z) \
+$
+$
+  tilde(gamma) &= 2pi + gamma =  plus.minus 2(i z + v) + 1 \
+  lambda &= k + pi' =  plus.minus 2 i v + plus.minus i = plus.minus i (2 v + 1) \
+$
+
+$
+  (sigma rho)' &= tau rho \
+  (sigma' - tilde(gamma)) rho + sigma rho' &= 0 \
+  minus.plus 2(i z + v) rho + z rho ' &= 0 \
+  (ln (rho))' &= plus.minus 2(i + v/z) \
+  rho &= z^(plus.minus 2 v) e^(plus.minus 2 i z) \ 
+$
+
+$
+  lambda + n tilde(gamma)' + 1/2 n(n-1) sigma'' &= 0 \
+  lambda plus.minus n 2i = plus.minus i(2v+1) plus.minus n 2i &= 0 \
+  n &= - v - 1/2 \
+$
+
+$
+  y_n (z) = C_n/(rho) (d/(d z))^n (rho sigma^n) \
+  u_v (z) = phi.alt y_n (z) = C_n z^(minus.plus v) e^(minus.plus i z) (d/(d z))^(-v -1/2) (z^(plus.minus 2 v -v -1/2) e^(plus.minus 2 i z))
+$
+
+Which can't be expressed in common polynomial due to the fractional differentiation, that's why many text book omit this. However, if, for $v -> v + 1/2$, we has a primitive expression for Those Bessel basis, like:
+
+$
+  u_(-1/2) (z) = C_(-1/2) z^(-1/2) e^(plus.minus i z)
+$
+
+We know:
+$
+  v(r,phi) &= u_n (r) e^(i n phi) \
+  u_n (r) &= 1/(2 pi) integral_(-pi)^(pi) v(r,phi) e^(- i n phi) d phi
+$
+
+For simplest solution $v(r,phi) = e^(i k r sin phi)$:
+$
+  u_n (r) = 1/(2 pi) integral_(-pi)^(pi) e^(i r sin phi - i n phi) d phi \
+$
+
+Must be Bessel equation of order $n$, we denote such term directly as normalization called $J_n (r)$.
+
+Then we can extend it into analytic contour, from $[-pi,pi]$ to $[pi,pi - i infinity)]$, $[-pi - i infinity, -pi]$, we omit the infinity term because it decays to zero.
+$
+  u_v (z) = 1/(2 pi) integral_C e^(i z sin phi - i v phi) d phi = 0 \
+$
+
+Thus, we choose $[pi,pi-i infinity]$ contour as $H^(1)_v$, same for another as $H^(2)_(v)$. A inspection of shift $pi$ will yielding the relation of $v <-> -v$ for the $[pi, pi-i infinity]$.
+
+$
+  1/(2 pi) integral_(L + pi) e^(-i z sin phi' + i v (phi' + pi)) d phi' = H_v (z) e^(i v pi) = H_(-v) (z)
+$
+Where the shift of $pi$ doesn't effect the imaginary integral, and negative sign is cancelled after parametrization $phi -> - phi$.
+
+$
+  J_v (z) + H_v^(1)(z) + H_v^(2)(z) = 0 \
+  J_v = - (H_v^(1) + H_v^(2)) \
+$
+However, sometimes one said that $1/pi (...) = H^(1)$ with negative factor as:
+$
+  J_v = 1/2 (H_v^(1) + H_v^(2)) \
+  e^(i z sin phi) = sum_(-infinity)^(infinity) J_n (z) e^(i n phi)
+$
+
+Sometimes, because we take real value on $J_v$, we has same, imaginary part as:
+
+$
+  Y_v = 1/(2 i) (H_v^1 - H_v^2) \
+$
+
+For cylindrical coordinates, indeed you will find we construct $J_n$ for specific $n$ in Laplace $nabla^2 v = 0$ just as spherical case, unless we choose $nabla^2 v = lambda v$ will construct the whole $J_n$ basis, which is plane wave.
+
+Generating function is suitable to deduce induction relation, but it's not useful in contemporary practise, however, Bessel equation has a shift property worth mention.
+
+$
+  (partial G(z,phi))/(partial z) &= i sin phi G(z,phi) = sum_(-infinity)^(infinity) J'_n (z) e^(i n phi) \
+  i sin phi &= (e^(i phi) - e^(-i phi))/2 \
+  J'_n (z) &= 1/2 (J_(n-1) (z) - J_(n+1) (z)) \
+$
+
+$
+  (partial G(z,phi))/(partial phi) &= i z cos phi G(z,phi) = sum_(-infinity)^(infinity) i n J_n (z) e^(i n phi) \
+  i cos phi &= i ((e^(i phi) + e^(-i phi))/2) \
+  n/z J_n (z) &= 1/2 (J_(n-1) (z) + J_(n+1) (z))
+$
+
+If you are astute enough to inspect the shift property already seen in $x partial$:
+$
+  x partial (x^n y) = x^n (n + x partial) y \
+$
+We sum the two equation above:
+$
+  1/z z^(1-n) partial (z^n J_n (z)) = J_(n-1) (z) \
+  1/z partial(z^n J_n (z)) = z^(n-1) J_(n-1) (z) \
+$
+Same, we can acquire for $-n$:
+$
+  - 1/z partial(z^(-n) J_n (z)) = z^(-(n+1)) J_(n+1) (z)
+$
+
+Which is a pleasant deduction form, then for half integer part, it can be written as:
+
+$
+  H^(1,2)_(n-1/2) (z) &= C_n z^(-1/2 + n) (-1/z d/(d z))^n e^(plus.minus i z) \
+  J_(n-1/2) (z) &= (...) cos z \
+  Y_(n-1/2) (z) &= (...) sin z \
 $
