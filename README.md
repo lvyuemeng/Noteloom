@@ -4,6 +4,7 @@ It's a notes set recording anything. Some of them is posted on [`nexus`](https:/
 
 ## Category
 
+- [Unix](/unix/)
 - [Kernel](/kernel/)
 - [physics(Md)](/physics/)
 
