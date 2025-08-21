@@ -72,21 +72,7 @@
   set page(
     paper: paper-size,
     // The margins depend on the paper size.
-    margin: if paper-size != "a4" {
-      (
-        top: (116pt / 279mm) * 100%,
-        left: (126pt / 216mm) * 100%,
-        right: (128pt / 216mm) * 100%,
-        bottom: (94pt / 279mm) * 100%,
-      )
-    } else {
-      (
-        top: 117pt,
-        left: 118pt,
-        right: 119pt,
-        bottom: 96pt,
-      )
-    },
+    margin: (left: 25mm, right: 25mm, top: 25mm, bottom: 30mm),
 
     header-ascent: 14pt,
     header: context {

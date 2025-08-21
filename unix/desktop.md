@@ -16,6 +16,8 @@ We skip the installation of unix-like OS, and only with minimal version.
 
 ## Desktop
 
+### Compositor
+
 You see a black screen with only a prompt input. It's called a `shell`, which is the interface between you and computer quite long ago. You can input the executable upon it, which is a binary that computer can execute immediately.
 
 You don't want to be caged in this prompt so you want a `Desktop`, if you know [`ArchWiki`](https://wiki.archlinux.org/title/General_recommendations#Booting), it provides many resources to learn, but it's too **terse** for beginner. Now you see in `Graphical user interface`(GUI) section, it said that `Xorg` and `Wayland` as a older and a newer protocol, which means it establishes the connection between screen rendering and software code(I guess so as a beginner!). You also know they are many physical drivers, especially, `Intel`, `AMD`, `NVIDIA`.
@@ -57,6 +59,8 @@ There's only few should be extracted:
 - Animations: animations.
 
 The above are all general settings, which can be distill and apply to others.
+
+## Addons
 
 If currently, you want to directly apply others settings given in docs if it, then, I suggests **No**, because you can't ensure what else gonna do or carry other fancy widgets you don't have therefore causing confliction.
 
