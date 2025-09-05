@@ -1,7 +1,7 @@
 #import "lib.typ": *
 
 #show: mine.with(
-  title: "Review of Classical Mechanics",
+  title: "Statistical Mechanics",
   eq-numbering: "(1.1)",
   eq-chapterwise: true,
 )
