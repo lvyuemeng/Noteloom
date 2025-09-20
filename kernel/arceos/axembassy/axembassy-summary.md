@@ -1,3 +1,11 @@
++++
+date = '2025-07-03T12:19:31+08:00'
+draft = false
+title = '2025 Spring Opencamp of Kernel-Summary'
+tag = ["embed", "arceos", "embassy"]
+author = ["nostalgia"]
++++
+
 # 开源操作系统训练营第四阶段总结 - Axembassy 模块化
 
 ## 起步

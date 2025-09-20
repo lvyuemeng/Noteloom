@@ -1,3 +1,11 @@
++++
+date = '2025-09-20T19:12:58+08:00'
+draft = false
+title = 'Ipc Spec'
+tag = ["ipc"]
+author = ["nostalgia"]
++++
+
 # IPC
 
 ## Philosophy
@@ -6,7 +14,7 @@ Separates the object instances (which are process-specific) from the data they m
 
 Each process initiates the different object instances with the same memory data. We should use the spin, atomic and any inter-process synchronization to ensure this.
 
-- No Ownership: The handle doesn't "own" the shared data
+- No Ownership: The handle doesn't *own* the shared data
 - Pointer-Based: Use `NonNull<T>` to reference shared memory
 - Safe Drop: Only cleanup process-local resources, never touch shared memory
 - Multiple Handles: Many processes can have handles to the same queue data
@@ -21,7 +29,7 @@ SHARED MEMORY LAYOUT:
 ├─────────────────────────────────────────────────────────────────────┤
 │ [General Metadata] <- Ipc related informations            												  │
 ├─────────────────────────────────────────────────────────────────────┤
-│ [TlsfAllocatorMetadata] <- Allocator control structures              │
+│ [AllocatorMetadata] <- Allocator control structures              │
 ├─────────────────────────────────────────────────────────────────────┤
 │ [BufferRegistry] <- Maps buffer names to locations                   │ 
 ├─────────────────────────────────────────────────────────────────────┤
@@ -55,11 +63,13 @@ Shared Memory:
     Safe to drop   Safe to drop   Safe to drop
 ```
 
-All things should be initiated per process with consistency so we won't lose information while retain the functionality across.
+All things should be initiated **per process** with consistency so we won't lose information while retain the functionality across.
 
-Refer `Claude`
+---
 
-We have `BufferRegistry` contains `BufferRegistryEntry`:
+> Refer `Claude`
+
+We have `BufferRegistry` contains `BufferRegistryEntry` to store the concrete offset for `Queue`.
 
 ```rust
 #[repr(C)]
@@ -164,6 +174,8 @@ impl SharedBufferRegistry {
 }
 ```
 
+---
+
 The `CommunicationManager` should contains the layout of memory and memory base.
 
 ```rust
@@ -187,6 +199,11 @@ pub struct CommunicationManager {
 ```rust
 // shm-on data
 pub struct LfQueue<T,N> {}
+
+pub struct SQHandle {
+    q: LfQueue,
+    // other field...
+}
 
 #[repr(C, align(64))]
 pub struct SharedQueueData<T> {
@@ -336,72 +353,6 @@ use std::collections::HashMap;
 /// - Queue handles message routing and ordering  
 /// - Allocator manages underlying memory lifecycle
 /// - All three coordinate seamlessly for optimal performance
-
-//==============================================================================
-// MESSAGE TYPES AND DATA STRUCTURES
-//==============================================================================
-
-/// Message metadata that travels through queues
-/// This is what gets enqueued/dequeued - contains reference to actual data
-#[repr(C)]
-#[derive(Clone, Copy, Debug)]
-pub struct MessageDescriptor {
-    /// Offset from shared memory base to actual data
-    data_offset: usize,
-    
-    /// Size of the allocated data block
-    data_size: usize,
-    
-    /// Message type for application-level routing
-    message_type: u32,
-    
-    /// Source process ID
-    source_pid: u32,
-    
-    /// Sequence number for ordering
-    sequence: u64,
-    
-    /// Timestamp for timeouts and debugging
-    timestamp: u64,
-    
-    /// Reference count - tracks how many readers need this data
-    ref_count: AtomicU32,
-    
-    /// Checksum for data integrity
-    checksum: u32,
-}
-
-impl MessageDescriptor {
-    /// Create new message descriptor
-    pub fn new(data_offset: usize, data_size: usize, message_type: u32, 
-               source_pid: u32, sequence: u64) -> Self {
-        Self {
-            data_offset,
-            data_size,
-            message_type,
-            source_pid,
-            sequence,
-            timestamp: current_timestamp(),
-            ref_count: AtomicU32::new(1),
-            checksum: 0, // Will be computed later
-        }
-    }
-    
-    /// Get pointer to actual data in shared memory
-    pub unsafe fn data_ptr(&self, shared_memory_base: *mut u8) -> *mut u8 {
-        shared_memory_base.add(self.data_offset)
-    }
-    
-    /// Increment reference count (for multi-reader scenarios)
-    pub fn add_ref(&self) -> u32 {
-        self.ref_count.fetch_add(1, Ordering::AcqRel) + 1
-    }
-    
-    /// Decrement reference count, returns true if should be deallocated
-    pub fn release_ref(&self) -> bool {
-        self.ref_count.fetch_sub(1, Ordering::AcqRel) == 1
-    }
-}
 
 //==============================================================================
 // UNIFIED COMMUNICATION INTERFACE
@@ -656,6 +607,72 @@ impl UnifiedCommunicationSystem {
         
         self.allocator.allocate(layout)
             .map_err(|_| CommunicationError::AllocationFailed)
+    }
+}
+
+
+//==============================================================================
+// MESSAGE TYPES AND DATA STRUCTURES
+//==============================================================================
+/// Message metadata that travels through queues
+/// This is what gets enqueued/dequeued - contains reference to actual data
+#[repr(C)]
+#[derive(Clone, Copy, Debug)]
+pub struct MessageDescriptor {
+    /// Offset from shared memory base to actual data
+    data_offset: usize,
+    
+    /// Size of the allocated data block
+    data_size: usize,
+    
+    /// Message type for application-level routing
+    message_type: u32,
+    
+    /// Source process ID
+    source_pid: u32,
+    
+    /// Sequence number for ordering
+    sequence: u64,
+    
+    /// Timestamp for timeouts and debugging
+    timestamp: u64,
+    
+    /// Reference count - tracks how many readers need this data
+    ref_count: AtomicU32,
+    
+    /// Checksum for data integrity
+    checksum: u32,
+}
+
+impl MessageDescriptor {
+    /// Create new message descriptor
+    pub fn new(data_offset: usize, data_size: usize, message_type: u32, 
+               source_pid: u32, sequence: u64) -> Self {
+        Self {
+            data_offset,
+            data_size,
+            message_type,
+            source_pid,
+            sequence,
+            timestamp: current_timestamp(),
+            ref_count: AtomicU32::new(1),
+            checksum: 0, // Will be computed later
+        }
+    }
+    
+    /// Get pointer to actual data in shared memory
+    pub unsafe fn data_ptr(&self, shared_memory_base: *mut u8) -> *mut u8 {
+        shared_memory_base.add(self.data_offset)
+    }
+    
+    /// Increment reference count (for multi-reader scenarios)
+    pub fn add_ref(&self) -> u32 {
+        self.ref_count.fetch_add(1, Ordering::AcqRel) + 1
+    }
+    
+    /// Decrement reference count, returns true if should be deallocated
+    pub fn release_ref(&self) -> bool {
+        self.ref_count.fetch_sub(1, Ordering::AcqRel) == 1
     }
 }
 
@@ -937,36 +954,89 @@ fn current_timestamp() -> u64 {
     // Platform-specific timestamp
     0 // Placeholder
 }
+```
 
-/*
-🎯 KEY INTERFACE DESIGN PRINCIPLES:
+---
 
-1. SIMPLE USER INTERFACE:
-   ✅ comm.send(channel, type, &data) - allocates + sends
-   ✅ msg = comm.receive(channel) - receives + manages lifecycle
-   ✅ msg.read_as::<T>() - typed access to data
+To design the initiation of shared memory, we should take a backend.
 
-2. AUTOMATIC MEMORY MANAGEMENT:
-   ✅ Send operations allocate from TLSF automatically
-   ✅ MessageHandle manages data lifecycle via reference counting
-   ✅ Drop implementations handle cleanup automatically
+```rust
+pub trait AddrSpec {
+    type Addr: MemoryAddr;
+    type Flags: Copy;
+}
 
-3. PERFORMANCE OPTIMIZATIONS:
-   ✅ Zero-copy writer for high-performance scenarios
-   ✅ Reference counting for multi-reader patterns
-   ✅ Direct shared memory access without copying
+pub trait Map<S: AddrSpec>: Sized {
+    type Config;
+    type Error: core::fmt::Debug;
 
-4. INTEGRATION:
-   ✅ Queue operations are transparent to user
-   ✅ Allocator coordinates with queue automatically
-   ✅ Channel management is seamless
+    fn map(
+        self,
+        start: Option<S::Addr>,
+        size: usize,
+        flags: S::Flags,
+        cfg: Self::Config,
+    ) -> Result<Area<S, Self>, Self::Error>;
+    fn unmap(area: &mut Area<S, Self>) -> Result<(), Self::Error>;
+}
 
-5. FLEXIBILITY:
-   ✅ Send typed data or raw bytes
-   ✅ Create channels on-demand or explicitly
-   ✅ Support both blocking and non-blocking operations
+pub struct Area<S: AddrSpec, M: Map<S>> {
+    va_range: AddrRange<S::Addr>,
+    flags: S::Flags,
+    bk: M,
+}
+```
 
-This interface provides the complete flow you described:
-USER → (allocator provides space) → QUEUE → (coordinates transfer) → TARGET
-*/
+To adapt the connection logic, one should take **once at a time** for a connection instance with fixed resolver like `name`. Then 
+
+```rust
+pub trait ShmInit {
+    fn try_claim() -> bool {}
+}
+
+pub struct Ipc<T: ShmInit + ...> {
+    // Shared memory information
+    area: Area<M>
+
+    // Components
+    ipc: T
+}
+
+impl<T: ShmInit> Ipc<T> {
+        /// Initialize as server - this does the SINGLE mmap()
+    fn initialize_server(&mut self, name: &str, size: usize) -> Result<(), Self::Error> {
+        // 1. Create shared memory (SINGLE mmap call)
+        let (shared_memory_base, actual_size) = create_shared_memory(name, size)?;
+        
+        // 2. Initialize the shared memory structures
+        let server = Ipc::new(shared_memory_base, actual_size, name)?;
+        
+        Ok(())
+    }
+    
+    /// Connect as client - NO mmap(), connects to server instead
+    fn connect_client(&mut self, name: &str) -> Result<(), Self::Error> {
+        // 1. Connect to server process (not shared memory directly)
+        let server_connection = connect_to(name)?;
+
+        // init client same...
+        self.attach(sever_connection);
+        
+        Ok(())
+    }
+
+    pub fn attach(&mut self, name: &str, size: usize) -> Result<(), InitError> {
+        // 2. Get coordinator (always at offset 0)
+        let coord_ptr = shared_memory_base as *mut SharedMemoryCoordinator;
+        let coord = unsafe { NonNull::new_unchecked(coordinator_ptr) };
+        self.coord = Some(coord);
+        
+        let coord_ref = unsafe { coordinator.as_mut() };
+        coord_ref.try_claim()?;
+
+        // acquire possible local handle...
+        
+        Ok(())
+    }
+}
 ```

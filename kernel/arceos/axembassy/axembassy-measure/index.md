@@ -1,3 +1,11 @@
++++
+date = '2025-06-07T14:11:47+08:00'
+draft = false
+title = 'AxEmbassy Measure'
+tag = ["embed", "arceos", "embassy"]
+author = ["nostalgia"]
++++
+
 # AxEmbassy-Measure
 
 We consider embassy task instance, which is async as same work unit as native thread.

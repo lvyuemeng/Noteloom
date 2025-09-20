@@ -1,3 +1,11 @@
++++
+date = '2025-09-20T19:12:58+08:00'
+draft = false
+title = 'Uring Investigation'
+tag = ["uring","ipc"]
+author = ["nostalgia"]
++++
+
 # Record of Learning of Uring
 
 ## What is uring?
@@ -34,7 +42,7 @@ Completion:
 
 - [concurrent queue][concurrent queue ref]
 
-![](ring.png)
+![](./ring.png)
 
 Reserve commit to retain space before really modifying. 
 

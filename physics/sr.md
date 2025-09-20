@@ -1,4 +1,15 @@
++++
+date = '2025-04-22T19:12:58+08:00'
+draft = false
+title = 'Special Relativity'
+tag = ["physics", "special relativity"]
+author = ["nostalgia"]
++++
+
+# Special Relativity
+
 ## Symmetry
+
 $$
 t' = \gamma(t - \frac{v}{c^2}x) \\
 x' = \gamma(x - vt)

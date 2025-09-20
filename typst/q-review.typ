@@ -2,7 +2,6 @@
 #import "@preview/physica:0.9.5": *
 #import "@preview/fletcher:0.5.8" as fletcher: diagram, edge, node
 
-
 #show: mine.with(
   title: "Review of Quantum",
   eq-numbering: "(1.1)",
@@ -35,8 +34,6 @@ $
   g dot f(x) = f (g^(-1) dot x) \
 $
 
----
-
 $V = W plus.circle W' -> v = w + w'$, where the projection $q(v) = w$. Define $overline(q): v -> 1/(abs(G)) sum_(g in G) rho(g) q(rho(g^(-1))v)$ which we drop $rho$ representation notation.
 
 $
@@ -61,7 +58,47 @@ $
   f(h v_1, ..., h v_n) &= 1/(abs(G)) sum_(g in G) g f(g^(-1) h v_1,..., g^(-1) h v_n) \ &= 1/(abs(G)) sum_(h^(-1) g in G) h^(-1) g f((h^(-1) g)^(-1) v_1, ...,(h^(-1) g)^(-1) v_n) = f(v_1,...,v_n)\
 $
 
+$
+  innerproduct(v,u) = innerproduct(u,v)^* \
+  innerproduct(u, alpha v + beta w) = alpha innerproduct(u,v) + beta innerproduct(u,w) \
+  norm(u)^2 = innerproduct(u,u)
+$
 
+$
+  innerproduct(rho(g) x, rho(g) y) = innerproduct(x,y) \
+$
+
+If there's a invariant space that $rho(g) (V_1) subset.eq V_1$, with the decomposition $V_2 = V_1^(perp)$ that $V_2 = {v in V | (v,x) = 0 thick forall x in V_1}$.
+
+$
+  innerproduct(rho(g) x, y) = innerproduct(rho(g)^(-1) rho(g) x, rho(g)^(-1) y) = innerproduct(x, rho(g)^(-1) y) quad forall y in V_1
+$
+
+Thus if $x in V_2$, the inner product should be *zero*. Reversely, we deduce that $rho(g) x in V_2$ because $y in V_1$ by first term. Therefore the representation can be decomposed if we seek a *sole* invariant space and repeat the procedure.
+
+Thus given a inner product, which is also a bilinear-function, we can construct $G$-invariant form like above.
+
+$
+  innerproduct(x,y) := sum_(h in G) innerproduct(rho(h)x,rho(h)y)
+$
+
+Which is _unitary_ as above already proved. Same as integral form one has:
+
+$
+  innerproduct(x,y) := integral_G d mu(h) innerproduct(rho(h)x,rho(h)y)
+$
+
+Yields the same results. However, we can conclude the canonical $G$-invariance form for _finite_ and _compact_ group due to the convergence given by the integral only for compactness.
+
+==
+
+$
+  (v_1,v_2) -> v_1 times.circle v_2 equiv v_1^i e_1^i times.circle  v_2^j e_2^j = v_1^i thin v_2^i thin e_1^i times.circle e_2^j
+$
+
+$
+  (rho_1 times.circle rho_2) (g) (v_1 times.circle v_2) = rho_1 (g) (v_1) times.circle rho_2 (g) (v_2)
+$
 
 ==
 
@@ -339,13 +376,28 @@ Which is called *root space decomposition*, where $alpha in #lie[t]^*$ is the ei
 We often see the ladder operator in physics that a state shared by all other raising and lowering operators, which is the eigenvector of Cartan subalgebra.
 
 $
-  D_t ([X,Y]) = [t, [X,Y]] = [[t,X],Y] + [X,[t,Y]] = (alpha + beta)(t) [X,Y] -> [#lie[g]_alpha,#lie[g]_beta] subset.eq #lie[g]_(alpha+beta)\
+  D_t ([X,Y]) = [t, [X,Y]] = [[t,X],Y] + [X,[t,Y]] = (alpha + beta)(t) [X,Y] -> [#lie[g] _alpha,#lie[g] _beta] subset.eq #lie[g] _(alpha+beta)\
 $
 
-Plus, we know if the ladder operator act too many times, it will reach zero, that's $D_(X)$ is nilpotent for $X in #lie[g]_(alpha), alpha != 0$, or we simply call it nilpotent that $#lie[g]_(beta+ n alpha) = 0$. Another thing is, for clarity, $#lie[g]_0$ means $[#lie[t],#lie[g]_0] = 0 dot #lie[g]_0 = 0$ thus $#lie[t] subset #lie[g]_0$, however, due to maximality, we have $#lie[g]_0 = #lie[t]$.
+Plus, we know if the ladder operator act too many times, it will reach zero, that's $D_(X)$ is nilpotent for $X in #lie[g] _(alpha), alpha != 0$, or we simply call it nilpotent that $#lie[g] _(beta+ n alpha) = 0$. Another thing is, for clarity, $#lie[g] _0$ means $[#lie[t],#lie[g] _0] = 0 dot #lie[g] _0 = 0$ thus $#lie[t] subset #lie[g] _0$, however, due to maximality, we have $#lie[g] _0 = #lie[t]$.
 
 $
-  [#lie[g]_alpha,#lie[g]_(-alpha)] subset.eq #lie[g]_0 = #lie[t] \ 
+  [#lie[g] _alpha,#lie[g] _(-alpha)] subset.eq #lie[g] _0 = #lie[t] \
+$
+
+Given each $bold(H) = (H_1,...,H_r)$, one has the evaluation on $g_alpha$ which gives $[H_i,X_alpha] = alpha_i X_alpha$. Thus we normalize:
+
+$
+  E_(plus.minus) equiv X_(plus.minus alpha)/(abs(alpha))
+$
+
+$
+  [rho(H_i), rho(E_alpha)] = alpha_i rho(E_alpha)
+$
+
+$
+  bold(mu) = (m_1,...,m_r) \
+  rho(H_i) rho(E_alpha) ket(#[$rho; bold(mu)$]) = ([rho(H_i),rho(E_alpha)] + rho(E_alpha) rho(H_i)) ket(#[$rho;bold(mu)$]) = (alpha_i + m_i) E_(alpha) ket(#[$rho;bold(mu)$])
 $
 
 
@@ -379,6 +431,18 @@ $
 $
 
 Which adjoin representation with *homomorphism consistency* should restrict all lie algebras to contain Jacobi identity.
+
+$
+  D_(X_i) D_(X_j) X_l = D_(X_i) tensor(c, k, -j, -l) X_k = tensor(c, -i, -k, m) tensor(c, -j, -l, k) X_m \
+  (D_(X_i) D_(X_j))_(m l) = tensor(c, -i, -k, m) tensor(c, -j, -l, k) \
+  Tr(D_(X_i)) D_(X_j)) = (D_(X_i) D_(X_j))_(m m) = tensor(c, -i, -k, m) tensor(c, -j, -m, k) = tensor(g, -i, -j)\
+$
+
+Where:
+
+$
+  tensor(g, -i, -j) tensor(g, j, l) = tensor(c, -i, -k, m) tensor(c, -j, -m, k) tensor(c, j, n, -f) tensor(c, l, f, -n) = tensor(c, -i, -k, m) tensor(c, l, f, -n) tensor(delta, -m, n) tensor(delta, k, -f) = tensor(delta, -i, l)
+$
 
 $
   [D_(X_i), D_(X_j)]_(k l) = sum_m (tensor(c, -i, -j, +m) tensor(c, -m, -k, +l) - tensor(c, -j, -i, +m) tensor(c, -m, -k, +l)) = sum_m tensor(c, -i, -j, +m) tensor(c, -m, -k, +l) \
@@ -469,8 +533,154 @@ $
 
 Same, one has for $xi^-$ that $tilde(C) = sqrt(j(j+1) - m(m-1))$.
 
+===
+
+Take the transformation $S O (3)$ as $G L (3;bb(R))$ matrix representation act naturally on $bb(R)^3$ equipped with function valued on it as a scalar form.
+$
+  l_1 (f)(bold(x)) = f (l^(-1)_1 x) & = d/(d t) f(exp(
+                                          t mat(
+                                            0, 0, 0;
+                                            0, 0, 1;
+                                            0, -1, 0;
+                                          )
+                                        ) vec(x_1, x_2, x_3))|_(t=0) \
+                                    & = dv(, t) f(mat(
+                                          1, 0, 0;
+                                          0, cos t, sin t;
+                                          0, -sin t, cos t;
+                                        ) vec(x_1, x_2, x_3))|_(t=0) \
+                                    & = dv(, t) f(vec(
+                                          x_1,
+                                          x_2 cos t + x_3 sin t,
+                                          - x_2 sin t + x_3 cos t,
+                                        )) \
+                                    & = (pdv(f, x_1),pdv(f, x_2),pdv(f, x_3)) dot vec(0, x_3, -x_2) \
+                                    & = x_3 pdv(f, x_2) - x_2 pdv(f, x_3)
+$
+
+If we have $x_1 = r sin theta cos phi.alt, x_2 = r sin theta sin phi.alt, x_3 = r cos theta$, we can construct the transformation upon $theta,phi.alt$ too.
+
+$
+  pdv(, x_i) = pdv(r_i, x_i) pdv(, r_i) \
+$
+
+In differential geometry as a basis vector transformation, or familiar Jacobi.
+
+$
+  & l_1 = x_3 pdv(, x_2) - x_2 pdv(, x_3) = sin phi.alt pdv(, theta) + cot theta cos phi.alt pdv(, phi.alt) \
+  & l_2 = - cos phi.alt pdv(, theta) + cot theta sin phi.alt pdv(, phi.alt) \
+  & l_3 = - pdv(, phi.alt)
+$
+
+$
+  & l^+ = e^(- i phi.alt) (-i pdv(, theta) + cot theta pdv(, phi.alt)) \
+  & l^- = e^(i phi.alt) (i pdv(, theta) + cot theta pdv(, phi.alt))
+$
+
+Given the representation $F(theta,phi.alt)(m)$ with the weight $m$ chosen by $l_3$, with the highest weight denoted as $l$:
+
+$
+  l_3 F(theta,phi.alt)(m) = - pdv(, phi.alt) F(theta,phi.alt)(m) = m F(theta,phi.alt)(m)
+$
+
+Thus we have $F(theta,phi.alt) ~ e^(m phi.alt) G (theta)$, however, we have such restriction $phi.alt + 2 pi ~ phi.alt$, thus we must have $m -> i m$ to match such period.
+
+We can immediately decompose the representation scalar function by raising operator for the highest weight:
+$
+  (pdv(, theta) - l cot theta) G (theta)(l) & = 0 \
+                             ln G(theta)(l) & = l ln sin theta \
+            G(theta)(l) = C_(l) sin^l theta
+$
+
+Where the constant is, for the representation of $2 l + 1$ dimension in $l$ weight. Apply lowering operator would giving us:
+
+$
+  F(theta,phi.alt)(m) &= C_m (l^-)^(l-m) F(theta,phi.alt)(l) \
+  &= C_m (e^(-i phi.alt) (i pdv(, theta) + cot theta pdv(, phi.alt)))^(l-m) e^(-i l phi.alt) sin^l theta \
+$
+
+However, one usually encompass the whole $2l+1$ representation for arbitrary $l$ as:
+
+$
+  Y_l^m (theta,phi.alt) = C_(l m) (...) thick "as representation for" 2l+1 "dimension with weight" m
+$
+
+Casimir operator with commutative property acting on will give us the eigenvalue.
+$
+  l^2 = l_1^2 + l_2^2 + l_3^2 \
+$
+
+$
+  l^2 Y_l^m (theta, phi.alt) = l(l+1) Y_l^m (theta, phi.alt)
+$
+
+$
+  l^2 &= l^-l^+ + i l_3 + l_3^2 \
+  &= e^(i phi.alt)(i pdv(, theta) + cot theta pdv(, phi.alt)) e^(-i phi.alt)(-i pdv(, theta) + cot theta pdv(, phi.alt)) - i pdv(, phi.alt) + pdv(, phi.alt, 2) \
+  &= pdv(, theta, 2) + i pdv(, theta)(cot theta pdv(, phi.alt)) + e^(i phi.alt) cot theta pdv(, phi.alt) (e^(- i phi.alt) (-i pdv(, theta))) + e^(i phi.alt) cot theta pdv(, phi.alt) (e^(-i phi.alt) cot theta pdv(, phi.alt)) + (...) \
+$
+
+Evaluate that:
+
+$
+  i pdv(, theta)(cot theta pdv(, phi.alt)) = i/(sin^2 theta) pdv(, phi.alt) + i cot theta pdv(, theta, phi.alt) \
+  e^(i phi.alt) cot theta pdv(, phi.alt) (e^(- i phi.alt) (-i pdv(, theta))) = - cot theta pdv(, theta) - i cot theta pdv(, theta, phi.alt) \
+  e^(i phi.alt) cot theta pdv(, phi.alt) (e^(-i phi.alt) cot theta pdv(, phi.alt)) = -i cot^2 theta pdv(, phi.alt) + cot^2 theta pdv(, phi.alt, 2)
+$
+
+The first term evaluate as:
+
+$
+  "First term" &= pdv(, theta, 2) - cot theta pdv(, theta) + i(1/(sin^2 theta) pdv(, phi.alt) - cot^2 theta pdv(, phi.alt)) + cot^2 theta pdv(, phi.alt, 2)\
+  &= pdv(, theta, 2) - cot theta pdv(, theta) + i pdv(, phi.alt) + cot^2 theta pdv(, phi.alt, 2)
+$
+
+$
+  "LHS" &= pdv(, theta, 2) - cot theta pdv(, theta) + cot^2 theta pdv(, phi.alt, 2) + pdv(, phi.alt, 2) \
+  &= 1/(sin theta) (pdv(, theta) (pdv(, theta)) sin theta + pdv(, theta) (sin theta) pdv(, theta) ) + 1/(sin^2 theta) pdv(, phi.alt, 2) \
+  &= 1/(sin theta) pdv(, theta) (sin theta pdv(, theta)) + 1/(sin^2 theta) pdv(, phi.alt, 2) = Delta_(Omega)
+$
+
+Which is the *Spherical Laplacian*#footnote[Actually, calculate by $l_1^2 + l_2^2 + l_3^2$ is more simpler, or use some notation reduction would be easier in burden.].
+
+This, actually can be formalize in such insight, that Laplacian as:
+$
+  pdv(,x_1,2) + pdv(,x_2,2) + pdv(,x_3,2) = Delta_Omega \
+$
+
+Is rotation invariant given by $[Delta_Omega, l_i] = 0$. Which is same as Casimir operator by its *uniqueness* up to constant. Thus we decompose $L^2 (S^2)$ into basis equipped with $Y^m_l (theta,phi.alt)$.
+
 ==
 
+$
+  S[*]: cal(F) -> bb(R); cal(F) = { bold(q)(t): t in [t_0,t_1] subset bb(R) -> bb(R)^M }
+$
 
+With differential set if applicable:
 
+$
+  cal(F)_epsilon = {delta bold(q)(t); abs(delta bold(q)(t)) < epsilon; abs(delta bold(dot(q))(t)) < epsilon; forall t in [t_0,t_1] subset bb(R)}
+$
 
+$
+  delta S(bold(q),bold(dot(q))) = 0 -> delta bold(q)(t_0) = delta bold(q)(t_1) = 0
+$
+
+Given by a certain basis product form:
+$
+  ket(x) "or" ket(x + delta)? -> "continuous basis" \
+  braket(x, psi) = braket(x, x') braket(x', psi)
+$
+
+Thus $phi$ should be a continuous basis expansion for the representation of coordinates:
+$
+  integral d mu thin phi(x|x') <-> braket(x, x') \
+  integral d mu thin phi(x|x') phi(x'|x_0) <-> braket(x, x') braket(x', x_0) = braket(x, x_0) <-> delta(x'|x_0)
+$
+
+$
+  phi(x|x_0) = phi(x|x_(N-1)) phi(x_(N-1)|x_(N-2)) ... phi(x_1|x_0) \
+  phi(x|x_0) = lim_(N->infinity) product^(infinity) T(phi(x_epsilon))
+$
+
+$$

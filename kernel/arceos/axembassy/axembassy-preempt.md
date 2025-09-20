@@ -1,3 +1,11 @@
++++
+date = '2025-06-12T11:23:15+08:00'
+draft = false
+title = 'AxEmbassy Preempt'
+tag = ["embed", "arceos", "embassy"]
+author = ["nostalgia"]
++++
+
 # AxEmbassy-Preempt
 
 ## Development
