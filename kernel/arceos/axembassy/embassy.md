@@ -1,4 +1,14 @@
-## Async
++++
+date = '2025-07-03T12:19:31+08:00'
+draft = false
+title = 'Embassy Investigation'
+tag = ["embed", "embassy"]
+author = ["nostalgia"]
++++
+
+# Embassy Investigation
+
+## Asynchronous 
 
 `Future` Trait will be given with a `poll` to check pending or ready. And the ability to prod `Waker` to poll again in the future.
 

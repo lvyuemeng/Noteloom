@@ -1,3 +1,11 @@
++++
+date = '2025-06-07T14:11:37+08:00'
+draft = false
+title = 'AxEmbassy Development'
+tag = ["embed", "arceos", "embassy"]
+author = ["nostalgia"]
++++
+
 # AxEmbassy-Development
 
 ## Design and Background

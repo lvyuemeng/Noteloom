@@ -2,7 +2,6 @@
 #import "@preview/physica:0.9.5": *
 #import "@preview/fletcher:0.5.8" as fletcher: diagram, edge, node
 
-
 #show: mine.with(
   title: "Review of Quantum",
   eq-numbering: "(1.1)",
@@ -18,10 +17,13 @@
 
 $g in G$, given a action of group on a general space $M$ equipped with function on it as $F(M)$. Thus we can apply $g$ on $M$ and lift upon $F(M)$ as well, i.e. $phi(g) dot x$ for $x in M$ and $rho(g) dot f$ for $f in F(M)$ as a $G$-equivariant map.
 
-$
-  #diagram($x edge(f, ->) edge("d", phi(g), ->) & f(x) edge("d", rho(g), ->)\
-  phi(g) dot x edge(f, ->) & rho(g) dot f(x) \/ f(phi(g) dot x)$)
-$
+#figure(
+  diagram(
+    $x edge(f, ->) edge("d", phi(g), ->) & f(x) edge("d", rho(g), ->)\
+    phi(g) dot x edge(f, ->) & rho(g) dot f(x) \/ f(phi(g) dot x)$,
+  ),
+  caption: "Commutative diagram of group action on space and mapped space",
+)
 
 Is commutative, i.e.
 
@@ -34,8 +36,6 @@ Is a anti-homomorphism, i.e. Such representation should be only with $g$ element
 $
   g dot f(x) = f (g^(-1) dot x) \
 $
-
----
 
 $V = W plus.circle W' -> v = w + w'$, where the projection $q(v) = w$. Define $overline(q): v -> 1/(abs(G)) sum_(g in G) rho(g) q(rho(g^(-1))v)$ which we drop $rho$ representation notation.
 
@@ -61,7 +61,129 @@ $
   f(h v_1, ..., h v_n) &= 1/(abs(G)) sum_(g in G) g f(g^(-1) h v_1,..., g^(-1) h v_n) \ &= 1/(abs(G)) sum_(h^(-1) g in G) h^(-1) g f((h^(-1) g)^(-1) v_1, ...,(h^(-1) g)^(-1) v_n) = f(v_1,...,v_n)\
 $
 
+$
+  innerproduct(v, u) = innerproduct(u, v)^* \
+  innerproduct(u, alpha v + beta w) = alpha innerproduct(u, v) + beta innerproduct(u, w) \
+  norm(u)^2 = innerproduct(u, u)
+$
 
+$
+  innerproduct(rho(g) x, rho(g) y) = innerproduct(x, y) \
+$
+
+If there's a invariant space that $rho(g) (V_1) subset.eq V_1$, with the decomposition $V_2 = V_1^(perp)$ that $V_2 = {v in V | (v,x) = 0 thick forall x in V_1}$.
+
+$
+  innerproduct(rho(g) x, y) = innerproduct(rho(g)^(-1) rho(g) x, rho(g)^(-1) y) = innerproduct(x, rho(g)^(-1) y) quad forall y in V_1
+$
+
+Thus if $x in V_2$, the inner product should be *zero*. Reversely, we deduce that $rho(g) x in V_2$ because $y in V_1$ by first term. Therefore the representation can be decomposed if we seek a *sole* invariant space and repeat the procedure.
+
+Thus given a inner product, which is also a bilinear-function, we can construct $G$-invariant form like above.
+
+$
+  innerproduct(x, y) := sum_(h in G) innerproduct(rho(h)x, rho(h)y)
+$
+
+Which is _unitary_ as above already proved. Same as integral form one has:
+
+$
+  innerproduct(x, y) := integral_G d mu(h) innerproduct(rho(h)x, rho(h)y)
+$
+
+Yields the same results. However, we can conclude the canonical $G$-invariance form for _finite_ and _compact_ group due to the convergence given by the integral only for compactness.
+
+Given linear morphism for irreducible space, $phi_1: V -> W$ and $phi_2: V->W$, one could inspect that due to $ker (phi) = {0} "or" V$ due to *irreducible* property, one can acquire no smaller subspace. Thus, $phi = 0 "or" "isomorphism"$, by uniqueness, $phi_1 = lambda phi_2$.
+
+Now given a space transformation:
+$
+  phi(rho(g)) = A^(-1) rho(g) A = rho' (g)
+$
+
+By above suggestion on irreducible representation, one should have $A = 0$, or better, the irreducible representation should be isomorphism, thus $A = lambda I$. However, for clarification, you should prefer $bb(C)$ field that to fully decompose space rather the root problem would occur.
+
+$
+  (v_1,v_2) -> v_1 times.circle v_2 equiv v_1^i e_1^i times.circle v_2^j e_2^j = v_1^i thin v_2^i thin e_1^i times.circle e_2^j
+$
+
+$
+  (rho_1 times.circle rho_2) (g) (v_1 times.circle v_2) = rho_1 (g) (v_1) times.circle rho_2 (g) (v_2)
+$
+
+$
+  chi_rho (g) = Tr (rho (g)) \
+$
+
+$
+  chi_rho'(g) = Tr (rho'(g)) = Tr (A^(-1) rho(g) A) = Tr (A^(-1) A rho(g)) = Tr (rho(g)) = chi_rho (g)
+$
+
+$
+  chi_(rho_1 plus.circle rho_2) (g) = Tr (rho_1 plus.circle rho_2 (g)) = Tr(rho_1 (g)) + Tr(rho_2 (g)) = chi_(rho_1) (g) + chi_(rho_2) (g)
+$
+
+$
+  chi_(rho_1 times.circle rho_2) (g) = Tr (rho_1 times.circle rho_2 (g)) &= Tr(rho_1 (g)) times.circle Tr(rho_2 (g)) \ &= chi_(rho_1) (g) times.circle chi_(rho_2)(g) = chi_(rho_1) (g) chi_(rho_2) (g) times.circle 1 tilde.equiv chi_(rho_1) (g) chi_(rho_2) (g)
+$
+
+$
+  chi_rho (e) = Tr (rho (e)) = Tr (I_V) = dim (V)
+$
+
+$
+  M^(i k)_(j l) = integral_G d mu (g) thin rho_1(g)^i_j rho_2(g^(-1))^k_l
+$
+
+$
+  rho_1 (h)^i_a rho_1 (g)^a_j = rho_1 (h g)^i_j
+$
+
+$
+  rho_1 (h)^i_a M^(a k)_(j l) & = integral_G d mu (g) rho_1 (h)^i_a rho_1 (g)^a_j rho_2(g^(-1))^k_l \
+                              & = integral_G d mu (h g) rho_1 (h g)^i_j rho_2 (g^(-1))^k_l quad h g -> g' \
+                              & = integral_G d mu (g') rho_1 (g')^i_j rho_2 (g'^(-1) h)^k_l \
+                              & = M^(i k)_(j b) rho_2(h)^b_k
+$
+
+By Schur's lemma, one acquire a one for all relation that either isomorphism, or nothing for $M$ as a transformation matrix. Thus, fix $j, k$ as $M^(j l)_(i k) = cal(M)_i^l$.
+
+$
+  M^(j l)_(i k) = alpha^j_k delta_i^l \
+$
+
+However, one can change the summation for matrix by apply direction as:
+
+$
+  rho_1(h)^a_j rho_1 (g)^i_a = rho_1 (g h)^i_j
+$
+
+Giving us:
+
+$
+  M^(j l)_(i k) = beta^l_i delta^j_k = alpha^j_k delta^l_i \
+$
+
+Thus it's actually a decomposition as $C delta^j_k delta^l_i$ for the same irreducible representation or else nothing. We then find it's actually a trace summation:
+
+$
+  integral_G d mu (g) rho (g)^i_j rho (g^(-1))^j_i = integral_G d mu (g) Tr (I_V) = n integral_G d mu (g) = sum_(i, j) M^(i j)_(j i) = C n^2
+$
+
+If we can normalize the integral:
+
+$
+  integral_G d mu (g) = 1 -> C = 1/n = 1/(dim (V))
+$
+
+$
+  integral_G d mu (g) rho (g)^i_i rho (g^(-1))^j_j = integral_G d mu (g) chi_rho (g) chi_rho (g^(-1)) = sum_(i j) M^(i j)_(i j) = C n^2 = n
+$
+
+Thus, one has:
+
+$
+  1/n integral_G d mu (g) chi_rho_1 (g) chi_rho_2 (g^(-1)) = 1_id delta_(rho_1,rho_2)
+$
 
 ==
 
@@ -323,33 +445,7 @@ $
 $
 Factor through, for all possible elements, otherwise $[L, L] = L$ is irreducible. Thus induce a maximal nilpotent ideal of $L$ which is the maximal solvable ideal of $L$, else it must be a *semi-simple* structure without additional smaller space. Where nilpotent is a structure that can be shared with a basis with commutative eigenvectors, that's $X Y v = Y X v + [X, Y]v = lambda(X) Y v + lambda ([X,Y]) v$ where $[X,Y]$ in some smaller space by deduction of nilpotent ideal.
 
-However, it doesn't mean that *semi-simple* structure contains no ideal. We try to diagonalize as much as possible even we can't achieve for all like solvable case. That's $#lie[t] subset #lie[g]$ which all elements are commutative. We call such maximal commutative subalgebra as *Cartan subalgebra*, which can be diagonalized simultaneously. Thus if one choose a vector space it acts on, we can decompose the space into eigen-space for all:
-
-$
-  V = plus.circle.big_(lambda(#lie[t])) V_lambda quad V_lambda = {v in V | forall H in #lie[t], H v = lambda(H) v} \
-$
-
-Given a adjoin representation or homomorphism as $X_i -> D_(X_i)$, we can then apply the Cartan subalgebra to decompose the lie algebra itself:
-
-$
-  #lie[g] = plus.circle.big_(alpha(#lie[t])) #lie[g] _alpha quad #lie[g] _alpha = {X in #lie[g] | forall H in #lie[t], [H,X] = D_(H) (X) = alpha(H) X} \
-$
-Which is called *root space decomposition*, where $alpha in #lie[t]^*$ is the eigenvalue on $#lie[t]$.
-
-We often see the ladder operator in physics that a state shared by all other raising and lowering operators, which is the eigenvector of Cartan subalgebra.
-
-$
-  D_t ([X,Y]) = [t, [X,Y]] = [[t,X],Y] + [X,[t,Y]] = (alpha + beta)(t) [X,Y] -> [#lie[g]_alpha,#lie[g]_beta] subset.eq #lie[g]_(alpha+beta)\
-$
-
-Plus, we know if the ladder operator act too many times, it will reach zero, that's $D_(X)$ is nilpotent for $X in #lie[g]_(alpha), alpha != 0$, or we simply call it nilpotent that $#lie[g]_(beta+ n alpha) = 0$. Another thing is, for clarity, $#lie[g]_0$ means $[#lie[t],#lie[g]_0] = 0 dot #lie[g]_0 = 0$ thus $#lie[t] subset #lie[g]_0$, however, due to maximality, we have $#lie[g]_0 = #lie[t]$.
-
-$
-  [#lie[g]_alpha,#lie[g]_(-alpha)] subset.eq #lie[g]_0 = #lie[t] \ 
-$
-
-
-Given a basis ${X_1,...,X_n}$ with structure constants:
+Given a basis ${X_1,...,X_n}$ with structure constants for a semi-simple lie algebra:
 
 $
   [X_i ,X_j] = sum_k tensor(c, -i, -j, +k) X_k \
@@ -364,7 +460,7 @@ $
 Moreover, we can define the representation based on the structure constants:
 
 $
-  & (T_i)_(j k) = (D_(X_i))_(j k) = tensor(c, -i, -j, +k) \
+  & (T_i)_j^k = (D_(X_i))_j^k = tensor(c, -i, -j, +k) \
   & D_(X_i): #lie[g] -> "ad"(#lie[g])
 $
 
@@ -381,8 +477,388 @@ $
 Which adjoin representation with *homomorphism consistency* should restrict all lie algebras to contain Jacobi identity.
 
 $
-  [D_(X_i), D_(X_j)]_(k l) = sum_m (tensor(c, -i, -j, +m) tensor(c, -m, -k, +l) - tensor(c, -j, -i, +m) tensor(c, -m, -k, +l)) = sum_m tensor(c, -i, -j, +m) tensor(c, -m, -k, +l) \
+  D_(X_i) D_(X_j) X_l = D_(X_i) tensor(c, k, -j, -l) X_k = tensor(c, -i, -k, m) tensor(c, -j, -l, k) X_m \
+  (D_(X_i) D_(X_j))^m_l = tensor(c, -i, -k, m) tensor(c, -j, -l, k) \
+  Tr(D_(X_i) D_(X_j)) = (D_(X_i) D_(X_j))^m_m = tensor(c, -i, -k, m) tensor(c, -j, -m, k) = tensor(g, -i, -j) = tensor(c, -j, -m, k) tensor(c, -i, -k, m) = tensor(g, -j, -i) \
 $
+
+Where:
+
+$
+  tensor(g, -i, -j) tensor(g, j, l) = tensor(c, -i, -k, m) tensor(c, -j, -m, k) tensor(c, j, n, -f) tensor(c, l, f, -n) = tensor(c, -i, -k, m) tensor(c, l, f, -n) tensor(delta, -m, n) tensor(delta, k, -f) = tensor(delta, -i, l)
+$
+
+// $
+//   [D_(X_i), D_(X_j)]_(k l) = sum_m (tensor(c, -i, -j, +m) tensor(c, -m, -k, +l) - tensor(c, -j, -i, +m) tensor(c, -m, -k, +l)) = sum_m tensor(c, -i, -j, +m) tensor(c, -m, -k, +l) \
+// $
+//
+$
+  innerproduct(v, w) = v^i (D_(X_i))_k^l v^j (D_(X_j))_l^k = v^i v^j g_(i j)
+$
+
+Cyclic property:
+
+$
+  0 = Tr ([A,B C]) & = Tr (B[A,C]) + Tr ([A,B]C) \
+$
+
+$
+  Tr ([A,B]C) & = Tr ((A B - B A) C) \
+              & = Tr (A B C) - Tr (B A C) \
+              & = Tr (A B C) - T r (A C B) = Tr (A [B,C]) \
+$
+
+$
+  0 = Tr ([rho(X_i) rho(X_j), rho(X_k)]) & = Tr (rho(X_i)[rho(X_j),rho(X_k)]) + Tr ([rho(X_i),rho(X_k)]rho(X_j)) \
+                                         & = Tr (rho(X_i) f_(j k)^d rho(X_d)) + Tr (f_(i k)^d rho(X_d) rho(X_j)) \
+                                         & = f_(j k)^d g_(i d) + f_(i k)^d g_(d j) \
+                                         & = f_(j k i) + f_(i k j)
+$
+
+Given with $f_(j k i) = - f_(k j i)$, one has $f_(j k i) = - f_(k j i) = f_(i j k) = - f_(j i k)$. It's totally anti-symmetric tensor.
+
+Fix indices as $f_(i j)^k = (cal(f)_i)^k_j$:
+$
+  cal(f)_j g^(\(rho\)) + (cal(f)_i g^(\(rho\)))^T & = 0 \
+            g^(-1)^(\(rho\)) cal(f)_j g^(\(rho\)) & = - cal(f)_i^T quad "by" g = g^T \
+                             cal(f)_j g^(\(rho\)) & = g^(\(rho\)) g^(-1)^(\(rho\)) cal(f)_j g^(\(rho\)) \
+            cal(f)_j g^(\(rho\)) g^(-1)^(\(rho\)) & = g^(\(rho\)) g^(-1)^(\(rho\)) cal(f)_j \
+$
+
+Thus by Schur's lemma, for _simple_ lie algebra, it should be up to constant for the representation of the metric form compared with the canonical metric form.
+
+However, it doesn't mean that *semi-simple* structure contains no ideal. We try to diagonalize as much as possible even we can't achieve for all like solvable case. That's $#lie[t] subset #lie[g]$ which all elements are commutative. We call such maximal commutative subalgebra as *Cartan subalgebra*, which can be diagonalized simultaneously. Thus if one choose a vector space it acts on, we can decompose the space into eigen-space for all:
+
+$
+  V = plus.circle.big_(lambda(#lie[t])) V_lambda quad V_lambda = {v in V | forall H in #lie[t], H v = lambda(H) v} \
+$
+
+Given a adjoin representation or homomorphism as $X_i -> D_(X_i)$, we can then apply the Cartan subalgebra to decompose the lie algebra itself:
+
+$
+  #lie[g] = plus.circle.big_(alpha(#lie[t])) #lie[g] _alpha quad #lie[g] _alpha = {X in #lie[g] | forall H in #lie[t], [H,X] = D_(H) (X) = alpha(H) X} \
+$
+Which is called *root space decomposition*, where $alpha in #lie[t]^*$ is the eigenvalue on $#lie[t]$.
+
+We often see the ladder operator in physics that a state shared by all other raising and lowering operators, which is the eigenvector of Cartan subalgebra.
+
+$
+  bold(H) = (H_1,...,H_r) \
+  [H_i, H_j] = 0 quad forall i,j = 1,...,r -> [rho(H_i),rho(H_j)] = 0 quad "for finite representation"
+$
+
+Due to mutually commutation, each $H_i$ can share the same eigenstate with weights $bold(m)$.
+$
+  rho(H_i) ket(bold(m)) = m_i ket(bold(m)) quad bold(m) = (m_1,...,m_r)
+$
+
+Plus, given by the adjoint representation, the same routine is applied for remained decomposition.
+$
+  D_H_i (E_(bold(alpha))) = [H_i, E_(bold(alpha))] = bold(alpha)(H_i) E_bold(alpha) = alpha_i E_(bold(alpha)) quad bold(alpha) = (alpha_1,...,alpha_r)
+$
+
+#[
+  #let balpha = $bold(alpha)$
+  #let bbeta = $bold(beta)$
+  $
+    D_H_i ([E_balpha,E_bbeta]) = [H_i, [E_balpha,E_bbeta]] &= [[H_i,E_balpha],E_bbeta] + [E_balpha,[H_i,E_bbeta]] \
+    &= (alpha_i + beta_i) [E_balpha,E_bbeta] ~ H_i E_(balpha + bbeta) <-> [#lie[g] _alpha,#lie[g] _beta] subset.eq #lie[g] _(alpha+beta)\
+  $
+]
+
+Just like you already have seen in generator of $lie(s u)(2)$ that $[xi_3, xi^(plus.minus)] = plus.minus xi^plus.minus$.
+
+We know if the ladder operator act too many times in finite representation, it will reach zero, that's $D_(X)$ is nilpotent for $X in #lie[g] _(alpha), alpha != 0$, or we simply call it nilpotent that $#lie[g] _(beta+ n alpha) = 0$.
+
+For clarity, $#lie[g] _0$ means $[#lie[t],#lie[g] _0] = 0 dot #lie[g] _0 = 0$ thus $#lie[t] subset #lie[g] _0$, however, due to maximality of Cartan subalgebra, we have $#lie[g] _0 = #lie[t]$.
+
+$
+  [#lie[g] _alpha,#lie[g] _(-alpha)] subset.eq #lie[g] _0 = #lie[t] \
+$
+
+Given a unitary representation, with the observable eigenvalue should be _real_, thus, we restrict $bold(m), bold(alpha)$ to real value, or $bold(H)^dagger = bold(H)$.
+
+$
+  [H_i, E_bold(alpha)]^dagger = (alpha_i E_bold(alpha))^dagger -> [E_bold(alpha)^dagger, H_i] = alpha_i^* E_bold(alpha)^dagger = - [H_i, E_bold(alpha)^dagger] -> E_bold(alpha)^dagger in lie(g)_(-alpha)
+$
+
+Which is justify the existence of $lie(g)_(-alpha)$
+
+$
+  [E_bold(alpha), E_(-bold(alpha))] = sum_i^r b^i H_i \
+$
+
+Restrict to $lie(t)$, we acquire its metric as $Tr (H_i H_j) = g_(i j)$.
+
+$
+  sum_j g_(i j) b^j = Tr (H_i [E_bold(alpha), E_(-bold(alpha))]) = Tr ([H_i, E_bold(alpha)] E_(-bold(alpha))) = alpha_i Tr (E_bold(alpha),E_(-bold(alpha)))
+$
+
+If we normalize that $Tr (E_bold(alpha),E_(-bold(alpha))) = 1$.
+
+$
+  sum_j g_(i j) b^j = alpha_i -> b^j = sum_i g^(i j) alpha_i
+$
+
+We thus could define $H_bold(alpha) := [E_bold(alpha), E_(-bold(alpha))] = sum_j b_j H_j$.
+
+$
+  [H_bold(alpha),E_bold(beta)] = sum_j b_j [H_j, E_bold(beta)] = (bold(b) dot bold(beta)) E_bold(beta) -> [H_bold(alpha), E_bold(plus.minus alpha)] = plus.minus (bold(b) dot bold(alpha)) E_(plus.minus bold(alpha))\
+$
+
+However:
+$
+  bold(b) dot bold(alpha) = sum_(i j) alpha_i alpha_j g^(i j) = innerproduct(alpha, alpha)
+$
+
+And we actually acquire a more ease representation as $H_bold(alpha)$.
+
+===
+#[
+  #let bm = $bold(m)$
+  #let balpha = $bold(alpha)$
+  #let bbeta = $bold(beta)$
+  #let rhoket(body) = $ket(#[$rho; body$])$
+  $
+    rho(H_i) rho(E_bold(alpha)) ket(#[$rho; bm$]) = ([rho(H_i),rho(E_bold(alpha))] + rho(E_bold(alpha)) rho(H_i)) ket(#[$rho;bm$]) = (bold(alpha)_i + m_i) E_(bold(alpha)) ket(#[$rho;bm$])
+  $
+
+  $
+    rho(E_balpha) rhoket(bm) = N_alpha (bm) rhoket(bm + balpha)
+  $
+
+  $
+       & [rho(E_balpha),rho(E_(-balpha))] = rho (H_balpha) \
+    -> & N_alpha (bm - balpha) N_(-alpha) (bm) - N_(-alpha) (bm + balpha) N_(alpha) (bm) = (balpha,bm)
+  $
+
+  $
+    E_balpha rhoket(bm + p balpha) = 0 quad E_(-balpha) rhoket(bm - q balpha) = 0
+  $
+
+  $
+    N_alpha (bm + (k - 1) balpha) N_(-alpha)(bm + k balpha) - N_(-alpha) (bm + (k+1) balpha) N_alpha (bm + k balpha) = innerproduct(balpha, bm + k balpha)
+  $
+
+  $
+    sum_(k = -q)^p &N_alpha (bm + (k - 1) balpha) N_(-alpha)(bm + k balpha) \ &- N_(-alpha) (bm + (k+1) balpha) N_alpha (bm + k balpha) = sum_(k=-q)^p innerproduct(balpha, bm + k balpha)
+  $
+
+  Then, for second term, change the summation from $k -> k - 1$, we cancel each term except the first and last.
+
+  $
+    & N_alpha (bm - (q + 1) balpha) N_(-alpha)(bm - q balpha) \
+    & - N_(-alpha) (bm + (p + 1) balpha) N_alpha (bm + p balpha) = sum_(k=-q)^p innerproduct(balpha, bm + k balpha)
+  $
+
+  However, due to the finite order restriction, the left terms all vanish.
+  $
+    (p+q+1) innerproduct(balpha, bm) + (1/2 p(p+1) - 1/2 q(q+1)) innerproduct(balpha, balpha) & = 0 \
+                                      2 innerproduct(balpha, bm)/innerproduct(balpha, balpha) & = q-p
+  $
+
+  So what's the procedure to investigate the roots of a lie algebra? First, given a canonical matrix representation, one should find the Cartan subalgebra, how? We seek the maximal independent _diagonal_ matrix set. Then seek the relation of $bold(H)$ and remaining elements, you may not pretty lucky to find direct scalar relation rather mixed terms. Then, you should make a combination like $v = a^i M_i$, and try to build by $[H_i, a^j M_j] = lambda_i a^j M_j$ exactly. Given each coefficient with normalization, you may find a set of $delta_(i,j) + delta_(i+1,j) +...$ for possible slots. Summarize, it can be evaluated for $bold(alpha) (H_i)$ for $i$ index of this vector, it indicates to extract the $i$ set to form a basis combination by $delta_(i j) + delta_(i+1,j) ~ e_j$ etc, which is the root.
+
+  === $A_n = lie(s l)(n+1)$
+
+  #let bue = $bold(upright(e))$
+
+  Given $bue_i$ for $i = 1,...,n+1$ in $bb(R)^(n+1)$ parametrize the lie algebra $lie(s l)(n+1)$. Thus the matrix is represented by $(M_(i j))_(alpha beta) = delta_(i alpha) delta_(j beta)$ which Kronecker index connects the matrix slot and generator index.
+
+  It's more natural to just seek a matrix summation to yield results, rather a direct index summation is false. Looking at the $j k$ summation yielding:
+
+  $
+    M_(i,j) M_(k,l) = delta_(j,k) M_(i,l)
+  $
+
+  $
+    [M_(i,j), M_(k,l)] = delta_(j,k) M_(i,l) - delta_(i,l) M_(j,k)
+  $
+
+  Given $Tr (lie(s l)(n+1)) = 0$, we should take the maximal diagonal and traceless basis set, then we choose:
+
+  $
+               H_i & = M_(i,i) - M_(i+1, i+1) \
+    [H_i, M_(k,l)] & = delta_(i,k) M_(i,l) - delta_(i+1,k) M_(i+1,l) + delta_(i,l) M_(k, i) - delta_(i+1,l) M_(k,i+1) \
+                   & = (delta_(i,k) - delta_(i,l) - delta_(i+1,k) + delta_(i+1,l)) M_(k,l)
+  $
+
+  Now, be clever to extract the basis of $i$ index to form simple root set.
+  $
+    bold(alpha) = bue_(k) - bue_(l) quad E_bold(alpha) = M_(k,l) \
+  $
+
+  $
+    [H_i, E_(balpha)] & = balpha(H_i) E_(balpha) \
+    bold(alpha) (H_i) & = (delta_(i,k) - delta_(i,l)) - (delta_(i+1,k) - delta_(i+1,l))
+  $
+
+  Where we choose root as $alpha_i = bue_i - bue_(i+1) quad i = 1,...,n$ to expand into more clarified basis set.
+  $
+    bue_k - bue_l = sum_k^(l-1) (bue_i - bue_(i+1))
+  $
+
+  $
+    innerproduct(alpha_i, alpha_j) = cases(2 &"if" i = j, -1 &"if" abs(i-j) = 1, 0 &"if" abs(i-j) >= -2)
+  $
+
+  We only care about the normalization relation upon the inner product, which build the relation between each basis. How to express this clearly? One named _Dynkin_, creates the diagram as follows:
+
+  #let dynkin_node(pos) = node(pos, radius: 4pt, stroke: 0.5pt)
+  #align(center)[
+    #figure(
+      diagram({
+        let nodes = range(6).map(i => {
+          if i == 4 {
+            return node((i * 0.5, 0))[...]
+          }
+          dynkin_node((i * 0.5, 0))
+        })
+
+        let syms = range(6).map(i => {
+          if i == 4 {
+            return
+          }
+          if i == 5 {
+            return node((i * 0.5, 0.3))[$balpha_n$]
+          }
+          node((i * 0.5, 0.3))[$balpha_#(i + 1)$]
+        })
+
+        (..nodes,).intersperse(edge("-"))
+        (..syms,)
+      }),
+      caption: [Dynkin diagram of $A_n = lie(s l)(n+1)$],
+    )
+  ]
+
+  Where the solid line connects node indicates $-1/2 = cos pi/3$ by normalization of simple roots in $i,j$ where $abs(i-j)=1$. Thus, given a relation between nodes, we connects nodes by single or multiple solid lines to indicates different normalization angles. We could also express in matrix form by $C_(i j) = innerproduct(alpha_i, alpha_j)$ called _Cartan_ matrix which is too sparse in expression compared to Dynkin diagram.
+
+  === $D_n = lie(s o)(2n)$
+
+  As for algebra $lie(s o)(2n)$, the antisymmetric matrix should be denoted as $M_(i j) = - M_(j i) = - M_(i j)^T$ for $i, j = 1,...,2n$.
+
+  $
+    (M_(i j))_(alpha beta) = delta_(a,alpha)delta_(b,beta) - delta_(a,beta) delta_(b,alpha) \
+  $
+
+  We should notie that one should transpose the index to sum again in second term, thus given $(i,j) (k,l)$, we should merge $j,k$ first and then $i,k$.
+
+  $
+    [M_(i,j),M_(k,l)] = delta_(j,k) M_(i,l) - delta_(i,k) M_(j,l) + delta_(l,i) M_(k,j) - delta_(k,i) M_(l,j) \
+  $
+
+  We define the Cartan subalgebra as, for maximal $n$ ranks for $lie(s o)(2n)$:
+
+  $
+    H_i = M_(2i-1,2i) quad i = 1,2,...,n
+  $
+
+  Which is *not* diagonalizable actually, that it must mix four elements by previous calculation. If one need to diagonalize such basis, we should take in $bb(C)$ with $i$ factor appended. Rank $n$ is the consequence derived from maximally $n$ independent rotation.
+
+  We aren't lucky enough to extract the scalar for a single basis, rather those are scalars distributing around different ones. Thus, we choose a vector format to calculate by choose a various $j,k = 1,2,...,n$ basis:
+
+  $
+    bold(M) = a M_(2j-1,2k-1) + b M_(2j,2k-1) + c M_(2j-1,2k) + d M_(2j,2k) \
+    [H_i,bold(M)] = a (delta_(2i,2j-1) M_(2i-1,2k-1) - delta_(2i-1,2j-1) M_(2i,2k-1) + delta_(2k-1,2i-1) M_(2i,2j-1) - delta_(2k-1,2i) M_(2i-1,2j-1)) + ... \
+  $
+
+  We suddenly found that $2i != 2j-1$ ever and ever because one is odd and one is even! We immediately reduce the index into $2i-1,2j-1$ or $2k-1,2i-1$. Then, we note that $delta_(i,j) M_(2i,2k-1) = M_(2j,2k-1)$, $delta_(k,i) M_(2i,2j-1) = - M_(2j-1,2k)$.
+
+  Thus we choose:
+  $
+    & balpha = eta bue_j + eta' bue_k quad j!= k quad eta, eta' = 1,-1 \
+    & E_balpha = 1/2 (M_(2j-1,2k-1) + eta M_(2j,2k-1) + eta' M_(2j-1,2k) - eta eta' M_(2j,2k)) \
+    & balpha(H_i) = eta delta_(i,j) + eta' delta_(i,k) \
+    & [H_i, E_balpha] = (eta delta_(i,j) + eta' delta_(i,k)) E_balpha
+  $
+
+  By counting numbers of generators, we found that they are $2n(n-1)$ for $j,k$ root generators.
+
+  $
+    & alpha_i = bue_i - bue_(i+1) quad i = 1,...,n-1 \
+    & alpha_n = bue_(n-1) + bue_n \
+  $
+
+  Actually, choose arbitrary sign is acceptable, but such is preferable.
+
+  $
+    innerproduct(alpha_i, alpha_j) = cases(2 &"if" i = j, -1 &"if" abs(i-j)=1, 0 &"if" abs(i-j) = 0, 0 &"if" i = n-1 thick j=n)
+  $
+
+  We draw the _Dynkin_ diagram as below:
+  #figure(
+    diagram(
+      {
+        let nodes = range(4).map(i => {
+          if i == 2 {
+            return node((i * 0.5, 0))[...]
+          }
+          dynkin_node((i * 0.5, 0))
+        })
+
+        let syms = range(4).map(i => {
+          if i == 2 {
+            return
+          }
+          if i == 3 {
+            return node((i * 0.5, 0.3))[$balpha_(n-2)$]
+          }
+          node((i * 0.5, 0.3))[$balpha_#(i + 1)$]
+        })
+
+        (..nodes,).intersperse(edge("-"))
+        (..syms,)
+      },
+      dynkin_node((4 * 0.5, 0.5)),
+      node((4 * 0.5, 0.8))[$balpha_(n)$],
+      dynkin_node((4 * 0.5, -0.5)),
+      node((4 * 0.5, -0.2))[$balpha_(n-1)$],
+      edge((3 * 0.5, 0), (4 * 0.5, 0.5)),
+      edge((3 * 0.5, 0), (4 * 0.5, -0.5)),
+    ),
+    caption: [Dynkin diagram of $D_n = lie(s o)(2n)$],
+  )
+
+  #figure(
+    diagram(
+      {
+        let nodes = range(4).map(i => {
+          if i == 2 {
+            return node((i * 0.5, 0))[...]
+          }
+          dynkin_node((i * 0.5, 0))
+        })
+
+        let syms = range(4).map(i => {
+          if i == 2 {
+            return
+          }
+          if i == 3 {
+            return node((i * 0.5, 0.3))[$balpha_(n-1)$]
+          }
+          node((i * 0.5, 0.3))[$balpha_#(i + 1)$]
+        })
+
+        (..nodes,).intersperse(edge("-"))
+        (..syms,)
+      },
+      dynkin_node((4 * 0.5, 0)),
+      node((4 * 0.5, 0.3), $balpha_n$),
+      edge((3 * 0.5, 0), (4 * 0.5, 0), "="),
+    ),
+    caption: [Dynkin diagram of $B_n = lie(s o)(2n+1)$],
+  )
+
+  === Coincidence
+
+  $
+    & lie(s o)(3;bb(C)) = lie(s l)(2;bb(C)) = lie(s p)(2;bb(C)) \
+    & lie(s o)(4;bb(C)) = lie(s l)(2;bb(C)) plus.circle lie(s l)(2;bb(C)) \
+    & lie(s o)(5;bb(C)) = lie(s p)(4;bb(C)) \
+    & lie(s o)(6;bb(C)) = lie(s l)(4;bb(C)) \
+  $
+]
 
 ===
 
@@ -469,8 +945,661 @@ $
 
 Same, one has for $xi^-$ that $tilde(C) = sqrt(j(j+1) - m(m-1))$.
 
+===
+
+Take the transformation $S O (3)$ as $G L (3;bb(R))$ matrix representation act naturally on $bb(R)^3$ equipped with function valued on it as a scalar form.
+$
+  l_1 (f)(bold(x)) = f (l^(-1)_1 x) & = d/(d t) f(exp(
+                                          t mat(
+                                            0, 0, 0;
+                                            0, 0, 1;
+                                            0, -1, 0;
+                                          )
+                                        ) vec(x_1, x_2, x_3))|_(t=0) \
+                                    & = dv(, t) f(mat(
+                                          1, 0, 0;
+                                          0, cos t, sin t;
+                                          0, -sin t, cos t;
+                                        ) vec(x_1, x_2, x_3))|_(t=0) \
+                                    & = dv(, t) f(vec(
+                                          x_1,
+                                          x_2 cos t + x_3 sin t,
+                                          - x_2 sin t + x_3 cos t,
+                                        )) \
+                                    & = (pdv(f, x_1),pdv(f, x_2),pdv(f, x_3)) dot vec(0, x_3, -x_2) \
+                                    & = x_3 pdv(f, x_2) - x_2 pdv(f, x_3)
+$
+
+If we have $x_1 = r sin theta cos phi.alt, x_2 = r sin theta sin phi.alt, x_3 = r cos theta$, we can construct the transformation upon $theta,phi.alt$ too.
+
+$
+  pdv(, x_i) = pdv(r_i, x_i) pdv(, r_i) \
+$
+
+In differential geometry as a basis vector transformation, or familiar Jacobi.
+
+$
+  & l_1 = x_3 pdv(, x_2) - x_2 pdv(, x_3) = sin phi.alt pdv(, theta) + cot theta cos phi.alt pdv(, phi.alt) \
+  & l_2 = - cos phi.alt pdv(, theta) + cot theta sin phi.alt pdv(, phi.alt) \
+  & l_3 = - pdv(, phi.alt)
+$
+
+$
+  & l^+ = e^(- i phi.alt) (-i pdv(, theta) + cot theta pdv(, phi.alt)) \
+  & l^- = e^(i phi.alt) (i pdv(, theta) + cot theta pdv(, phi.alt))
+$
+
+Given the representation $F(theta,phi.alt)(m)$ with the weight $m$ chosen by $l_3$, with the highest weight denoted as $l$:
+
+$
+  l_3 F(theta,phi.alt)(m) = - pdv(, phi.alt) F(theta,phi.alt)(m) = m F(theta,phi.alt)(m)
+$
+
+Thus we have $F(theta,phi.alt) ~ e^(m phi.alt) G (theta)$, however, we have such restriction $phi.alt + 2 pi ~ phi.alt$, thus we must have $m -> i m$ to match such period.
+
+We can immediately decompose the representation scalar function by raising operator for the highest weight:
+$
+  (pdv(, theta) - l cot theta) G (theta)(l) & = 0 \
+                             ln G(theta)(l) & = l ln sin theta \
+            G(theta)(l) = C_(l) sin^l theta
+$
+
+Where the constant is, for the representation of $2 l + 1$ dimension in $l$ weight. Apply lowering operator would giving us:
+
+$
+  F(theta,phi.alt)(m) &= C_m (l^-)^(l-m) F(theta,phi.alt)(l) \
+  &= C_m (e^(-i phi.alt) (i pdv(, theta) + cot theta pdv(, phi.alt)))^(l-m) e^(-i l phi.alt) sin^l theta \
+$
+
+However, one usually encompass the whole $2l+1$ representation for arbitrary $l$ as:
+
+$
+  Y_l^m (theta,phi.alt) = C_(l m) (...) thick "as representation for" 2l+1 "dimension with weight" m
+$
+
+Casimir operator with commutative property acting on will give us the eigenvalue.
+$
+  l^2 = l_1^2 + l_2^2 + l_3^2 \
+$
+
+$
+  l^2 Y_l^m (theta, phi.alt) = l(l+1) Y_l^m (theta, phi.alt)
+$
+
+$
+  l^2 &= l^-l^+ + i l_3 + l_3^2 \
+  &= e^(i phi.alt)(i pdv(, theta) + cot theta pdv(, phi.alt)) e^(-i phi.alt)(-i pdv(, theta) + cot theta pdv(, phi.alt)) - i pdv(, phi.alt) + pdv(, phi.alt, 2) \
+  &= pdv(, theta, 2) + i pdv(, theta)(cot theta pdv(, phi.alt)) + e^(i phi.alt) cot theta pdv(, phi.alt) (e^(- i phi.alt) (-i pdv(, theta))) + e^(i phi.alt) cot theta pdv(, phi.alt) (e^(-i phi.alt) cot theta pdv(, phi.alt)) + (...) \
+$
+
+Evaluate that:
+
+$
+  i pdv(, theta)(cot theta pdv(, phi.alt)) = i/(sin^2 theta) pdv(, phi.alt) + i cot theta pdv(, theta, phi.alt) \
+  e^(i phi.alt) cot theta pdv(, phi.alt) (e^(- i phi.alt) (-i pdv(, theta))) = - cot theta pdv(, theta) - i cot theta pdv(, theta, phi.alt) \
+  e^(i phi.alt) cot theta pdv(, phi.alt) (e^(-i phi.alt) cot theta pdv(, phi.alt)) = -i cot^2 theta pdv(, phi.alt) + cot^2 theta pdv(, phi.alt, 2)
+$
+
+The first term evaluate as:
+
+$
+  "First term" &= pdv(, theta, 2) - cot theta pdv(, theta) + i(1/(sin^2 theta) pdv(, phi.alt) - cot^2 theta pdv(, phi.alt)) + cot^2 theta pdv(, phi.alt, 2)\
+  &= pdv(, theta, 2) - cot theta pdv(, theta) + i pdv(, phi.alt) + cot^2 theta pdv(, phi.alt, 2)
+$
+
+$
+  "LHS" &= pdv(, theta, 2) - cot theta pdv(, theta) + cot^2 theta pdv(, phi.alt, 2) + pdv(, phi.alt, 2) \
+  &= 1/(sin theta) (pdv(, theta) (pdv(, theta)) sin theta + pdv(, theta) (sin theta) pdv(, theta) ) + 1/(sin^2 theta) pdv(, phi.alt, 2) \
+  &= 1/(sin theta) pdv(, theta) (sin theta pdv(, theta)) + 1/(sin^2 theta) pdv(, phi.alt, 2) = Delta_(Omega)
+$
+
+Which is the *Spherical Laplacian*#footnote[Actually, calculate by $l_1^2 + l_2^2 + l_3^2$ is more simpler, or use some notation reduction would be easier in burden.].
+
+This, actually can be formalize in such insight, that Laplacian as:
+$
+  pdv(, x_1, 2) + pdv(, x_2, 2) + pdv(, x_3, 2) = Delta_Omega \
+$
+
+Is rotation invariant given by $[Delta_Omega, l_i] = 0$. Which is same as Casimir operator by its *uniqueness* up to constant. Thus we decompose $L^2 (S^2)$ into basis equipped with $Y^m_l (theta,phi.alt)$.
+
+===
+
+Given $S O (2)$, it contains one generator which rotates the plane:
+
+$
+  l = mat(0, 1; -1, 0) ~ l = x_1 pdv(, x_2) - x_2 pdv(, x_1) = - pdv(, phi.alt)
+$
+
+It's simple that only one element share the eigenvalue solely.
+$
+  l ket(m) = m ket(m) ~ ket(m) = F(phi.alt)(m) = e^(- i m phi.alt)
+$
+With period condition induced.
+
+$S O (2) times.r bb(R)^+ = E(2)$
+
+$
+  mat(R(theta), bold(t); 0^T, 1) = mat(cos theta, sin theta, x; sin theta, cos theta, y; 0, 0, 1)
+$
+
+$#lie[e] (2)$
+$
+  l -> mat(0, -1, 0; 1, 0, 0; 0, 0, 0) quad p_x -> mat(0, 0, 1; 0, 0, 0; 0, 0, 0) quad p_y -> mat(0, 0, 0; 0, 0, 1; 0, 0, 0)
+$
+
+$
+  [l,p_x] = p_y quad [l,p_y] = - p_x quad [p_x,p_y] = 0
+$
+
+$
+  & l -> x_1 pdv(, x_2) - x_2 pdv(, x_1) = - pdv(, phi.alt) \
+  & p_x -> pdv(, x) \
+  & p_y -> pdv(, y) \
+$
+
+Given a Cartan subalgebra, we choose $l$, because the Cartan subalgebra must be a semi-simple decomposition thus we shouldn't take a nilpotent ideal which would *vanish in commutation*.
+
+$
+  p^(plus.minus) := p_x plus.minus i p_y = pdv(, x) plus.minus i pdv(, y) = e^(plus.minus i phi.alt) (pdv(, r) plus.minus i/r pdv(, phi.alt)) \
+$
+
+$
+  [l,p^(plus.minus)] = plus.minus p^(plus.minus) quad [p^+,p^-] = 0
+$
+
+Casimir
+
+$
+          p^+ p^- - p^+ p^- & = 0 \
+  [l,p^+] p^- + p^+ [l,p^-] & = 0 \
+                [l,p^+ p^-] & = 0 \
+         [l, p_x^2 + p_y^2] & = 0 \
+                   [l, p^2] & = 0
+$
+
+Thus, it's the Casimir operator, why there's no $l^2$? Because there's no element can generate $l$ to absorb in. Thus we clarify such operator should be unique up to scalar, which is $Delta_perp$ in representation.
+
+$
+  p^+ p^- & = e^(i phi.alt) (pdv(, r) + i/r pdv(, phi.alt)) (e^(- i phi.alt))(pdv(, r) - i/r pdv(, phi.alt)) \
+$
+
+$
+    & e^(i phi.alt)(pdv(, r) + i/r pdv(, phi.alt)) (e^(- i phi.alt) B) \
+  = & pdv(, r) B + 1/r B + i/r pdv(, phi.alt) B
+$
+
+$
+  p^+ p^- &= pdv(, r, 2) - i/r pdv(, r, phi.alt) + i/r^2 pdv(, phi.alt) + 1/r pdv(, r) - i/r^2 pdv(, phi.alt) + i/r pdv(, phi.alt, r) + 1/r^2 pdv(, phi.alt, 2) \
+  &= pdv(, r, 2) + 1/r pdv(, r) + 1/r^2 pdv(, phi.alt, 2)
+$
+
+We inspect that the commutation relation differs from the case in semi-simple algebra like $S U (2)$, which we can't generate the angular part from the translation. If you review the proof of weight boundedness of $S U(2)$ representation that Casimir operator build the connection with maximal and minimal weight, however, we can't reach the results in this one, indicating _unboundedness_ of the weight.
+
+$
+  p^(plus.minus) F(r,phi.alt,z)(m,k_z) = e^(plus.minus i phi.alt)(pdv(, r) plus.minus i/r pdv(, phi.alt)) F(r,phi.alt,z)
+$
+
+$
+  Delta_perp = pdv(, x, 2) + pdv(, y, 2) = pdv(, r, 2) + 1/r pdv(, r) + 1/r^2 pdv(, phi.alt, 2) = p^2 \
+$
+
+Given by weight $m$, we extract terms like $e^(i m phi.alt)$:
+
+$
+                   (Delta_perp + partial_z^2) F(r,phi.alt,z)(m,k_z) & = lambda F(r,phi.alt,z)(m,k_z) \
+                               Delta_perp (e^(i m phi.alt) R(r)(m)) & = (lambda - k_z^2) (e^(i m phi.alt) R(r)(m)) \
+  (pdv(, r, 2) + 1/r pdv(, r) - m^2/r^2 + (k_z^2 - lambda)) R(r)(m) & = 0
+$
+
+Which is called _Bessel Equation_, the solution is called _Bessel Function_ $J_m (r)$ with $m$ as weight notation. Notice that $k_z^2 - lambda$ is a isolated scalar generated from $z$ translation which could be reduced, we denote as $r -> sqrt(k_z^2 - lambda) r := k r$.
+
+$
+  G (r,phi.alt)(m) = e^(i m phi.alt) R(r)(m) = J_m (k r) e^(i m phi.alt) \
+  p^+ (G(r,phi.alt)(m)) = G(r,phi.alt)(m+1) \
+$
+
+$
+  J_(m+1) (r) = m/x J_m (r) - J'_m (r)
+$
+
+However, we have no choice like $S U(2)$ to denote the minimal or maximal basis function and iterates for else. Thus, we can only acquire a iteration relation like above. You may expect the different solution or _differential seed_ will inherit the same iteration property like above.
+
+$
+  [l,p^(plus.minus)] = plus.minus p^(plus.minus) \
+  e^(t l) p^(plus.minus) e^(- t l) = e^(t D_l) (p^(plus.minus)) = sum_n^infinity t^(n)/n! (plus.minus 1)^n p^(plus.minus) = e^(plus.minus t) p^(plus.minus) \
+$
+
+We then set $t -> i phi.alt$ for period restriction.
+
+$
+  U(phi.alt) := e^(i phi.alt l) \
+  U(phi.alt) ket(m) = e^(i phi.alt l) ket(m) = e^(i m phi.alt) ket(m)
+$
+
+We thus immediately decompose it to the $m$-weight space, recall the representation decomposition, one has $chi(g) = e^(i m phi.alt)$:
+
+$
+  1/(2 pi) integral_0^(2 pi) e^(-i m phi.alt) e^(i m phi.alt) d phi.alt = 1_m \
+  1/(2 pi) integral_0^(2 pi) e^(- i m phi.alt) U(phi.alt) ket(m) d phi.alt = 1_id \
+  1/(2 pi) integral_0^(2 pi) e^(- i m phi.alt) U(phi.alt) d phi.alt = Pi_m \
+$
+
+$
+  Tr (U(phi.alt)) = braket(m, U(phi.alt), m) = sum_(m in bb(z)) e^(i m phi.alt) = 2 pi sum_(m in bb(z)) delta(phi.alt - 2pi n) = sum_m Pi_m = 1_id \
+$
+
+$
+  sum_m Pi_m (e^(i k r cos phi.alt)) = sum_(m in bb(z)) J_m (k r) e^(i m phi.alt)
+$
+
 ==
 
+$
+  S[*]: cal(F) -> bb(R); cal(F) = { bold(q)(t): t in [t_0,t_1] subset bb(R) -> bb(R)^M }
+$
 
+With differential set if applicable:
 
+$
+  cal(F)_epsilon = {delta bold(q)(t); abs(delta bold(q)(t)) < epsilon; abs(delta bold(dot(q))(t)) < epsilon; forall t in [t_0,t_1] subset bb(R)}
+$
 
+$
+  delta S(bold(q),bold(dot(q))) = 0 -> delta bold(q)(t_0) = delta bold(q)(t_1) = 0
+$
+
+Given by a certain basis product form:
+$
+  ket(x) "or" ket(x + delta)? -> "continuous basis" \
+  braket(x, psi) = braket(x, x') braket(x', psi)
+$
+
+Thus $phi$ should be a continuous basis expansion for the representation of coordinates:
+$
+  integral d mu thin phi(x|x') <-> braket(x, x') \
+  integral d mu thin phi(x|x') phi(x'|x_0) <-> braket(x, x') braket(x', x_0) = braket(x, x_0) <-> delta(x'|x_0)
+$
+
+$
+  phi(x|x_0) = phi(x|x_(N-1)) phi(x_(N-1)|x_(N-2)) ... phi(x_1|x_0) \
+  phi(x|x_0) = lim_(N->infinity) product^(infinity) T(phi(x_epsilon))
+$
+
+Denotes $M(V;bb(C))$ as set of non-degenerate complex-valued symmetric bilinear forms on $V$ with non-negative definite real part, with dense set $M^circle.small (V;bb(C))$. Now fix a translation invariant volume form $d x$ on $V$, thus we can define the determinant $det(B) thick B in M^circle.small (V;bb(C))$.
+
+Let $cal(S)(V)$ be the _Schwartz space_ of $V$ where the smooth functions on $V$ whose all derivatives are rapidly decaying at $infinity$ faster than any power of $abs(x)$, equipped with the dual space $cal(S)^*(V)$ in natural inclusions $cal(S)(V) subset L^2(V) subset cal(S)'(V)$.
+
+$
+  cal(F): cal(S)(V) -> cal(S)(V^*) \
+  cal(F)[g](p) = (2pi)^(-d/2) integral_V g(x) e^(-i innerproduct(p, x)) d x
+$
+
+Isometry is given by $cal(F)^2[g](x) = g(-x)$. By duality, such operator could be extended to $cal(S)^*(V) -> cal(S)^*(V^*)$ for tempered distribution. The function $exp(-1/2 B(x,x))$ for matrix $B in M^circle.small (V)$ belongs to $cal(S)^*(V)$ if $Re B >= 0$ by its decaying behavoir.
+
+For dimension 1, where a diagonalizable $B$:
+$
+  cal(F)(exp(-1/2 B(x,x))) &= (2pi)^(-1/2) integral_(-infinity)^(infinity) exp(-i p x - 1/2 a x^2) d x \
+  &= (2 pi)^(-1/2) exp(-1/2 a^(-1) p^2) integral_(-infinity)^(infinity) exp(-1/2 a(x+i a^(-1)p)^2) d x \
+  &= (2 pi)^(-1/2) exp(-1/2 a^(-1) p^2) integral_(bb(R) + i a^(-1)p) exp(-1/2 a(x+i a^(-1)p)^2) d x \
+  &= a^(-1/2) exp(-1/2 a^(-1) p^2)
+$
+
+We therefore could extend such matrix to diagonalizable by dense property that for arbitrary countable dimensions where a general results is given by:
+
+$
+  cal(F)(exp(-1/2 B(x,x))) = (det B)^(-1/2) exp(-1/2 B^(-1) (p,p))
+$
+
+That the $det(B)^(-1/2) = product_i lambda_i$ by eigenvalues which is trivial in dimension 1.
+
+$
+  I[g;B] (hbar) & = 1/hbar^(1/2) integral_V g(x) e^(-1/(2 hbar) B(x,x)) d x quad hbar >= 0 \
+                & = integral_V g(hbar^(1/2) x) e^(-1/2 B(x,x)) d x quad x -> x/(hbar^(1/2))
+$
+
+$
+  I[g;B] (0) = integral_V (...) d x thick g(0) = (2pi)^(d/2) (det B)^(-1/2) g(0)
+$
+
+$
+  I[g;B] (hbar) & = innerproduct(g(hbar^(1/2)x), exp(-1/2 B(x,x))) \
+                & = hbar^(-d/2) (det B)^(-1/2) innerproduct(cal(F)[g](hbar^(-1/2)p), exp(-1/2 B^(-1)(p,p))) \
+                & = (det B)^(-1/2) innerproduct(cal(F)[g](p), exp(- hbar/2 B^(-1)(p,p))) \
+$
+
+Where $hbar -> 0 ~> exp(-hbar/2 B^(-1)(p,p)) = 1$.
+
+If $l in V^*$ and $g in cal(S)(V)$, then:
+
+$
+  I[l g;B] (hbar) & = innerproduct(l(hbar^(1/2) x) g(hbar^(1/2)x), exp(-1/2 B(x,x))) \
+                  & = hbar^(1/2) innerproduct(g(hbar^(1/2)x), l(x) exp(-1/2 B(x,x))) \
+                  & = - hbar^(1/2) innerproduct(g(hbar^(1/2)x), partial_(B^(-1) l) exp(-1/2 B(x,x))) \
+                  & = hbar^(1/2) innerproduct(partial_(B^(-1) l) g(hbar^(1/2)x), exp(-1/2 B(x,x))) \
+                  & = hbar innerproduct((partial_(B^(-1)l) g) (hbar^(1/2) x), exp(-1/2 B(x,x))) \
+                  & = hbar I [partial_(B^(-1) l) g;B] (hbar)
+$
+
+$
+  dv(, hbar) (g(hbar^(1/2) x)) = 1/2 hbar^(-1/2) (x^* dot partial_(hbar^(1/2) x) g)(hbar^(1/2) x) = 1/2 hbar^(-1/2) hbar^(-1/2) (x^* dot partial_x g)(hbar^(1/2) x) = 1/2 hbar^(-1) (x^* dot partial_x g)(hbar^(1/2) x)
+$
+
+Where $x^*$ is the covector compared to vector $x$. Compose two results we get a Laplacian operator:
+
+$
+  I' [g;B] (hbar) = 1/2 hbar^(-1) I [x^* dot partial_x g] (hbar) = 1/2 hbar^(-1) hbar I [partial_(B^(-1) x^*) dot partial_x g)] (hbar) = I [1/2 Delta_B g;B] (hbar)
+$
+
+By deduction, we can apply as much as possible that:
+
+$
+  I^(\(n\))[g;B](hbar) = I[(1/2 Delta_B)^n;B](hbar)
+$
+
+If moreover $g$ vanishes at the origin to order $2n+1$, then for every differential operator of order $<= 2n$ annihilates $g$ at $0$, hence:
+
+$
+  I_g (0) = I'_g (0) = ... = I_g^(\(n\))(0) = 0
+$
+
+Assume $f$ attains a global minimum at a unique point $c in [a,b]$, s.t. $a<c<b$ and $f''(c)>0$. To acquire more information, we could expand the function as:
+
+$
+  f(x) = f(c) + 1/2 f''(c) (x-c)^2 + ... \
+$
+
+Or even better to take a variable transformation with equality by rescale and shift:
+
+$
+  c -> 0 quad f(c) = 0 ~> f(x) = M/2 x^2 \
+$
+
+If given a compact support that ${c} in U$ where divide the function as $g = g_1 + g_2 quad g_1 subset U, g_2 subset [a,b]\\U$. Hence the integral of second term will rapidly decaying if we choose a enough huge neighborhood support around $c$. We left with the first term as:
+
+$
+  I[g](hbar) = integral_(-infinity)^(infinity) g(hbar^(1/2) y) e^(-M/2 y^2) d y
+$
+
+$
+  hbar^(1/2) I [g;f] = integral_a^b g(x) e^(- f(x)/hbar) d x = hbar^(1/2) e^(-f(c)/hbar) I[tilde(g);B = (dot)^2]
+$
+
+It actually show a general strategy to expand the integral by:
+
+$
+  c = 0 quad f(x) = 1/2 p(x)^2 \
+  p'(0) = sqrt(f''(0)) > 0 \
+$
+
+$
+  integral_(-infinity)^(infinity) g(x) e^(-p(x)^2/(2 hbar)) d x ~ hbar^(1/2) integral_(-infinity)^(infinity) tilde(g)(hbar^(1/2) y) e^(-y^2/2) d y
+$
+
+$
+  & p(x)/(hbar^(1/2)) = y \
+  & d x = d p^(-1)(hbar^(1/2) y) = (p^(-1))' (hbar^(1/2) y) hbar^(1/2) d y \
+$
+$
+                    p(p^(-1)(x)) & = x \
+  p'(p^(-1)(x)) dot (p^(-1))'(x) & = 1 \
+                    (p^(-1))'(x) & = 1/(p'(p^(-1)(x))) \
+$
+$
+  tilde(g)(y) := g(p^(-1)(y)) thin (p^(-1))' (y) = g(p^(-1)(y))/(p'(p^(-1)(y)))
+$
+
+We could expand $tilde(g)$ by Taylor polynomials to acquire a series of summation.
+
+Notice that any odd order polynomials expansion will vanish due to the whole space integral. Thus we can freely expand in $O(hbar^n)$ order as:
+
+$
+  hbar^(1/2) I[g;f] = hbar^(1/2) e^(- f(c)/hbar) I[tilde(g);B] = (2pi hbar)^(1/2) e^(-f(c)/hbar) sum_(n>=0) a_n hbar^n
+$
+
+The Gaussian integral can be expanded as $integral_(-infinity)^(infinity) y^(2m) e^(-y^2/2) d y = (2pi)^(1/2) (2m-1)!!$, So we can exploit the constant that $tilde(g)(y) = sum_(n>=0)^(infinity) b_n y^n -> a_n = b_(2n) (2m-1)!!$.
+
+$
+  integral_a^b g(x) e^((i f(x))/hbar) d x = hbar^(1/2) e^((i f(c))/hbar) e^((plus.minus pi i)/4) I[g](hbar)
+$
+
+$
+  I(hbar) = sum_(n>=0) a_n hbar^n &= sum_(n>=0) a_n hbar^n/n! n! \
+  &= sum_(n>=0) a_n hbar^n/n! integral_0^infinity u^n e^(- u) d u \
+  &= integral_0^infinity g(hbar u) e^(-u) d u quad g(hbar) = sum_(n>=0) a_n (hbar^n)/n! \
+  &= integral_(-infinity)^(infinity) abs(v) g (hbar v^2) e^(-v^2) d v quad u -> v^2 \
+  &= hbar^(-1/2) integral_(-infinity)^(infinity) tilde(g) (hbar^(1/2) v) e^(-v^2) d v quad tilde(g)(v) = abs(v) g(v^2) \
+$
+
+$
+  Gamma(s+1) & = integral_0^infinity t^s e^(-t) d t quad s > 0 \
+             & = s^(s+1) integral_0^infinity x^s e^(-s x) d x quad t -> s x \
+             & = s^(s+1) integral_0^infinity e^(-s (x - ln x)) d x quad hbar -> 1/s, f(x) -> x-ln x, g(x) -> 1 \
+             & = s^(s+1/2) e^(-s) (2pi)^(1/2) sum_(n>=0) a_n (1/s)^n quad f(c) = f(1) = 1
+$
+
+$
+  p(x) = sqrt(2 (x-ln x)) & = sqrt(2(x - (x - x^2/2 +x^3/3 + ...))) \
+                          & = x sqrt(1 - (2x)/3 + x^2/2 + ...) = x - x^2/3 + (7x^3)/36 + ...
+$
+
+$
+  p^(-1) (x) = x + x^2/3 + x^3/36 + ... \
+  (p^(-1))' (x) = 1 + (2x)/3 + (x^2)/12 + ... \
+$
+
+$
+  tilde(g)(y) = p'^(-1) (y) -> a_0 = 1, a_1 = 1/12 (2-1)!! = 1/12 \
+$
+
+Multidimensional steepest descent formula:
+$
+  hbar^(d/2) I^D [g;f] = integral_D g(x) e^(-f(x)/hbar) d x = hbar^(d/2) e^(-f(c)/hbar) I[g;B]
+$
+
+$
+  T -> Pi(T) \
+  abs(Pi_k) = ((2k)!)/(2^k k!) = ((2k)!)/((2k)!!) = (2k-1)!!
+$
+
+$
+  expval(l_1...l_N) := hbar^(-d/2) e^(S(c)/hbar) integral_D l_1(x)...l_N (x) e^(-S(x)/hbar) d x \
+$
+
+$
+  S(x) = B(x,x)/2 + tilde(S)(x) = B(x,x)/2 - sum_(i>=0) g_i (B_i (x,...,x))/i!
+$
+
+$
+  Z = I[1;S(x)] = hbar^(-d/2) integral_V e^(-S(x)/hbar) d x
+$
+
+$
+  vf(n) = (n_0,n_1,n_2,...) \
+  F_(Gamma) = product_i g_i^n_i dot tilde(F)_Gamma \
+$
+
+$
+              x & -> y = hbar^(-1/2)x \
+  B_i (x,...,x) & -> hbar^(i/2) B_i (x,...,x) \
+      Z_(vf(n)) & = integral_V e^(- B(y,y)/2) product_i g_i^n_i/((i!)^(n_i) n_i !) (hbar^(i/2-1) B_i (y,...,y))^(n_i) d y
+$
+
+Contract each vertex.
+
+$
+  -chi(Gamma) = E(Gamma) - V(Gamma) = 1/2 sum_(i>=0) n_i i - sum_(i>=0) n_i = sum_(i>=0) n_i (i/2 - 1)
+$
+
+$
+  Z_n = (2pi)^(d/2) (det B)^(-1/2) product_i g_i^n_i/((i!)^(n_i) n_i !) sum_(sigma in product(T_vf(n))) tilde(F)(sigma)
+$
+
++ permutation of "flowers" of given valency: $S_(n_i)$
++ permutation of the $i$th edges inside each $i$-valent "flower": $S^(n_i)_i$
+
+$
+       bb(G)_vf(n) & = product_i (S_(n_i) times.l S_i^(n_i)) \
+  abs(bb(G)_vf(n)) & = product_i (n_i !)(i!)^(n_i)
+$
+
+The group $bb(G)_vf(n)$ acts on the set $Pi(T_vf(n))$, which the stabilizer of a given matching is $"Aut"(Gamma)$.
+
+$
+  N_Gamma = (product_i (n_i !)(i!)^(n_i))/(abs("Aut"(Gamma))) \
+$
+
+$
+  sum_(sigma in Pi(T_vf(n))) tilde(F)(sigma) = sum_Gamma (product_i (n_i !)(i!)^(n_i))/(abs("Aut"(Gamma))) F_Gamma = sum_Gamma N_Gamma tilde(F)_Gamma
+$
+
+$
+  chi(Gamma) & = beta_0(Gamma) - beta_1(Gamma) = V - E \
+$
+$
+  Z = sum_(vf(n)) Z_vf(n) = (2pi)^(d/2) (det B)^(-1/2) sum_(vf(n)) product_i (g_i hbar^(i/2 - 1))^(n_i) sum_(Gamma in G(vf(n))) tilde(F)_Gamma/(abs("Aut"(Gamma))) \
+$
+
+We know that such exponential can be expanded as infinite sum of expectation of products.
+
+$
+  expval(e^l) := sum_(n>=0) 1/n! expval(l^n) = hbar^(d/2) integral_V e^(l(x)-S(x)/hbar) d x
+$
+
+We immediately inspect that the infinite sum of $Z_vf(n)$ is exact the same as the exponential expansion of $Z$, a specific case for $B_1(dot) = l(dot)$ as the external vertices plus a arbitrary action of $S(x)/hbar$ to induce the Feynman amplitude for $F_Gamma (l_1,...,l_N) thick Gamma in G(vf(n))$.
+
+Given below diagram, one have two external vertices and a loop, also with a 3-valent flower and 4-valent flower too.
+
+#let dig_node(pos) = node(pos, radius: 2pt, stroke: 0.5pt)
+#figure(
+  diagram(
+    spacing: 4em,
+    dig_node((0, 0)),
+    dig_node((1, 0)),
+    edge((0, 0), (1, 0)),
+    edge((1, 0), (2, 0), bend: 90deg),
+    edge((2, 0), (1, 0), bend: 90deg),
+    dig_node((3, 0)),
+    dig_node((4, 0)),
+    dig_node((5, 0)),
+    edge((3, 0), (4, 0)),
+    edge((3, 0), (4, 0), bend: 90deg),
+    edge((4, 0), (3, 0), bend: 90deg),
+    edge((4, 0), (5, 0)),
+  ),
+  caption: [A graph with separated components.],
+)
+
+$
+  &B_3 = sum_i b^1_i times.circle b^2_i times.circle b^3_i \
+  &B_4 = sum_j c^1_j times.circle c^2_j times.circle c^3_j times.circle c^4_j \
+$
+
+In expansion of $B_3$ and $B_4$ exponential will generate the 3-valent and 4-valent flowers, plus two external vertices $l_1,l_2$, all which will be contracted by the edges $B_2$.
+
+$
+  F_Gamma (l_1,l_2) = sum_i B^(-1)(l_1,b_i^1) B^(-1) (b_i^2,b_i^3) sum_(i j) B^(-1) (b_i^1,c^1_j) B^(-1) (b_i^2,c^2_j) B^(-1) (b_i^3,c^3_j) B^(-1) (c^4_j,l_2)
+$
+
+Suppose the coefficients $g_i = 1$, we acquire the general expression for expectation as sum of all possible graphs:
+
+$
+  expval(l_1...l_N) = sum_(Gamma in G(N)) hbar^(-chi(Gamma))/(abs("Aut"(Gamma))) tilde(F)_Gamma (l_1,...,l_N)
+$
+
+Where we reduce the product of $product_i (g_i hbar^(i/2-1))$ in $hbar^(-chi(Gamma))$ by the Euler characteristic.
+
+Now, suppose in $1$-dimension, given a examples as simple as possible that $B(y,y) = y^2$, $B_i = z^i$, $g_i = g$, $hbar = 1$:
+
+$
+  Z = (2pi)^(-1/2) integral_(-infinity)^(infinity) exp(- y^2/2 + g sum_(i>=0) (z x)^i/i!) d y = (2pi)^(-1/2) integral_(-infinity)^(infinity) exp(- y^2/2 + g e^(z x)) d y \
+$
+
+It actually contains infinite many vertices with arbitrary *valency*, we expand the second term $g e^(z x)$:
+
+$
+  Z = (2pi)^(-1/2) integral_(-infinity)^(infinity) exp(- y^2/2) sum_(n>=0) (g e^(z y))^n/n! d y = (2pi)^(-1/2) sum_(n>=0) g^n/n! integral_(-infinity)^(infinity) exp(-y^2/2 + n z y) d y \
+$
+
+We can explain that $z(dot)$ pair a vertex, thus $n$ vertices will contribute $n$ factors of $z$ as $z(dot) + z(dot) + ...$:
+
+$
+  integral exp(-y^2/2 + n z y) d y = exp((n^2 z^2)/2) integral exp(-1/2(y-n z^2)) d y = (2pi)^(1/2) exp((n^2 z^2)/2)
+$
+
+$
+  Z = sum_(n>=0) g^n/n! exp((n^2 z^2)/2) = sum_(n>=0) g^n/n! sum_(k>=0) (n^2 z^2/2)^k/k! = sum_(n,k>=0) (g^n n^(2k))/(2^k k! n!) z^(2k) = sum_(n>=0) g^n sum_(Gamma in G(n)) tilde(F)_Gamma/(abs("Aut"(Gamma)))
+$
+
+Given a number of vertices $n$ with contribution $z y$ to each $B^(-1) (z y,z y) = z^2 B^(-1) (y,y) = z^2$. Thus a general graph with $k$ edges contribute $F_Gamma = z^(2 k) times (B^(-1))^k = z^(2k)$. It can also be evaluated by expanding $exp(n z y)$ then integrating. Therefore, we can identify the $abs("Aut"(Gamma))$ too:
+
+$
+  sum_(Gamma in G(n)) (...) = sum_k sum_(Gamma in G(n;k)) 1/(abs("Aut"(Gamma))) = n^(2k)/(2^k k! n!)
+$
+
+To scrutinize our answer in combinatorics, we pick out two vertices from $n$ vertices with $n^2$ choice with order. For list of $k$ edges, we have $n^2 dot n^2 dot ... = n^(2 k)$ choices. To cancel out the order, we first remove orientation of edges which contribute $2 dot 2 dot 2... = 2^k$ choices. Then we reomove the permutation of edges #footnote[It should also be considered as the contraction order from $1$ to $k$, so if we pick out $(a_1,b_1), (a_2,b_2)$, it's also reasonable to pick out $(a_2,b_2),(a_1,b_1)$ which remove the contribution of edges order.] which contribute $k!$ choices. We still treats the vertices as labelled, so remove the permutation of vertices which contribute $n!$ choices.
+
+Try to decompose the graph to connected components, we denote $Gamma = union.sq.big_(j=1)^r Gamma_j^(k_j) $ with $vf(k)$ as tuple of number of copies of each connected components.
+
+$
+  F_(Gamma_1 union.sq Gamma_2) = F_(Gamma_1) times F_(Gamma_2) \
+  chi(Gamma_1 union.sq Gamma_2) = chi(Gamma_1) + chi(Gamma_2) \
+  abs("Aut"(Gamma_1^k_1 union.sq Gamma_2^k_2 ... union.sq Gamma_r^(k_r))) = product_(j=1)^r abs("Aut"(Gamma_j))^(k_j) k_j !
+$
+
+Here $k_j!$ of the third equality comes from the permutation of identical connected components.
+
+Given a connected graph set $G_c (*)$, $Gamma = union.sq.big_(gamma in G_c (*)) gamma^(k_gamma)$ where the index is same as the graph itself for simplicity.
+
+$
+  w(Gamma) := (F_Gamma)/(abs("Aut"(Gamma))) product_i (g_i hbar^(i/2-1))^(n_i)\
+$
+
+$
+  tilde(F)_Gamma/(abs("Aut"(Gamma))) = product_(gamma in G_c (*)) (tilde(F)_gamma/(abs("Aut"(gamma))))^(k_gamma) 1/(k_gamma !) \
+$
+
+We decompose the second product $product_i (...)$ too, therefore we reduce the terms as:
+
+$
+  w(Gamma) = product_(gamma in G_c (*)) w(gamma)^(k_gamma)/(k_gamma !) \
+$
+
+$
+  Z = (2pi)^(d/2) (det B)^(-1/2) sum_(vf(n)) sum_(Gamma in G(n)) w(Gamma) = Z_0 sum_(Gamma in G(*)) w(Gamma) quad Z_0 = (2pi)^(d/2) (det B)^(-1/2)\
+$
+
+Where we just reduce our previous expansion of $Z$ in a more concise expression.
+
+$
+  Z/Z_0 = sum_(Gamma in G(*)) w(Gamma) = sum_(k_gamma) product_(gamma in G_c (*)) w(gamma)^(k_gamma)/(k_gamma !) = exp(sum_(gamma in G_c (*)) w(gamma)) \
+$
+
+For any summation of arbitrary graphs in $G(*)$, we can decompose it to connected components with reordering $vf(n) -> vf(k) ~ sum_vf(n) product_i -> sum_(vf(k)) product_gamma$ by counting the flowers into counting the connected components.
+
+$
+  ln Z/Z_0 = sum_(gamma in G_c (*)) w(gamma) = sum_(gamma in G_c (*)) tilde(F)_gamma/(abs("Aut"(gamma))) product_i (g_i hbar^(i/2-1))^(n_i (gamma)) = sum_(vf(n)) product_i (...)
+$
+
+A spanning-tree $T subset Gamma$ contains all $V$ vertices and without any cycles, thus a spanning-tree on $V$ vertices contains exactly $V-1$ edges. Thus the extra edges will contribute exact the same number of loops.
+
+$
+  beta_1(Gamma) = 1 - chi(Gamma) = E -V + 1 \
+$
+$
+  beta_0(Gamma) & = 1 "for connected graph" \
+  beta_1(Gamma) & = E - V + 1
+$
+
+It suggests $hbar^(-chi(gamma))$ will contribute in different order of $O(hbar)$. For *tree*, $beta_1 = 0$, thus a connected graph contribute $-chi(gamma) = -(V-E) = - (beta_0 - beta_1) = - 1 ~ O(hbar^(-1))$ order. For *1-loop* graph, $beta_1 = 1$, thus contribute $O(hbar)$ order, and so forth.
+
+$
+  Z := hbar^(-d/2) integral_V e^(-S(x)/hbar) d x = e^(- S(x_0)/hbar) I [1;B = B_2] = e^(- S(x_0)/hbar) (det B)^(1/2) det(S''(x_0))^(-1/2) sum_(i>=0) a_i hbar^i \
+$
+
+By steepest descent formula in the neighborhood of critical point $x_0$ where $S'(x_0) = 0$.
+
+$
+  log Z/Z_0 = - S(x_0)/hbar + 1/2 log det(B)/det(S''(x_0)) + log (sum_(i>=0) a_i hbar^i) \
+$
+
+Often, the first term is called _classical approximation_ by physicists, the second term is called _1-loop approximation_ etc.

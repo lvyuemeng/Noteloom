@@ -1,13 +1,13 @@
 # Notes
 
-It's a notes set recording anything. Some of them is posted on [`nexus`](https://lvyuemeng.github.io/Nexus-Blog) too, usually the [Kernel](/kernel/) part.
+It's a notes set recording anything. Some of them is posted on [`nexus`](https://lvyuemeng.github.io/Nexus-Blog) too, usually the [Kernel](/kernel) part.
 
 ## Category
 
-- [Unix](/unix/)
-- [Kernel](/kernel/)
-- [physics(Md)](/physics/)
+- [Unix](/unix)
+- [Kernel](/kernel)
+- [physics](/physics)
 
-A notes pack is separated due to its special format.
+A note pack is separated due to its special format.
 
 - [Typst](/typst/)
