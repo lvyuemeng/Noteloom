@@ -1577,7 +1577,7 @@ $
 For any summation of arbitrary graphs in $G(*)$, we can decompose it to connected components with reordering $vf(n) -> vf(k) ~ sum_vf(n) product_i -> sum_(vf(k)) product_gamma$ by counting the flowers into counting the connected components.
 
 $
-  ln Z/Z_0 = sum_(gamma in G_c (*)) w(gamma) = sum_(gamma in G_c (*)) tilde(F)_gamma/(abs("Aut"(gamma))) product_i (g_i hbar^(i/2-1))^(n_i (gamma)) = sum_(vf(n)) product_i (...)
+  ln Z/Z_0 = sum_(gamma in G_c (*)) w(gamma) = sum_(gamma in G_c (*)) tilde(F)_gamma/(abs("Aut"(gamma))) product_i (g_i hbar^(i/2-1))^(n_i (gamma)) = sum_(vf(n)) product_i (g_i hbar^(i/2-1)) sum_(gamma in G_c (vf(n))) tilde(F)_gamma/(abs("Aut"(gamma)))
 $
 
 A spanning-tree $T subset Gamma$ contains all $V$ vertices and without any cycles, thus a spanning-tree on $V$ vertices contains exactly $V-1$ edges. Thus the extra edges will contribute exact the same number of loops.
@@ -1590,7 +1590,15 @@ $
   beta_1(Gamma) & = E - V + 1
 $
 
-It suggests $hbar^(-chi(gamma))$ will contribute in different order of $O(hbar)$. For *tree*, $beta_1 = 0$, thus a connected graph contribute $-chi(gamma) = -(V-E) = - (beta_0 - beta_1) = - 1 ~ O(hbar^(-1))$ order. For *1-loop* graph, $beta_1 = 1$, thus contribute $O(hbar)$ order, and so forth.
+It suggests $hbar^(-chi(gamma))$ will contribute in different order of $O(hbar)$. For *tree*, $beta_1 = 0$, thus a connected graph contribute $-chi(gamma) = -(V-E) = - (beta_0 - beta_1) = - 1 ~ O(hbar^(-1))$ order. For *1-loop* graph, $beta_1 = 1$, thus contribute $O(hbar)$ order, and so forth. Given a set of classes of graphs with *$j$* loops:
+
+$
+  hbar^(j-1) (ln Z/Z_0)_j := sum_vf(n) product_i (g_i^(n_i (gamma)) hbar^(j-1) sum_(gamma in G_c (vf(n))) tilde(F)_gamma/(abs("Aut"(gamma)))
+$
+
+$
+  ln Z/Z_0 = sum_(j>=0) (ln Z/Z_0)_j hbar^(j-1)
+$
 
 $
   Z := hbar^(-d/2) integral_V e^(-S(x)/hbar) d x = e^(- S(x_0)/hbar) I [1;B = B_2] = e^(- S(x_0)/hbar) (det B)^(1/2) det(S''(x_0))^(-1/2) sum_(i>=0) a_i hbar^i \
@@ -1603,3 +1611,96 @@ $
 $
 
 Often, the first term is called _classical approximation_ by physicists, the second term is called _1-loop approximation_ etc.
+
+$
+  S'(x) &= 0 \
+  (1/2 B(x,x) - sum_(i>=3) g_i B_i (x,...,x)/i!)' = B(x, dot) - sum_(i>=3) g_i (B_i (x,...,x,dot))/(i-1)! &= 0 \
+  sum_(i>=3) g_i B^(-1) (B_i (x,...,x,dot))/((i-1)!) := beta(x) &= x quad B^(-1): V^* -> V\
+$
+
+In the sense of power series norm, $beta$ is a contraction mapping in a neighborhood of $0$.
+
+$
+  x_0 = lim_(n->infinity) beta^(n)(x) \
+$
+
+- Each application of $beta$ produces a new *vertex* with $i-1$ incoming arguments and one outgoing edge.
+- $B^(-1)$ contracts the open leg (argument of the slot $B(x,...,-)$) with the upper vertex.
+
+$
+  x^(2) = beta(x^(1)) = sum_i g_i B^(-1) (B_i (x^(1),...,x^(1)))/((i-1)!) \
+$
+
+$
+  x_0 = sum_(vf(n)) product_i (g_i hbar^(i/2-1))^(n_i) sum_(Gamma in G^(0)(vf(n))) tilde(F)_T/(abs("Aut"(T)))
+$
+
+Where the graph $Gamma$ is a _tree_ with one external vertex. Take the convergence results $x_0$ back to the action $S(x) -> S(x_0)$. To explain this, $B(x_0,x_0)/2$ corresponds to gluing two trees with both single external vertices; $B_i(x_0,...,x_0)/i!$ corresponds to gluing $i$ trees with external vertices together into a $i$-valent flower. We can think of the first term as counting tree $E$ times (once per edge), and rest of terms as counting each tree $V$ times (once per vertex), therefore $-S(x_0) = V - E = 1$ (per tree). So the tree summation contribution is $-S(x_0)$.
+
+$
+  S(x) := x^2/2 - g h(x) quad h(x) = sum_(n>=0) c_n x^n "with" c_1 != 0 quad g "is constant"
+$
+
+$
+  S'(x) &= 0 \
+  x_0 &= g h' (x_0) \
+  x_0/(h'(x_0)) & = g \
+  (x_0/(h'(x_0)))^(-1) x_0/(h'(x_0)) &= (x_0/h'(x_0))^(-1) (g) \
+  x_0 &= f (g) quad (x_0/(h'(x_0)))^(-1) = f \
+$
+
+$
+  -S(x_0) = F(g) = - f(g)^2/2 + g h (f(g))
+$
+
+$
+  F'(g) = - f(g) f'(g) + h(f(g)) + g h'(f(g)) f'(g)
+$
+
+But $x_0 = g h'(x_0) -> f(g) = g h'(f(g)) -> h'(f(g)) = f(g)/g$, first and third terms cancel each other.
+
+$
+  F'(g) = h (f(g)) -> -S(x_0) = integral_0^g h(f(a)) d a
+$
+
+Consider $B_i = 1, g_i = g$ with $S(x) = x^2/2 - g e^x$, expanding $e^x$ will give the all flowers or external edges for us to compute the number of trees.
+
+$
+  sum_(n>=0) g^n sum_(gamma in G^(0)_c (n)) 1/(abs("Aut"(gamma))) = - S(x_0)
+$
+
+$
+  S'(x) = 0 -> x = g e^x -> x_0 = f(g) = (x/e^x)^(-1) (g)
+$
+
+$
+  f(x)/e^(f(x)) = x -> e^(f(x)) = f(x)/x
+$
+
+$
+  -S(x_0) = integral_0^g h(f(a)) d a -> integral e^(f(a)) d a  -> integral f(a)/a d a
+$
+
+Now we need to evaluate the coefficients of Taylor series of $f(x)$ to acquire the count of summation of automorphism class of graphs.
+
+$
+  f(g) = sum_(n>=1) a_n g^n \
+  a_n = 1/(2pi i) integral.cont f(g)/(g^(n+1)) d g ->^(g -> f^(-1)(x)) 1/(2pi i) integral.cont x/(x e^(-x))^(n+1) d (x e^(-x)) = 1/(2pi i) integral.cont e^(n x) (1-x)/(x^n) d x
+$
+
+We take residue in a simpler way, expand $e^(n x) = sum_(i>=0) (n x)^i/i!$, we immediately see the residue equal to $n^i/i! x^(i - k) quad i - k = -1$. Therefore $k = n "or" n-1$, we get:
+
+$
+  a_n = n^(n-1)/(n-1)! - n^(n-2)/(n-2)! = n^(n-2)/(n-1)!
+$
+
+$
+  -S(x_0) = integral_0^a f(a)/a d a = sum_(n>=1) n^(n-2)/(n-1)! integral_0^g a^(n-1) d a = sum_(n>=1) n^(n-2)/n! g^n
+$
+
+$
+  -S(x_0) = sum_(n>=1) n^(n-2)/n! g^n &= sum_(n>=0) g^n sum_(gamma in G_c^(0) (n)) 1/(abs("Aut"(gamma))) \
+  n^(n-2)/n! &= sum_(gamma in G_c^(0) (n)) 1/(abs("Aut"(gamma))) 
+$
+
+We conclude that the number of unlabelled tree with $n$ vertices is $n^(n-2)/n!$ or labelled one is $n^(n-2)$. The theorem is called _Cayley_ theorem.
