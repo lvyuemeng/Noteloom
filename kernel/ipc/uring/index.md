@@ -409,3 +409,370 @@ A general design should use a `A:Allocator`, however, rust tends to use global a
 As for the layout, it would cast to the allocator itself with its best on memory continuity, thus, `allocator + uring + free memory` as a unified instance solely with stable exposed api.
 
 [Shm ref]: https://github.com/loichyan/openoscamp-2025s/blob/main/examples/evering-ipc/src/shm/boxed.rs
+
+---
+
+## In Shared Memory
+
+Metadata/header of ring in registry for resolving buffer. Thus the registry manage the lifetime of buffer ring. One could allocate or deallocate or resolve ring from it.
+
+```rust
+const MAX_BUFFERS: usize = 256;
+
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct BufferEntry<T> {
+    pub token: u64,                    // identifier
+    pub lock: RwLock<()> // necessary for preparation of header.
+    pub header: Header<T>   // metadata of buffer
+    pub state: AtomicU32,              // 状态机
+    pub ref_count: AtomicU32,          // 引用计数
+}
+
+impl BufferEntry {
+    pub const STATE_FREE: u32 = 0;
+    pub const STATE_ALLOCATING: u32 = 1;
+    pub const STATE_ACTIVE: u32 = 2;
+    pub const STATE_MARKED_FOR_DELETION: u32 = 3;
+    
+    /// 原子状态转换
+    pub fn try_allocate(&self, expected: u32, new_state: u32) -> bool {
+        self.state.compare_exchange(
+            expected, 
+            new_state, 
+            Ordering::AcqRel, 
+            Ordering::Acquire
+        ).is_ok()
+    }
+    
+    pub fn is_active(&self) -> bool {
+        self.state.load(Ordering::Acquire) == Self::STATE_ACTIVE
+    }
+    
+    pub fn acquire_ref(&self) -> Result<u32, ()> {
+        if !self.is_active() {
+            return Err(());
+        }
+        
+        let old_count = self.ref_count.fetch_add(1, Ordering::AcqRel);
+        Ok(old_count + 1)
+    }
+    
+    pub fn release_ref(&self) -> Result<u32, ()> {
+        if !self.is_active() {
+            return Err(());
+        }
+        
+        let old_count = self.ref_count.fetch_sub(1, Ordering::AcqRel);
+        if old_count == 1 {
+            // 最后一个引用被释放
+            self.state.store(Self::STATE_MARKED_FOR_DELETION, Ordering::Release);
+            Ok(0)
+        } else {
+            Ok(old_count - 1)
+        }
+    }
+}
+```
+
+```rust
+#[repr(C, align(64))]
+pub struct BufferRegistry<T> {
+    magic: u32,
+    version: u32,
+    global_epoch: AtomicU64,           // 用于安全的内存回收
+    active_count: AtomicUsize,
+    next_token: AtomicU64,
+    entries: [BufferEntry<T>; MAX_BUFFERS],
+}
+
+impl BufferRegistry {
+    const MAGIC: u32 = 0x42554652; // "BUFR"
+    const VERSION: u32 = 1;
+    
+    pub fn initialize(&mut self) {
+        self.magic = Self::MAGIC;
+        self.version = Self::VERSION;
+        self.global_epoch.store(1, Ordering::Relaxed);
+        self.active_count.store(0, Ordering::Relaxed);
+        self.next_token.store(0, Ordering::Relaxed);
+        
+        for (i, entry) in self.entries.iter_mut().enumerate() {
+            *entry = BufferEntry::new();
+        }
+    }
+    
+    pub fn is_initialized(&self) -> bool {
+        self.magic == Self::MAGIC
+    }
+    
+    /// 分配新的缓冲区条目 - 原子操作
+    pub fn allocate_entry(
+        &self,
+        buffer_offset: usize,
+        buffer_size: usize,
+        entry_size: usize,
+        creator_pid: u32
+    ) -> Result<(u64, &BufferEntry), RegistryError> {
+        let token = self.next_token.fetch_add(1, Ordering::AcqRel);
+        
+        for entry in &self.entries {
+            // 尝试原子性地从 FREE -> ALLOCATING
+            if entry.try_allocate(BufferEntry::STATE_FREE, BufferEntry::STATE_ALLOCATING) {
+                // write...
+
+                // state change：ALLOCATING -> ACTIVE
+                entry.state.store(BufferEntry::STATE_ACTIVE, Ordering::Release);
+                entry.ref_count.store(1, Ordering::Relaxed);
+                
+                self.active_count.fetch_add(1, Ordering::Relaxed);
+                return Ok((token, entry));
+            }
+        }
+        
+        Err(RegistryError::RegistryFull)
+    }
+    
+    pub fn find_entry(&self, token: u64) -> Option<&BufferEntry> {
+        for entry in &self.entries {
+            if entry.token == token && entry.is_active() {
+                // 增加引用计数
+                if entry.acquire_ref().is_ok() {
+                    return Some(entry);
+                }
+            }
+        }
+        None
+    }
+    
+    pub fn release_entry(&self, token: u64) -> Result<(), RegistryError> {
+        for entry in &self.entries {
+            if entry.token == token {
+                match entry.release_ref() {
+                    Ok(0) => {
+                        // 最后一个引用被释放，标记为待删除
+                        self.active_count.fetch_sub(1, Ordering::Relaxed);
+                        return Ok(());
+                    }
+                    Ok(_) => {
+                        // 还有其它引用，正常返回
+                        return Ok(());
+                    }
+                    Err(_) => {
+                        return Err(RegistryError::EntryNotActive);
+                    }
+                }
+            }
+        }
+        Err(RegistryError::EntryNotFound)
+    }
+    
+    pub fn garbage_collect(&self, current_epoch: u64) -> usize {
+        let mut collected = 0;
+        
+        for entry in &self.entries {
+            if entry.state.load(Ordering::Acquire) == BufferEntry::STATE_MARKED_FOR_DELETION {
+                // 检查是否所有可能的使用者都已经前进到当前epoch
+                // 这里可以添加更复杂的epoch-based内存回收逻辑
+                
+                // 原子性地重置条目
+                if entry.try_allocate(
+                    BufferEntry::STATE_MARKED_FOR_DELETION, 
+                    BufferEntry::STATE_FREE
+                ) {
+                    collected += 1;
+                }
+            }
+        }
+        
+        collected
+    }
+    
+    pub fn active_tokens(&self) -> Vec<u64> {
+        self.entries.iter()
+            .filter(|entry| entry.is_active())
+            .map(|entry| entry.token)
+            .collect()
+    }
+}
+```
+
+```rust
+struct Header<T> {
+    field: ... // for anything track buffer informations.
+    buf: BufferToken<T> // resolve buffer by relative offset.
+}
+
+impl Header {
+    fn handle() -> QueueHandle {...}
+}
+```
+
+## Communication
+
+```rust
+const Version:16 = ...;
+
+pub trait Checksum {
+    fn checksum(&self) -> u32;
+    fn update_checksum(&mut self, data: &[u8]);
+    fn verify_checksum(&self, data: &[u8]) -> bool;
+}
+
+pub struct NoChecksum;
+impl Checksum for NoChecksum {
+    fn checksum(&self) -> u32 { 0 };
+    fn update_checksum(&mut self, data: &[u8]) {}
+    fn verify_checksum(&self, data: &[u8]) -> bool { true }
+}
+
+pub trait Timed {
+    fn timestamp(&self) -> u64;
+    fn is_expired(&self, max_age: Duration) -> bool {
+        self.timestamp() + max_age.as_millis() as u64
+            < now_millis()
+    }
+}
+```
+
+```rust
+struct Token {
+    id: u8,
+    meta: Meta,
+}
+
+pub struct TypedToken<M: Message> {
+    token: Token,
+    _marker: PhantomData<M>,
+}
+
+impl Token {
+    const fn eq_of<T:Message>(&self) -> bool {
+        self.id == T::TypeId
+    }
+
+    const fn eq(&self, other: &Token) -> bool {
+        self.id == other.id
+    }
+
+    const fn eq_in<M:Message>(&self, other: &TypedToken<M>) -> bool {
+        self.id == M::TypeId
+    }
+
+    const fn from/into_typed(...) -> ... {}
+}
+
+trait Semantics {}
+
+struct Move impl Semantics;
+struct Copy impl Semantics;
+struct Serial impl Semantics;
+struct Publish impl Semantics;
+
+pub trait Message: Send + Sync {
+    type Semantics: Semantics;
+    const TypeId: u16;
+}
+
+pub trait MoveMessage: Message<Semantics = Move> + bytemuck::Pod + bytemuck::Zeroable {}
+
+pub trait BytesMessage<U: Clone + Copy>: Message<Semantics = Copy> + AsRef<[U]> + AsMut<[U]> 
+
+BytesMessage<u8> / BytesMessage<Position>
+
+pub trait CopyMessage: Message<Semantics = Copy> + Clone + Copy
+
+pub trait SerialMessage: Message<Semantics = Serial> + Serialize + for<'de> Deserialize<'de> {}
+
+pub trait PublishMessage: Message<Semantics = Publish> + ...;
+
+// It would be better to be a manual one.
+impl<T: Send + Sync> Message for T {
+    const TypeId: u32 = const { ConstTypeId::of::<T>() } 
+}
+
+// manual one
+impl Message for MyStruct {
+    const TypeId: u8 = 0xA2;
+}
+```
+
+```rust
+impl Move {
+    pub fn tokenize<M:MoveMessage, A:MetaAlloc>(msg: M, alloc: A) -> Token {
+        // we allocate a box in shared memory while retain necessary informations
+        let b = LocalBox::new_in(message, alloc);
+        b.token()
+    }
+
+    pub fn detokenize<M:MoveMessage, A:MetaAlloc>(token:Token,alloc:A) -> M {
+        ...
+    }
+}
+
+impl Copy {
+    pub fn tokenize<M:BytesMessage<u8>, A:MetAlloc>(msg: &M, alloc:A) -> Token {
+        let b = LocalBox::copy_from_slice(msg.as_ref(),alloc);
+        b.token()
+    }
+
+    pub fn detokenize<M:MoveMessage, A:MetaAlloc>(token: Token, alloc:A) -> LocalBox<[M]> {
+        ...
+    }
+}
+```
+
+```rust
+struct EntryToken<H: Evelope> {
+    h: H,
+    token: Token,
+}
+
+pub struct MessageQueue<H:Evelope> {
+    queue: Queue<EntryToken<H>>,
+}
+
+impl MessageQueue {
+    pub fn send(&self, token: Token) -> Result<(), QueueFull> {
+        let e = EntryToken::from_token(token)?;
+        self.queue.push(e)?;
+        Ok(())
+    }
+    
+    pub fn receive(&self) -> Option<Token> {
+        let e = self.queue.pop()?;
+        let token = e.verify()?;
+        Some(token)
+    }
+}
+```
+
+### Example
+
+```rust
+// suppose alloc:
+let alloc = ...;
+
+let message_queue = MessageQueue::<MyHeader>::new();
+// Maybe a better design rather clone everytime for alloc.
+let move_to = Move::from(alloc.clone());
+
+let position = PositionMessage { x: 1.0, y: 2.0, z: 3.0, timestamp: 123456 };
+let token = move_to.tokenize(position);
+message_queue.send(token)?;
+
+let text = TextMessage { content: "Hello".to_string(), priority: 1 };
+let token = Serial::tokenize(&text,alloc.clone())?;
+message_queue.send(token)?;
+
+if let Some(t) = message_queue.receive() {
+    if let Ok(position) = Move::detokenize::<Position,_>(t,alloc.clone())? {
+        println!("Received position: {:?}", position);
+    }
+    if let Ok(position) = move_to.detokenize::<Position>(t)? {
+        println!("Received position: {:?}", position);
+    } else if let Ok(text) = serial_to.detokenize::<TextMessage>(t)? {
+        ...
+    }
+}
+```
