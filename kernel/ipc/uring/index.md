@@ -417,332 +417,222 @@ As for the layout, it would cast to the allocator itself with its best on memory
 Metadata/header of ring in registry for resolving buffer. Thus the registry manage the lifetime of buffer ring. One could allocate or deallocate or resolve ring from it.
 
 ```rust
-const MAX_BUFFERS: usize = 256;
+impl<H: Envelope, A: MemAllocator> Resource for TokenQueue<H, A> {
+    type Config = usize;
+    type Ctx = A;
+    fn new(cfg: Self::Config, ctx: Self::Ctx) -> (Self, Self::Ctx) {
+        let cap = cfg;
+        let alloc = ctx;
+        let h = Header::new(cap);
+        let buffer: PBox<_, A> = PBox::new_slice_in(
+            cap,
+            |i| Slot {
+                stamp: AtomicUsize::new(i),
+                value: UnsafeCell::new(MaybeUninit::uninit()),
+            },
+            alloc,
+        );
+        let (buf, alloc) = buffer.token_with();
+        (TokenQueue { h, buf }, alloc)
+    }
+
+    fn drop_in(self, ctx: Self::Ctx) -> Self::Ctx {
+        let alloc = ctx;
+        let Self { h: _, buf } = self;
+        let b = buf.detoken(alloc);
+        PBox::drop_in(b)
+    }
+}
+
+impl<H: Envelope, A: MemAllocator> Project for TokenQueue<H, A> {
+    type View = ptr::NonNull<TokenSlots<H, A>>;
+
+    fn project(&self, ctx: Self::Ctx) -> (Self::View, Self::Ctx) {
+        let alloc = ctx;
+        let (buf, alloc) = self.buf.as_ptr(alloc);
+        (buf, alloc)
+    }
+}
+
+impl<H: Envelope, A: MemAllocator> QueueOps for QEntryView<'_, H, A> {
+    type Item = PAToken<H, A>;
+
+    #[inline]
+    fn header(&self) -> &Header {
+        &self.g.h
+    }
+
+    #[inline]
+    fn buf(&self) -> &Slots<Self::Item> {
+        unsafe { self.v.as_ref() }
+    }
+}
+
+struct Sender<T> {
+    // acquire queue handle and restrict methods.
+    QueueHandle
+}
+
+struct Receiver<T> {
+    QueueHandle
+}
+
+impl Sender<T> {
+    fn send   
+}
+
+impl Receiver<T> {
+    fn recv
+}
 
 #[repr(C)]
-#[derive(Clone, Copy)]
-pub struct BufferEntry<T> {
-    pub token: u64,                    // identifier
-    pub lock: RwLock<()> // necessary for preparation of header.
-    pub header: Header<T>   // metadata of buffer
-    pub state: AtomicU32,              // 状态机
-    pub ref_count: AtomicU32,          // 引用计数
+pub struct Entry<T> {
+    data: UnsafeCell<MaybeUninit<T>>,
+    rc: AtomicUsize,
+    state: AtomicU8,
 }
 
-impl BufferEntry {
-    pub const STATE_FREE: u32 = 0;
-    pub const STATE_ALLOCATING: u32 = 1;
-    pub const STATE_ACTIVE: u32 = 2;
-    pub const STATE_MARKED_FOR_DELETION: u32 = 3;
-    
-    /// 原子状态转换
-    pub fn try_allocate(&self, expected: u32, new_state: u32) -> bool {
-        self.state.compare_exchange(
-            expected, 
-            new_state, 
-            Ordering::AcqRel, 
-            Ordering::Acquire
-        ).is_ok()
+#[repr(transparent)]
+pub struct EntryGuard<'a, T> {
+    e: &'a Entry<T>,
+}
+
+pub struct EntryView<'a, T: Project> {
+    pub g: EntryGuard<'a, T>,
+    pub v: T::View,
+}
+
+impl<T> Entry<T> {
+    unsafe fn get(&self) -> T {
+        unsafe { self.data.replace(MaybeUninit::uninit()).assume_init() }
     }
-    
-    pub fn is_active(&self) -> bool {
-        self.state.load(Ordering::Acquire) == Self::STATE_ACTIVE
+
+    unsafe fn get_ref(&self) -> &T {
+        unsafe { (*self.data.get()).assume_init_ref() }
     }
-    
-    pub fn acquire_ref(&self) -> Result<u32, ()> {
-        if !self.is_active() {
-            return Err(());
+
+    unsafe fn write(&self, data: T) {
+        unsafe { (*self.data.get()).write(data) };
+    }
+
+    fn init(&self, data: T) -> Result<(), T> {
+        if self
+            .state
+            .compare_exchange_weak(FREE, INITIALIZING, Ordering::SeqCst, Ordering::Acquire)
+            .is_ok()
+        {
+            return Err(data);
         }
-        
-        let old_count = self.ref_count.fetch_add(1, Ordering::AcqRel);
-        Ok(old_count + 1)
-    }
-    
-    pub fn release_ref(&self) -> Result<u32, ()> {
-        if !self.is_active() {
-            return Err(());
+
+        unsafe {
+            self.write(data);
         }
-        
-        let old_count = self.ref_count.fetch_sub(1, Ordering::AcqRel);
-        if old_count == 1 {
-            // 最后一个引用被释放
-            self.state.store(Self::STATE_MARKED_FOR_DELETION, Ordering::Release);
-            Ok(0)
-        } else {
-            Ok(old_count - 1)
-        }
-    }
-}
-```
 
-```rust
-#[repr(C, align(64))]
-pub struct BufferRegistry<T> {
-    magic: u32,
-    version: u32,
-    global_epoch: AtomicU64,           // 用于安全的内存回收
-    active_count: AtomicUsize,
-    next_token: AtomicU64,
-    entries: [BufferEntry<T>; MAX_BUFFERS],
-}
-
-impl BufferRegistry {
-    const MAGIC: u32 = 0x42554652; // "BUFR"
-    const VERSION: u32 = 1;
-    
-    pub fn initialize(&mut self) {
-        self.magic = Self::MAGIC;
-        self.version = Self::VERSION;
-        self.global_epoch.store(1, Ordering::Relaxed);
-        self.active_count.store(0, Ordering::Relaxed);
-        self.next_token.store(0, Ordering::Relaxed);
-        
-        for (i, entry) in self.entries.iter_mut().enumerate() {
-            *entry = BufferEntry::new();
-        }
-    }
-    
-    pub fn is_initialized(&self) -> bool {
-        self.magic == Self::MAGIC
-    }
-    
-    /// 分配新的缓冲区条目 - 原子操作
-    pub fn allocate_entry(
-        &self,
-        buffer_offset: usize,
-        buffer_size: usize,
-        entry_size: usize,
-        creator_pid: u32
-    ) -> Result<(u64, &BufferEntry), RegistryError> {
-        let token = self.next_token.fetch_add(1, Ordering::AcqRel);
-        
-        for entry in &self.entries {
-            // 尝试原子性地从 FREE -> ALLOCATING
-            if entry.try_allocate(BufferEntry::STATE_FREE, BufferEntry::STATE_ALLOCATING) {
-                // write...
-
-                // state change：ALLOCATING -> ACTIVE
-                entry.state.store(BufferEntry::STATE_ACTIVE, Ordering::Release);
-                entry.ref_count.store(1, Ordering::Relaxed);
-                
-                self.active_count.fetch_add(1, Ordering::Relaxed);
-                return Ok((token, entry));
-            }
-        }
-        
-        Err(RegistryError::RegistryFull)
-    }
-    
-    pub fn find_entry(&self, token: u64) -> Option<&BufferEntry> {
-        for entry in &self.entries {
-            if entry.token == token && entry.is_active() {
-                // 增加引用计数
-                if entry.acquire_ref().is_ok() {
-                    return Some(entry);
-                }
-            }
-        }
-        None
-    }
-    
-    pub fn release_entry(&self, token: u64) -> Result<(), RegistryError> {
-        for entry in &self.entries {
-            if entry.token == token {
-                match entry.release_ref() {
-                    Ok(0) => {
-                        // 最后一个引用被释放，标记为待删除
-                        self.active_count.fetch_sub(1, Ordering::Relaxed);
-                        return Ok(());
-                    }
-                    Ok(_) => {
-                        // 还有其它引用，正常返回
-                        return Ok(());
-                    }
-                    Err(_) => {
-                        return Err(RegistryError::EntryNotActive);
-                    }
-                }
-            }
-        }
-        Err(RegistryError::EntryNotFound)
-    }
-    
-    pub fn garbage_collect(&self, current_epoch: u64) -> usize {
-        let mut collected = 0;
-        
-        for entry in &self.entries {
-            if entry.state.load(Ordering::Acquire) == BufferEntry::STATE_MARKED_FOR_DELETION {
-                // 检查是否所有可能的使用者都已经前进到当前epoch
-                // 这里可以添加更复杂的epoch-based内存回收逻辑
-                
-                // 原子性地重置条目
-                if entry.try_allocate(
-                    BufferEntry::STATE_MARKED_FOR_DELETION, 
-                    BufferEntry::STATE_FREE
-                ) {
-                    collected += 1;
-                }
-            }
-        }
-        
-        collected
-    }
-    
-    pub fn active_tokens(&self) -> Vec<u64> {
-        self.entries.iter()
-            .filter(|entry| entry.is_active())
-            .map(|entry| entry.token)
-            .collect()
-    }
-}
-```
-
-```rust
-struct Header<T> {
-    field: ... // for anything track buffer informations.
-    buf: BufferToken<T> // resolve buffer by relative offset.
-}
-
-impl Header {
-    fn handle() -> QueueHandle {...}
-}
-```
-
-## Communication
-
-```rust
-const Version:16 = ...;
-
-pub trait Checksum {
-    fn checksum(&self) -> u32;
-    fn update_checksum(&mut self, data: &[u8]);
-    fn verify_checksum(&self, data: &[u8]) -> bool;
-}
-
-pub struct NoChecksum;
-impl Checksum for NoChecksum {
-    fn checksum(&self) -> u32 { 0 };
-    fn update_checksum(&mut self, data: &[u8]) {}
-    fn verify_checksum(&self, data: &[u8]) -> bool { true }
-}
-
-pub trait Timed {
-    fn timestamp(&self) -> u64;
-    fn is_expired(&self, max_age: Duration) -> bool {
-        self.timestamp() + max_age.as_millis() as u64
-            < now_millis()
-    }
-}
-```
-
-```rust
-struct Token {
-    id: u8,
-    meta: Meta,
-}
-
-pub struct TypedToken<M: Message> {
-    token: Token,
-    _marker: PhantomData<M>,
-}
-
-impl Token {
-    const fn eq_of<T:Message>(&self) -> bool {
-        self.id == T::TypeId
-    }
-
-    const fn eq(&self, other: &Token) -> bool {
-        self.id == other.id
-    }
-
-    const fn eq_in<M:Message>(&self, other: &TypedToken<M>) -> bool {
-        self.id == M::TypeId
-    }
-
-    const fn from/into_typed(...) -> ... {}
-}
-
-trait Semantics {}
-
-struct Move impl Semantics;
-struct Copy impl Semantics;
-struct Serial impl Semantics;
-struct Publish impl Semantics;
-
-pub trait Message: Send + Sync {
-    type Semantics: Semantics;
-    const TypeId: u16;
-}
-
-pub trait MoveMessage: Message<Semantics = Move> + bytemuck::Pod + bytemuck::Zeroable {}
-
-pub trait BytesMessage<U: Clone + Copy>: Message<Semantics = Copy> + AsRef<[U]> + AsMut<[U]> 
-
-BytesMessage<u8> / BytesMessage<Position>
-
-pub trait CopyMessage: Message<Semantics = Copy> + Clone + Copy
-
-pub trait SerialMessage: Message<Semantics = Serial> + Serialize + for<'de> Deserialize<'de> {}
-
-pub trait PublishMessage: Message<Semantics = Publish> + ...;
-
-// It would be better to be a manual one.
-impl<T: Send + Sync> Message for T {
-    const TypeId: u32 = const { ConstTypeId::of::<T>() } 
-}
-
-// manual one
-impl Message for MyStruct {
-    const TypeId: u8 = 0xA2;
-}
-```
-
-```rust
-impl Move {
-    pub fn tokenize<M:MoveMessage, A:MetaAlloc>(msg: M, alloc: A) -> Token {
-        // we allocate a box in shared memory while retain necessary informations
-        let b = LocalBox::new_in(message, alloc);
-        b.token()
-    }
-
-    pub fn detokenize<M:MoveMessage, A:MetaAlloc>(token:Token,alloc:A) -> M {
-        ...
-    }
-}
-
-impl Copy {
-    pub fn tokenize<M:BytesMessage<u8>, A:MetAlloc>(msg: &M, alloc:A) -> Token {
-        let b = LocalBox::copy_from_slice(msg.as_ref(),alloc);
-        b.token()
-    }
-
-    pub fn detokenize<M:MoveMessage, A:MetaAlloc>(token: Token, alloc:A) -> LocalBox<[M]> {
-        ...
-    }
-}
-```
-
-```rust
-struct EntryToken<H: Evelope> {
-    h: H,
-    token: Token,
-}
-
-pub struct MessageQueue<H:Evelope> {
-    queue: Queue<EntryToken<H>>,
-}
-
-impl MessageQueue {
-    pub fn send(&self, token: Token) -> Result<(), QueueFull> {
-        let e = EntryToken::from_token(token)?;
-        self.queue.push(e)?;
+        // state suggests that rc is 0.
+        self.rc.store(0, Ordering::Relaxed);
+        self.state.store(ACTIVE, Ordering::Release);
         Ok(())
     }
-    
-    pub fn receive(&self) -> Option<Token> {
-        let e = self.queue.pop()?;
-        let token = e.verify()?;
-        Some(token)
+
+    fn acquire<'a>(&'a self) -> Option<EntryGuard<'a, T>> {
+        if self.state.load(Ordering::Acquire) == ACTIVE {
+            self.rc.fetch_add(1, Ordering::Relaxed);
+            Some(EntryGuard { e: self })
+        } else {
+            None
+        }
+    }
+
+    fn reset(&self) -> Option<T> {
+        if self
+            .state
+            .compare_exchange_weak(
+                INACTIVE,
+                DEINITIALIZING,
+                Ordering::Acquire,
+                Ordering::Relaxed,
+            )
+            .is_ok()
+        {
+            // Me is the sole owner.
+            let data = unsafe { self.get() };
+            self.state.store(FREE, Ordering::Relaxed);
+            Some(data)
+        } else {
+            None
+        }
+    }
+}
+
+impl<T> Clone for EntryGuard<'_, T> {
+    fn clone(&self) -> Self {
+        self.e.rc.fetch_add(1, Ordering::Relaxed);
+        Self { e: self.e }
+    }
+}
+
+impl<T> Drop for EntryGuard<'_, T> {
+    fn drop(&mut self) {
+        let prev = self.e.rc.fetch_sub(1, Ordering::Release);
+        if prev == 1 {
+            // state must be `ACTIVE` -> `INACTIVE`, ensure ordering release.
+            self.e.state.store(INACTIVE,Ordering::Release);
+        }
+    }
+}
+
+impl<T> Deref for EntryGuard<'_, T> {
+    type Target = T;
+
+    fn deref(&self) -> &Self::Target {
+        unsafe { self.e.get_ref() }
+    }
+}
+
+#[repr(C)]
+pub struct Registry<T, const N: usize> {
+    magic: crate::header::MAGIC,
+    counts: AtomicUsize,
+    entries: [Entry<T>; N],
+}
+
+pub trait Resource: Sized {
+    type Config: Clone;
+    type Ctx;
+    fn new(cfg: Self::Config, ctx: Self::Ctx) -> (Self, Self::Ctx);
+    fn drop_in(self, ctx: Self::Ctx) -> Self::Ctx;
+}
+
+pub trait Project: Resource {
+    type View;
+    fn project(&self, ctx: Self::Ctx) -> (Self::View, Self::Ctx);
+}
+
+impl<T: Resource> Entry<T> {
+    pub fn rinit(&self, cfg: T::Config, ctx: T::Ctx) -> Result<(), T::Config> {
+        let (res, ctx) = T::new(cfg.clone(), ctx);
+        self.init(res).map_err(|res| {
+            res.drop_in(ctx);
+            cfg
+        })
+    }
+
+    pub fn rreset(&self, ctx: T::Ctx) -> T::Ctx {
+        if let Some(data) = self.reset() {
+            data.drop_in(ctx)
+        } else {
+            ctx
+        }
+    }
+}
+
+impl<T: Project> Entry<T> {
+    pub fn rview<'a>(&'a self, ctx: T::Ctx) -> (Option<EntryView<'a, T>>, T::Ctx) {
+        let Some(g) = self.acquire() else {
+            return (None, ctx);
+        };
+        let (v, ctx) = g.project(ctx);
+        (Some(EntryView { g, v }), ctx)
     }
 }
 ```

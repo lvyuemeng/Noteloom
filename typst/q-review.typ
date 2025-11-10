@@ -1490,8 +1490,8 @@ Given below diagram, one have two external vertices and a loop, also with a 3-va
 )
 
 $
-  &B_3 = sum_i b^1_i times.circle b^2_i times.circle b^3_i \
-  &B_4 = sum_j c^1_j times.circle c^2_j times.circle c^3_j times.circle c^4_j \
+  & B_3 = sum_i b^1_i times.circle b^2_i times.circle b^3_i \
+  & B_4 = sum_j c^1_j times.circle c^2_j times.circle c^3_j times.circle c^4_j \
 $
 
 In expansion of $B_3$ and $B_4$ exponential will generate the 3-valent and 4-valent flowers, plus two external vertices $l_1,l_2$, all which will be contracted by the edges $B_2$.
@@ -1538,7 +1538,7 @@ $
 
 To scrutinize our answer in combinatorics, we pick out two vertices from $n$ vertices with $n^2$ choice with order. For list of $k$ edges, we have $n^2 dot n^2 dot ... = n^(2 k)$ choices. To cancel out the order, we first remove orientation of edges which contribute $2 dot 2 dot 2... = 2^k$ choices. Then we reomove the permutation of edges #footnote[It should also be considered as the contraction order from $1$ to $k$, so if we pick out $(a_1,b_1), (a_2,b_2)$, it's also reasonable to pick out $(a_2,b_2),(a_1,b_1)$ which remove the contribution of edges order.] which contribute $k!$ choices. We still treats the vertices as labelled, so remove the permutation of vertices which contribute $n!$ choices.
 
-Try to decompose the graph to connected components, we denote $Gamma = union.sq.big_(j=1)^r Gamma_j^(k_j) $ with $vf(k)$ as tuple of number of copies of each connected components.
+Try to decompose the graph to connected components, we denote $Gamma = union.sq.big_(j=1)^r Gamma_j^(k_j)$ with $vf(k)$ as tuple of number of copies of each connected components.
 
 $
   F_(Gamma_1 union.sq Gamma_2) = F_(Gamma_1) times F_(Gamma_2) \
@@ -1635,18 +1635,18 @@ $
   x_0 = sum_(vf(n)) product_i (g_i hbar^(i/2-1))^(n_i) sum_(Gamma in G^(0)(vf(n))) tilde(F)_T/(abs("Aut"(T)))
 $
 
-Where the graph $Gamma$ is a _tree_ with one external vertex. Take the convergence results $x_0$ back to the action $S(x) -> S(x_0)$. To explain this, $B(x_0,x_0)/2$ corresponds to gluing two trees with both single external vertices; $B_i(x_0,...,x_0)/i!$ corresponds to gluing $i$ trees with external vertices together into a $i$-valent flower. We can think of the first term as counting tree $E$ times (once per edge), and rest of terms as counting each tree $V$ times (once per vertex), therefore $-S(x_0) = V - E = 1$ (per tree). So the tree summation contribution is $-S(x_0)$.
+Where the graph $Gamma$ is a _tree_ with one external vertex. Take the convergence results $x_0$ back to the action $S(x) -> S(x_0)$. To explain this, $B(x_0,x_0)/2$ corresponds to gluing two trees with both single external vertices; $1/i! B_i (x_0,...,x_0)$ corresponds to gluing $i$ trees with external vertices together into a $i$-valent flower. We can think of the first term as counting tree $E$ times (once per edge), and rest of terms as counting each tree $V$ times (once per vertex), therefore $-S(x_0) = V - E = 1$ (per tree). So the tree summation contribution is $-S(x_0)$.
 
 $
   S(x) := x^2/2 - g h(x) quad h(x) = sum_(n>=0) c_n x^n "with" c_1 != 0 quad g "is constant"
 $
 
 $
-  S'(x) &= 0 \
-  x_0 &= g h' (x_0) \
-  x_0/(h'(x_0)) & = g \
-  (x_0/(h'(x_0)))^(-1) x_0/(h'(x_0)) &= (x_0/h'(x_0))^(-1) (g) \
-  x_0 &= f (g) quad (x_0/(h'(x_0)))^(-1) = f \
+                               S'(x) & = 0 \
+                                 x_0 & = g h' (x_0) \
+                       x_0/(h'(x_0)) & = g \
+  (x_0/(h'(x_0)))^(-1) x_0/(h'(x_0)) & = (x_0/h'(x_0))^(-1) (g) \
+                                 x_0 & = f (g) quad (x_0/(h'(x_0)))^(-1) = f \
 $
 
 $
@@ -1678,7 +1678,7 @@ $
 $
 
 $
-  -S(x_0) = integral_0^g h(f(a)) d a -> integral e^(f(a)) d a  -> integral f(a)/a d a
+  -S(x_0) = integral_0^g h(f(a)) d a -> integral e^(f(a)) d a -> integral f(a)/a d a
 $
 
 Now we need to evaluate the coefficients of Taylor series of $f(x)$ to acquire the count of summation of automorphism class of graphs.
@@ -1699,8 +1699,293 @@ $
 $
 
 $
-  -S(x_0) = sum_(n>=1) n^(n-2)/n! g^n &= sum_(n>=0) g^n sum_(gamma in G_c^(0) (n)) 1/(abs("Aut"(gamma))) \
-  n^(n-2)/n! &= sum_(gamma in G_c^(0) (n)) 1/(abs("Aut"(gamma))) 
+  -S(x_0) = sum_(n>=1) n^(n-2)/n! g^n & = sum_(n>=0) g^n sum_(gamma in G_c^(0) (n)) 1/(abs("Aut"(gamma))) \
+                           n^(n-2)/n! & = sum_(gamma in G_c^(0) (n)) 1/(abs("Aut"(gamma)))
 $
 
-We conclude that the number of unlabelled tree with $n$ vertices is $n^(n-2)/n!$ or labelled one is $n^(n-2)$. The theorem is called _Cayley_ theorem.
+We conclude that the number of labelled tree of $n$ vertices is $n^(n-2)$ as $n!/abs("Aut"(gamma))$ non-isomorphic labellings, The theorem is called _Cayley_ theorem.
+
+Consider now $B_i = 1, g_i = g$ with $S(x) = x^2/2 - g(x + x^3/6)$ which is the set of graphs composed by 1-valent and 3-valent flowers. However, we can directly calculate the fixed point by solving algebraically.
+
+$
+  S'(x) = 0 -> x = g (1 + x^2/2) \
+  x_0 = (1 - (1-2g^2)^(1/2))/2 \
+$
+
+$
+  - S(x_0) & = integral_0^g (1-(1-2a^2)^(1/2))/a + (1-(1-2a^2)^(1/2))^3/(6a^3) d a \
+           & = integral_0^g 1/(6a^3) (6a^2 - 6a^2(1-2a^2)^(1/2) + 1 + 3 (1-2a^2) - 3 (1-2a^2)^(1/2) - (1-2a^2)^(3/2)) d a \
+           & = integral_0^g 1/(6a^3) (4-(6a^2+3+1-2a^2) (1-2a^2)^(1/2)) d a \
+           & = 2/3 integral_0^g 1/a^3 (1-(1+a^2)(1-2a^2)^(1/2)) d a quad "integrate by part" d v = 1/a^3 \
+           & = 2/3 lr((-1/(2a^2))|)^g_0 - 2/3 lr((1+a^2)(1-2a^2)^(1/2) (-1/(2a^2)) |)_0^g \
+           & #h(3em) - 2/3 integral_0^g -1/(2a^2) (2a (1-2a^2)^(1/2) + (1+a^2) dot 1/2 (1-2a^2)^(-1/2) dot (-4a)) d a \
+$
+
+We focus on third term in:
+
+$
+  d u & = 2 a (1-2a^2)^(1/2) - 2a (1+a^2)(1-2a^2)^(-1/2) \
+      & = (2 a (1-2a^2) - 2 a (1+a^2))/(1-2a^2)^(1/2) \
+      & = (6a^3)/(1-2a^2)^(1/2)
+$
+
+$
+  "third term" = integral_0^g (2a)/(1-2a^2)^(1/2) d a = integral_0^g 1/(1-2a^2)^(1/2) d a^2 = -lr((1-2a^2)^(1/2)|)_0^g
+$
+
+Combine two terms together:
+
+$
+  I & = 1/(3a^2) ((1+a^2)(1-2a^2)^(1/2) - 1 - 3a^2(1-2a^2)^(1/2)) \
+    & = 1/(3a^2) ((1-2a^2)(1-2a^2)^(1/2) - 1) \
+    & = 1/(3a^2) ((1-2a^2)^(3/2) - 1)
+$
+
+$
+  lr(I|)^g_0 & = 1/(3g^2)((1-2g^2)^(3/2) - 1) - lim_(a -> 0) 1/(3a^2) (-3a^2) quad "L'Hôpital's Rule" \
+             & = 1/(3g^2)((1-2g^2)^(3/2) - 1) + 1
+$
+
+$
+  -S(x_0) &= 1/(3g^2)((1-2g^2)^(3/2) - 1) + 1 \
+  &= 1/(3g^2) sum_(n=0)^(infinity) 1/((n+1)!) 3/2 dot 1/2 dot ... dot (3-2n)/2 (-2)^(n+1) g^(2(n+1)) + 1/(3g^2) - 1/(3g^2) + 1 thick "by shift 1 index"\
+  &= sum_(n=1)^(infinity) 1/((n+1)!) 1/2 dot ... dot (2n - 3)/2 (-1)^(n) (-2)^(n) g^(2n) - 1 + 1 thick "by extract first term" \
+  &= sum_(n=1)^(infinity) (1 dot 3 dot ... dot (2n-3))/((n+1)!) g^(2n)
+$
+
+Now we see each coefficients corresponds to counts of tree with $m = 2n$ vertices, if we multiply $2n$ then corresponds to the one with vertices labelled.
+
+Feynman calculus can be used to count not only oriented but also oriented graphs. Suppose we want to count not labelled oriented trees, how to represent this? Given two labelled point $x,y$ rather $x^2$, the bilinear form is thus $x y$. Identify $x$ as the source of the edge and $y$ as the sink of the edge, we extend all flowers same as before but summation for both: $b e^x + a e^y$. Combine together: $S(x,y) = x y - b e^x - a e^y$. The critical point is the zeros of partial derivative in such 2-dimension manifold.
+
+$
+  pdv(S(x,y), x) = y - b e^x = 0 -> b e^x = y \
+  pdv(S(x,y), y) = x - a e^y = 0 -> a e^y = x \
+$
+
+Such transcendental function can't be solved directly, we expand each coefficients:
+
+$
+  & x = a (sum_(i>=0) y^i/i!) = a + sum_(p>=1, q>=1) c_(p,q) a^p b^q \
+  & y = b (sum_(i>=0) x^i/i!) = b + sum_(p>=1,q>=1) d_(p,q) a^p b^q
+$
+
+Evaluate the coefficient of each order by Cauchy's theorem:
+
+$
+  c_(p,q) = 1/(2pi i)^2 integral.cont integral.cont x a^(-(p+1)) b^(-(q+1)) d a and d b
+$
+
+$
+  d a = e^(-y) (d x - x d y) quad d b = e^(-x) (d y - y d x) \
+  d a and d b = e^(-x-y) (d x - x d y) and (d y - y d x) = e^(-x-y) (1 - x y) d x and d y
+$
+
+$
+  a^(-(p+1)) = x^(-(p+1)) e^((p+1) y), b^(-(q+1)) = y^(-(q+1)) e^((q+1)x)
+$
+
+$
+  c_(p,q) &= 1/(2pi i)^2 integral.cont integral.cont x x^(-(p+1)) e^((p+1) y) y^(-(q+1)) e^((q+1)x) e^(-x-y) (1-x y) d x and d y \
+  &= 1/(2pi i)^2 integral.cont integral.cont (1-x y) x^(-p) y^(-(q+1)) e^(q x + p y) d x and d y \
+$
+
+We evaluate $x^(-k) y^(-l) e^(q x + p y)$ to tackle general case:
+
+$
+  x^(-k) y^(-l) sum_(i,j>=0) (q x)^i/i! (p y)^j/j! -> i - k = -1, j - l = -1 -> I = q^(k-1)/((k-1)!) p^(l-1)/((l-1)!)
+$
+
+$
+  c_(p,q) = q^(p-1)/((p-1)!) p^(q)/(q!) - q^(p-2)/((p-2)!) p^(q-1)/((q-1)!) & = (q^(p-1) p^(q) - (p-1) q^(p-2) q p^(q-1))/((p-1)! q!) \ &= ((p - (p-1)) q^(p-1) p^(q-1))/((p-1)! q!) \
+  &= (q^(p-1) p^(q-1))/((p-1)! q!)
+$
+
+Similarly, $d_(p,q)$ is solved by same strategy while $x <-> y$, thus $p <-> q$, is $(q^(p-1) p^(q-1))/((q-1)!p!)$. Use integral trick to compute $S(x_0,y_0)$, but before on the hand, we decompose:
+
+$
+  pdv(S(x_0,y_0), a) = - e^(y_0) = - x_0/a, quad pdv(S(x_0,y_0), a) = - e^(x_0) = - y_0/b
+$
+
+Thus we can evaluate the integral of the curve by the total derivative of the action:
+
+$
+  - S(x_0,y_0)(a,b) & = integral^(a,b)_(a,0) integral^(a,0)_(0,0) x_0/u d u + y_0/v d v \
+                    & = integral_(0,0)^(a,0) (x_0 (u,0))/u d u + integral_(a,0)^(a,b) (y_0 (a,v))/v d v \
+                    & = a + integral_0^b (1 + sum_(p>=1, q>=1) d_(p,q) a^p v^(q-1)) d v \
+                    & = a + b + sum_(p>=1,q>=1) (q^(p-1) p^(q-1))/(q! p!) a^p b^q
+$
+
+Now we see that the number of trees with $p$ sources and $q$ sinks is $(q^(p-1) p^(q-1))/(q! p!)$ labelled for source and sink one, or $q^(p-1) p^(q-1) (p+q)!/(q! p!)$ unlabelled for which is source or sink, or $p^(q-1) p^(q-1)$ if the vertices *in* source and sink are also labelled.
+
+Can we extend the vertex to arbitrary finite labelled choices or colored? For example, the previous case has two color choices for each vertex, then the choice for different color can be considered as source and sink. Therefore we have a tuple of vertex color as $(x_1,...,x_n)$ and their connection edges by $1/2 vf(x)^T B vf(x)$ bilinear form while the previous case is $B = mat(0, 1; 1, 0)$. Different flowers for each color can be constructed by $sum_j^m a_j e^(x_j)$, reaching the final actions:
+
+$
+  S(vf(x)) = 1/2 sum_(i j) B_(i j) x_i x_j - sum_j^m a_j e^(x_j)
+$
+
+Differentiate to get fixed points tuple:
+
+$
+  pdv(S, x_i) = 0 -> sum_j B_(i j) x_j = a_i e^(x_i)
+$
+
+Define $X_i := sum_j B_(i j) x_j$ as the co-vector, the critical equations are:
+
+$
+  X_i = a_i e^(x_i) -> a_i = X_i e^(-x_i), quad x_i := sum_i (B^(-1))_(i j) X_j
+$
+
+We already know the final form of the action on critical points is restricted by:
+
+$
+  & pdv(S(vf(x_0))(vf(a)), a_i) = e^(x_i) = X_i/a_i \
+  & - S(vf(x)_0) = sum_i integral_0^(a_i) (X_i (a_1,...,a_i= u,0,...))/u d u
+$
+
+So the only problem is to solve the coefficients of expansion of each critical points.
+
+$
+  X_i = a_i + sum_(p_j >= 1) c_(vf(p),i) product_j^m a_j^p_j
+$
+
+Where the coefficient $c_(vf(p),i)$ indicates the power counts tuple $p_j$ for each $a_j^(p_j)$ while the $i$ indicates the $X_i$ co-vector.
+
+Induce that any $X_i (a_1,..,u,0,...) = a_i$ because all product term vanishes, thus we only need to know the coefficient and integrate to get the result: $c_(vf(p),i)/p_i$.
+
+$
+  c (vf(p),i) &= 1/(2pi i)^m integral.cont X_i (product_k a_k^(-p_k-1)) d vf(a) \
+  &= 1/(2pi i)^m integral.cont X_i (product_k (X_k e^(-x_k))^(-p_k - 1)) d (X_1 e^(-x_1)) and ... and d (X_m e^(-x_m))
+$
+
+We first calculate the single term, transforming all into $X_i$:
+
+$
+  pdv(X_i e^(-x_i), X_j) = e^(-x_i) delta_(i j) - X_i e^(-x_i) B^(-1)_(i j) = e^(-x_i) (delta_(i j) - B^(-1)_(i j) X_i)
+$
+
+Thus the Jacobian matrix $J_(i j) = e^(-x_i) (delta_(i j) - B^(-1)_(i j) X_i)$. We can inspect in matrix form:
+
+$
+  J = Lambda(e^(-x_1), ..., e^(-x_m)) dot (I - Lambda (X_1,...,X_m) B^(-1)) quad Lambda(...) "is diagonal matrix"
+$
+
+$
+  det (J) = product_(i = 1)^m e^(-x_i) det(I - Lambda(X_1, ..., X_m) B^(-1)) = e^(- sum_(i=1)^m x_i) det(I - Lambda(X_1, ..., X_m) B^(-1))
+$
+
+Generally, we should evaluate the concrete form of $det (lambda I - A)$ for certain matrix $A$. To calculate the determinant, recall the linearity of determinant for row and column:
+
+$
+  det (lambda I - A) &= det (lambda_1 - a^((1)),...,lambda_n - a^((n))) quad a^((i)) "is column" (i) \
+  &= det (lambda_1,...,lambda_n) + sum_({1,...,n} supset T, abs(T) = 1) det (lambda_1,...,lambda_(n-1),-a^((n))) + ...
+$
+
+The dumb expansion could be summarized in more terse form, scrutinize that we can pick arbitrary columns $a^((i))$ from the tuple, which *count* as a subset $T subset {1,...,n}$. For example, we pick two columns ${1,2} in {1,2,3}$ for a 3-dimension matrix resulting $det (-a^((1)),-a^((2)),lambda_3)= lambda_3 det (a^((1)),a^((2)),1) := lambda_3 D_({1,2}) (A)$ where we use $D$ to represent the residual or _minor_ determinant of the matrix $A$. Thus the determinant is the summation of all subsets:
+
+$
+  det (lambda I - A) = sum_(T subset {1,...,n}) (-1)^(abs(T)) D_T (A) product_(r in {1,...,n}\\T) lambda_r
+$
+
+You can see the product of $lambda_r$ comes from the remained index subtracted from $T$.
+
+$
+  det (J) &= e^(- sum_(i=1)^m x_i) sum_(T subset {1,...,m}) (-1)^abs(T) D_T (Lambda (X_1,...,X_m) B^(-1)) \
+  &= (...) product_(r in T) X_r D_T (B^(-1)) = (...) product_(i=1)^m X_i product_(r in {1,...,n} \\ T) X_r^(-1) D_T (B^(-1))
+$
+
+Where the final term is just reverse the product in set $T$ to the product of whole dividing the product *not in* the $T$.
+
+$
+  c(vf(p),i) &= 1/(2pi i)^m integral.cont sum_(T subset {1,...,m}) (-1)^(abs(T)) D_T (B^(-1)) X_i product_(r in {1,...,n}\\T) X_r^(-1) \ &quad quad times product_(k=1)^m X_k^(- p_k - 1) product_(h=1)^m X_h exp(sum_(k=1)^m (p_k + 1) x_k - sum_(h=1)^m x_i)) d vf(X)
+$
+
+We see a lot of dumb index repeated count, reduce them:
+
+$
+  c(vf(p),i) &= 1/(2pi i)^m integral.cont sum_(T subset {1,...,m}) (-1)^abs(T) D_T (B^(-1)) X_i product_(r in {1,...,n}\\T) X_r^(-1) \ &quad quad times product_(k=1)^m X_k^(-p_k) exp(sum_(k,l)^m p_k B^(-1)_(k,l) X_l) d vf(X)
+$
+
+The residue power counting is same as before, to simplify notation, identify $T^c = {1,...,n}\\T$. Focus on the certain dumb index $l$:
+
+$
+  &n_l - p_l - delta(l in T^c) + delta(i=l) = - 1 \
+  &n_l = p_l + delta(l in T^c) - delta(i=l) - 1 ->  product_l^m (sum_k^m p_k B^(-1)_(k,l))^(p_l + delta(l in T^c) - delta(i = l) - 1)/((p_l + delta(l in T^c) - delta(i=l) - 1)!)
+$
+
+The delta notation impede us reduce further, we reformat the first delta $delta (l in T^c) = 1 - delta (l in T)$, second, we see that $delta (i = l)$ can be decomposed into $delta (i in T^c = l) + delta (i in T = l)$, but it only effect $X_i$, so extract out $i$ index: $p_i - delta(i in T) - delta(i in T) - delta(i in T^c) = p_i - 1 - delta (i in T)$. Focus the $i$ index term, we balance the power:
+
+$
+  (sum_k^m p_k B_(k,i)^(-1))^(p_l - delta(i in T) - 1)/(p_i - delta(i in T) - 1)! = (p_i - delta(i in T))/(sum_k^m p_k B^(-1)_(k,i)) (sum_k^m p_k B^(-1)_(k,i))^(p_l - delta(i in T))/((p_i - delta(i in T))!)
+$
+
+To thunk the $i$ index term into a whole product. Now we combine all into:
+
+$
+  c(vf(p),i) = sum_(T subset {1,...,m}) (-1)^abs(T) D_T (B^(-1)) (p_i - delta (i in T))/(sum_k^m p_k B_(k,l)^(-1)) product_l^m (sum_k^m p_k B^(-1)_(k,l))^(p_l - delta(l in T))/((p_l - delta(l in T))!)
+$
+
+$
+  product_l^m (...) = product_(l in T)^m ((sum_k^m p_k B^(-1)_(k,l))^(p_l))/(p_l !) product_(l in.not T)^m ((sum_k^m p_k B^(-1)_(k,l))^(p_l - 1))/((p_l - 1)!) = product_l^m C^(p_l)_l/(p_l !) product_(l in.not T)^m (p_l/C_l) \ C_(k,l) = p_k B^(-1)_(k,l) quad C_l = sum_k^m p_k B^(-1)_(k,l)
+$
+
+Where we extract by $product_(l in.not T)^m C_l^(p_l-1)/(p_l - 1)! = product_(l in.not T)^m C_l^(p_l)/(p_l !) p_l/(C_l)$.
+
+$
+  c(vf(p),i) = product_i^m C^(p_l)_l/(p_l !) sum_(T subset {1,...,m}) (-1)^(abs(T)) (p_i - 1 + delta(i in T^c))/C_i D_T (B^(-1)) product^m_(l in.not T) (p_l/C_l)
+$
+
+Here the key, we decompose by $(p_i - 1) + delta(i in T^c)$ into two parts:
+
+$
+  det M &:= det (C_i delta_(i l) - p_i B_(i l)^(-1)) = product_k^m C_k det (delta_(i l) - p_i/C_i B^(-1)_(i l)) \ &= product_k^m C_k sum_(T subset {1,..,m}) (-1)^abs(T) D_T (B^(-1)) product^m_(l in.not T) (p_l/C_l)
+$
+
+Where each column or row summation is zero, thus, we can find a vector that $C_i$ as columns with $C_i - sum_l C_(i l) = 0$ which is the linear dependence. 
+
+$
+  det M := det (C_i delta_(i l) - C_(i l)) := 0
+$
+
+$
+  "term 1" = (p_i - 1)/C_i det (delta_(i l) - p_i/C_i B^(-1)_(i l)) = (p_i - 1) 1/C_i product_k^m 1/C_k det M = 0
+$
+
+$
+  sum_(T subset {1,...,m}) delta (i in T^c) = sum_(T subset {1,...,m}\\i) -> det D_({1,...,m} \\ i) (M) := (det M)_((i))
+$
+
+Where we can see due to the delta notation, the summation must be restricted to index without $i$. Thus the determinant should be ignore the whole $j$ column and row, which is the minor determinant without $j$ index.
+
+$
+  "term 2" = 1/C_i det(delta_(i l) - p_i/C_i B^(-1)_(i l))_((i)) = 1/C_i product_(k != i)^m 1/C_k (det M)_((i)) = product_k^m 1/C_k (det M)_((i))
+$
+
+$
+  c(vf(p),i) = product_l^m C_l^(p_l - 1)/(p_l !) (det M)_((i))
+$
+
+Is the final answer, notice the $p_l - 1$ power counts rather $p_l$ due to the factor division from $product_k^m 1/C_k$. It can also be formatted as:
+
+$
+  det M &:= product_k^m 1/p_k det (C_i p_l delta_(i,l) - C_(i,l) p_l) := product_k^m 1/p_k det L \ &quad -> N_Gamma (vf(p)) :=  c(vf(p),i)/p_i = product_k^m 1/(p_k) product_l^m C^(p_l - 1)_l/(p_l !) (det (L) )_(i)
+$
+
+Be careful! The *left* $1/p_i$ pair with $product_(k != i)^m 1/p_k$ to forming the whole product. The theorem generalize into a weighted version of _Kirchnoff's matrix tree theorem_, a highly non-trivial extension of _Cayley's theorem_, where we have $p_i$ numbers of vertex $a_i$ of $Gamma$. Suppose only $a_1$ type of vertex, one has $C_l = sum_k^m p_k B_(k,l)^(-1) = p_1$. Because such special case, the $(det (L))_(i)$ is a zero matrix which is defined as $1$. Thus, $N_Gamma (p_1) = p^(p - 2)/p!$, which is exactly the answer of _Cayley's theorem_. We then apply it to the case containing vertices type $a_1$ and $a_2$ or source and sinks:
+
+$
+  B = mat(0,1;1,0) -> B^(-1) = mat(0,1;1,0) \
+  vf(p) = (p,q)
+$
+
+$
+  C_l = sum_(k = 1)^2 p_k B_(k,l)^(-1) = (q,p) \
+  det(L) = C_i p_l delta_(i,l) - C_(i,l) p_l = mat(p q, -p q; - p q, p q) -> (det(L))_(i) = p q\
+$
+
+$
+  N_Gamma ((p,q)) = 1/(p q) (p^(q-1) q^(p-1))/(p! q!) dot p q = (p^(q-1) q^(p-1))/(p! q!)
+$
+
+Which is same as the results of previous calculation.
+
+

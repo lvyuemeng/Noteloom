@@ -1,4 +1,5 @@
 #import "lib.typ": *
+#import "@preview/physica:0.9.5": *
 
 #show: mine.with(
   title: "Statistical Mechanics",
@@ -824,8 +825,379 @@ $
   E = - M H ~ hat(H) = - mu_0 H sum_(i=1)^N sigma_i
 $
 
+= Classical
 
+$
+  d U = d Q + d W \
+$
 
+$
+  eta(Q_i,Q_f) = W/Q_i = (Q_i - Q_f)/Q_i = 1 - Q_f/Q_i
+$
+
+$
+  W(T_i,Q_i;T_f,Q_f) -> W(T_i,Q_i;T_f,Q'_f)
+$
+
+$
+  W(T_1,Q_1;T_2,Q_2) W(T_2,Q_2;T_3,Q_3) = W(T_1,Q_1;T_3,Q_3)
+$
+
+$
+  W^(-1) (T_i,Q_i;T_f,Q_f) = W(T_f,Q_f;T_i,Q_i)
+$
+
+$
+  W^(-1) (T_i,Q_i;T_f,Q_f) W(T_i,Q_i;T_f,Q'_f) = W(T_f, Q_f; T_f, Q'_f)
+$
+
+However, if $Q'_f < Q_f$, one create a machine that produces more work from a single source, thus it's impossible a machine could be more stronger than reversible one. Thus, it's better to say that $forall eta, eta <= eta^R$.
+
+If the substance of system works in a certain environment temperature, which is independent of other condition due to heat $Q$ is. Thus measure heat transfer between them is indeed measure the temperature of them.
+
+$
+  Q_2/Q_1 = phi(T_1, T_2) -> Q_2/Q_1 = phi(T_3,T_2)/phi(T_3,T_1) -> Q_2/Q_1 = phi(T_2)/phi(T_1) -> Q_2/Q_1 = T_2/T_1
+$
+
+Due to arbitrary $T_3$ must be cancelled in function, which we reduce in more tense expression that $T_2\/T_1$ rather $phi(T_2)\/phi(T_1)$. The reverse machine is uniquely determined by $Q_i, T_i, T_f$, one could say $Q_2\/Q_1 = T_2\/T_1$, if not, $Q_2\/Q_1 > T_2\/T_1$. Make it a algebraic variables by denoting $Q > 0$ absorbing, $Q < 0$ exerting. $Q_2\/Q_1 > T_2 \/T_1 -> Q_2\/T_2 + Q_2\/T_1 <= 0$.
+
+$
+  integral.cont (d Q)/T <= 0
+$
+
+You may say that if $(d Q)/T = S$ for a exact differential. We can say that a reverse machine correspond to such $S$ which $d S >= (d Q)/T$ because a normal machine must with cycle or a part of integral, smaller than reversible one.
+
+$
+  &d U = pdv(U,S)_V d S + pdv(U,V)_S d V = T d S - P d V\
+  &d H = pdv(H,S)_P d S + pdv(H,P)_S d P = T d S + V d P \
+  &d F = pdv(F,T)_V d T + pdv(H,V)_T d V = - S d T - P d V \
+  &d G = pdv(G,T)_P d T + pdv(G,P)_T d P = - S d T + V d P
+$
+
+A general characteristic function may be the Legendre transformation of arbitrary general work and position.
+
+$
+  f = L(U; X_1,...,X_n)
+$
+
+Given parameter in $(T,V)$:
+
+$
+  d U = T d S - P d V &= T (pdv(S,T)_V d T + pdv(S,V)_T d V) - P d V \
+  &= T pdv(S,T)_V d T + (T pdv(S,V)_T - P) d V \
+  &= T pdv(P,V)_T d T + (T pdv(P,T)_V - P) d V
+$
+
+Given parameter in $(T,P)$
+
+$
+  d H = T d S + V d P &= T (pdv(S,T)_V d T + pdv(S,P)_T d P) + V d P \
+  &= T pdv(S,T)_V d T + (T pdv(S,P)_T + V) d P \
+  &= T pdv(P,V)_T d T + (-T pdv(V,T)_P + V) d P
+$
+
+$
+  &(d Q)_V = d (U - W)_V = (d U + P d V)_V = (d U)_V \
+  &(d Q)_P = d (U - W)_P = (d U + P d V)_P = (d H)_P
+$
+
+$
+  &C_V = pdv(Q,T)_V =  pdv(U,T)_V = T pdv(S,T)_V \ 
+  &C_P = pdv(Q,T)_P = pdv(H,T)_P = T pdv(S,T)_P \
+$
+
+$
+  C_P - C_V &= pdv(U + P V,T)_P - pdv(U,T)_V 
+  quad (pdv(U,T)_P = pdv(U,T)_V + pdv(U,V)_T pdv(V,T)_P) \
+  &= (P - pdv(U,V)_T) pdv(V,T)_P quad (pdv(U,V)_T = pdv(U,V)_S + pdv(U,S)_V pdv(S,V)_T) \
+  &= - pdv(U,S)_V pdv(S,V)_T pdv(V,T)_P \
+  &= T pdv(P,T)_V pdv(V,T)_P
+$
+
+Thus we recover everything in integral:
+
+$
+  &d U = C_V d T + (T pdv(P,T)_V - P) d V \
+  &d S = C_V/T d T + pdv(P,T)_V d V \
+$
+
+$
+  &d H = C_P d T + (-T pdv(V,T)_P + V) d P \
+  &d S = C_P/T d T - pdv(V,T)_P d P
+$
+
+Use the expression in $T pdv(S,T)_((dot))$ would be easier.
+
+Denote $C_P/C_V = gamma$, which is a measurement of per unit work compensated by temperature increasing in heat bath. As for ideal gas, it's same as $dv(P V,T) = n R$.
+
+A example of $C_V > 0$ and $pdv(P,V)_T < 0$ to deduce $C_P > 0$ and $pdv(P,V)_S < 0$.
+$
+  C_P = T pdv(S,T)_P = T (pdv(S,T)_V + pdv(S,V)_T pdv(V,T)_P) = C_V + T pdv(P,T)_V pdv(V,T)_P = C_V - T pdv(P,V)_T pdv(T,V)^(-1)_P pdv(V,T)_P
+$
+
+Thus $C_P = C_V + "positive" -> C_P > 0$.
+
+$
+  pdv(P,V)_S &= pdv(P,V)_T + pdv(P,T)_V pdv(T,V)_S \ 
+  &= pdv(P,V)_T - pdv(P,V)_T pdv(T,S)_V pdv(V,S)^(-1)_T \
+
+  &= pdv(P,V)_T -  T/(C_V) pdv(P,V)_T pdv(P,T)_V
+$
+
+We see that $pdv(P,V)_S = pdv(P,V)_T - "positive" -> pdv(P,V)_S < 0$.
+
+$
+  C_V (gamma - 1)  = T pdv(P,T)_V pdv(V,T)_P = T (n R)/V (n R)/P = n R \
+  C_V = (n R)/(gamma - 1), thick C_P = (gamma n R)/(gamma - 1)
+$
+
+$
+  f(lambda x_1,...,lambda x_n) = lambda^n f(x_1,...,x_n)
+$
+
+$
+  f(x_1,...,x_n) = sum_i^n x_i (partial f(x_1,...,x_n))/(partial x_i)
+$
+
+$
+  U (lambda S,lambda V,lambda N) = lambda U(S,V,N) \
+$
+
+$
+  U(S,V,N_i) = T S - P V + sum_i^l mu_i N_i
+$
+
+It can be generalized to arbitrary variables.
+
+$
+  H & = T S + sum_i^l mu_i N_i \
+  F & = - P V + sum_i^l mu_i N_i \
+  G & = sum_i^l mu_i N_i \
+  Omega &= F - sum_i^l mu_i N_i = - P V \
+  J & = 0 \
+$
+
+Thus:
+
+$
+  S d T - V d P + sum_i^l N_i d mu_i = 0
+$
+
+Sometimes we will rely on the extensible property of a certain variable to divide every other extension variables to acquire the intension property.
+
+For example:
+
+$
+  d mu = - S_m d T + V_m d P
+$
+
+We know that $S (V,T) = integral C_V/T d T + pdv(P,T)_V d V$, therefore, fixed the $V$ variable, we integrate $T$ variable:
+
+$
+  &integral_(T_0)^T integral_(T_0)^(T') (C_(P,m) (T'',P_0))/T'' d T'' d T' quad (T_0 <= T'' <= T' <= T -> T' in [T'',T]) \
+  &= integral_(T_0)^T (integral_(T_'')^T d T') (...) d T'' \
+  &= integral_(T_0)^T (T - T'') (...) d T''
+$
+
+Which is what we need, if you want, a arbitrary constant could be added because we can never measure a *absolute* potential indeed. For ideal gas, you may expect:
+
+$
+  d mu &= -(integral_(T_0)^T C_(P,m)/T'' d T'') d T + (R T)/P d P \
+  -> mu &= R T (phi + ln P) quad (R T phi = -integral S_m d T)
+$
+
+If we emphasize for multiple components, the special case in ideal gas and independence between components will induce that:
+
+$
+  P_i prop N_i -> P_i = x_i P = N_i/N P
+$
+
+$
+  mu_i = R T (phi_i + ln x_i P)
+$
+
+Denote different phase for single component as $(dot)^(alpha\/beta\/gamma...)$, we can divide two phase as two system in contact, therefore share the same intensive attributes:
+
+$
+  d S^alpha = d U^alpha 1/T^alpha + d V^alpha P^alpha/T^alpha - d n^alpha mu^alpha/T^alpha
+$
+
+$
+  d S = d S^alpha + d S^beta = 0 \
+$
+
+However, the whole system is closed thus $d (dot)^alpha + d (dot)^beta = 0$ for each correlated attributes. We conclude that they share the same temperature, pressure and chemical potential in reversible phase transition:
+
+$
+  T^alpha = T^beta = T, P^alpha = P^beta = P, mu^alpha = mu^beta = mu
+$
+
+// $
+//   d G = d (G^alpha + G^beta) &= - S d T + V d P + mu (d n^alpha + d n^beta) \
+//   &= - S d T + V d P
+// $
+
+// It should be clear that the total Gibbs energy won't be zero variation due to the if we follow the curve of phase transition, rather in the fixed temperature and pressure of two phase in contact.
+
+Suppose the extensive Gibbs-Duhem theorem:
+
+$
+                      d mu^alpha & = d mu^beta \
+  -S^alpha_m d T + V^alpha_m d P & = -S^beta_m d T + V^beta_m d P \
+                     (d P)/(d T) & = (S_m^alpha - S_m^beta)/(V^alpha_m - V^beta_m) = L/(T Delta V_m)
+$
+
+Which is called Clausius-Clapeyron relation. It's also can be seen that, the total entropy will move along the curve of phase transition:
+
+$
+              d S & = lr((partial S)/(partial V_m)|)_T d V_m + lr((partial S)/(partial T)|)_(V_m) d T \
+              d S & = lr((partial S)/(partial V_m)|)_T d V_m quad "Fixed temperature" \
+              d S & = lr((partial P)/(partial T)|)_(V_m) d V_m quad "Maxwell relation" \
+  L/(T Delta V_m) & = (d P)/(d T) quad Delta V = d V_m = V^beta_m - V^alpha_m \
+$
+
+In the case where two parameter move in phase transition curve $(P,T)$.
+
+$
+  dv(L(P,T),T) = dv(,T) (S^beta - S^alpha)T &= 1/T dv(,T)(S^beta - S^alpha) + (S^beta - S^alpha)\
+  &= T (pdv(S^beta,T)_P + pdv(S^beta,P)_T dv(P,T) + (beta <-> alpha)) + L/T \
+  &= C^beta_P - C^alpha_P + (pdv(V^beta,T)_P - pdv(V^alpha,T)_P) L/(Delta V)
+$
+
+$
+  d G & = V d P - S d T \
+      & = V d P = 0 \
+$
+
+$
+  integral_i^f V d P = (P V)|^f_i - integral_i^f P d V = 0
+$
+
+$
+                  d S = d (S_1 + S_2 + S_A) & = 0 \
+  (4 pi r^2 (p_1 - p_2) + 8 pi r sigma) d r & = 0 \
+                    p_1 - p_2 + (2 sigma)/r & = 0 \
+                          p_1 + (2 sigma)/r & = p_2 -> Delta p = (2 sigma)/r
+$
+
+$
+        mu_g (p_r, T) & = mu_l (p_("in"),T) \
+  mu_g (p_infinity,T) & = mu_l (p_infinity,T) \
+           Delta mu_g & = Delta mu_l
+$
+
+$
+  mu_g (p_r, T) = integral_(p_infinity)^(p_r) V_(m,g) d p + mu_g (p_infinity,T) = integral_(p_infinity)^(p_r) (R T)/p d p + ... = R T ln (p_r/p_infinity) + mu_g (p_infinity,T) \
+$
+
+$
+  Delta p = p_r - p_infinity approx p_("in") - p_(infinity)
+$
+
+$
+  mu_l (p_("in"), T) = integral_(p_infinity)^(p_"in") V_(m,l) d p approx V_(m,l) Delta p
+$
+
+$
+  R T ln (p_r/p_infinity) & = (2 sigma)/r V_(m,l) \
+           p_r/p_infinity & = exp((2 sigma V_(m,l))/(R T r))
+$
+
+$((partial mu)/(partial p))_T = V_m > 0$, thus increase pressure will increase chemical potential, while in phase transition equilibrium needs to maintain the equality, $mu_l > mu_g$, thus $mu_l -> mu_g$ (or _saturated vapor pressure_) indicates the vaporize itself, so maintains the mechanical equilibrium will break the chemical potential equilibrium. If the temperature keeps cool down while the condensation nucleus is few thus the expected phase transition doesn't happen, we expect $mu_g arrow.b$ or $p > p_"vapor" = p_infinity$, which is the expect inequality, plus, if it's also smaller than the $p_r$, we still can't maintain mechanical equilibrium thus droplet nucleus tends to vaporize. Until the point where the enough huge liquid bubble emergent to meet such mechanical equilibrium, therefore growing and whole gas is liquefied. In real life, due to dust or polarized molecules, the $r_c$ is great enough and $p_r$ is smaller enough nearly equal to $p_infinity$, when we reach the liquefaction point, the gas is immediately liquefied.
+
+For Vanderwaals gas, the deflection in lower volume is the key of phase transition. But such deflection only exist in lower temperature too, denoted as $T_c$ the critical temperature. So, for $T < T_c$, we can describe the phase transition of the gas, the problem is how can deflection expressing the coexistence of liquid and gas?
+
+$
+  T_l = T_g \
+  P_l = P_g \
+  mu_l (T,P) = mu_g (T,P)
+$
+
+Thus the specified $P$ must be special that satisfying certain condition that the phase transition occurs. 
+
+$
+  d mu = - S_m d T + V_m d P = V_m d P quad "fixed temperature" \
+  d (mu_l - mu_g) = integral.cont_(V_g -> V_l) V_m d P = 0
+$
+
+The deflection of $P-V$ graph shows that for a given temperature, we can integrate along the curve while the difference must be *zero* where the start and end point have the same pressure. We transform the variable to solve reversely:
+
+$
+  integral_(V_g)^(V_l) V_m (P) d P &= lr(P V_m)|_(V_g)^(V_l) - integral_(V_g)^(V_l) P(V_m) d V_m quad (P(V_g) = P(V_l) = P_"eq")\
+  &= integral_(V_g)^(V_l) (P(V_m) - P_"eq") d V_m = 0
+$
+
+Where we can deduce $P_"eq"$ by integration following the graph.
+
+For ideal gas/liquid, one have:
+
+$
+  d mu_i (T,P) = - S_m d T + V_m d P -> mu_i (T,P) = g_i (T,P) + R T ln P_i quad (P_i = x_i P)
+$
+
+We absorb the scalar into $g_i$ as:
+
+$
+  mu_i = g_i (T,P) + R T ln x_i
+$
+
+Thus we see that if $x_i = 1$, single component will have $mu = g_i (T,P)$. One therefore reduce that the difference of $G(T,P) = n_i mu_i$:
+
+$
+  &Delta G = sum_i^n R T n_i ln x_i \
+  &Delta V = sum_i pdv(Delta G, P)_(n_i,T, P) = 0 \
+  &Delta S = - sum_i pdv(Delta G,T)_(n_i,P) = -sum_i^n R n_i ln x_i \
+  &Delta H = Delta G + T Delta S = 0 \
+  &Delta U = Delta H - P Delta V = 0
+$
+
+We see that due to thermo equilibrium and pressure equilibrium, only Gibbs energy changes. Suppose the solvent can be evaporated solely, thus in chemical potential equilibrium.
+
+$
+  g' = g + R T ln (1-x)
+$
+
+Where $x$ is the partition ratio of solute, $g'$ is the chemical potential of solvent in gas. Differentiate that:
+$
+  pdv(g',P)_T d P + pdv(g',T)_P d T &= pdv(g,P)_T d P + pdv(g,T)_P d T - (R T)/(1-x) d x + R ln(1-x) d T \
+  V_g d P - S_g d T &= V_l d P - S_l d T - (R T)/(1-x) d x + R ln (1-x) d T \
+  (V_g - V_l) d P - (S_g - S_l + R ln(1-x)) d T &= -(R T)/(1-x) d x \
+$
+
+$
+  S_g - S_l + R ln (1-x) = ((g' + T S_g) - (g + T S_l))/T = (H_g - H_l)/T
+$
+
+Suppose $d T = 0$ or fixed temperature:
+
+$
+  pdv(P,x)_(T) &= (R T)/(V_g - V_l) 1/(1-x)\
+  &= P/(1-x) quad (V_g >> V_l "with ideal gas model") \
+  &-> p_x = p_0 (1-x) quad (x = 0 -> p_x = p_0)
+$
+
+Suppose $d P = 0$ or fixed pressure:
+
+$
+  (H_g - H_l)/T d T &= (R T)/(1-x) d x \
+  pdv(T,x)_P &= (R T^2)/(L(1-x)) quad (H_g - H_l = L)\
+$
+
+If $x << 1$, or dilute solution:
+
+$
+  Delta T = (R T^2)/L x
+$
+
+However, we could achieve this by semi-permable membrane. Like sugar solution while only water can cross the membrane, we can create a pressure difference while maintaining the chemical potential equilibrium. Thus $p_x - p_0$ is the difference between sugar solution and pure water.
+
+$
+  g' = g(T,P) = g(T,P_0) + R T ln(1-x) \
+  V_(l,m) (p-p_0) = R T ln (1-x) approx -R T x \
+  p - p_0 = (R T)/V_(l,m) x = (R T)/V_(l,m) n_2/(n_1 + n_2) approx (R T)/V_(l,m) n_2/n_1 = (n_2 R T)/V_l
+$
+
+Notice, previous is in same pressure which can be identified as saturated vapor pressure; while this is in different pressure proportional to the amount of sugar substance.
 
 
 
