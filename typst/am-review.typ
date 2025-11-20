@@ -1,6 +1,5 @@
 #import "lib.typ": *
 
-
 #show: mine.with(
   title: "Review of Classical Mechanics",
   eq-numbering: "(1.1)",

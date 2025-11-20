@@ -15,7 +15,7 @@
     r
   }
 
-  $angle.l #l , #r angle.r$
+  $chevron.l #l , #r chevron.r$
 }
 
 // Mine infos
@@ -23,9 +23,10 @@
   "本论文旨在深入探讨李群理论在分析力学中的应用,尤其关注其在对称性和不变量分析中的核心作用.论文首先介绍了流形和李群的基本概念及其在物理学中描述构型空间与对称变换的必要性.在此基础上,我们详细分析了伽利略群的结构及其李代数,并结合拉格朗日分析力学和诺特定理,证明了伽利略不变性所导致的动量,能量等守恒量的存在,以及非相对论动能形式的内在联系.随后,论文进一步阐述了Euler-Poincaré定理,该定理通过将动力学方程从传统的构型空间约化到李代数空间,极大地简化了处理具有李群对称性的系统.最后,我们将Euler-Poincaré应用于旋转群的框架下,成功推导并分析了刚体转动的欧拉运动方程.从而展示了李群与流形理论在揭示复杂动力学系统深层对称性和简化方程方面的强大能力."
 }
 
-#let keywords = ("李群","伽利略群","李代数","诺特定理","拉格朗日力学",)
+#let keywords = ("李群", "伽利略群", "李代数", "诺特定理", "拉格朗日力学")
 
 #show: mine.with(
+  template: "am-zh",
   lang: "zh",
   title: "基于李群的伽利略不变性与刚体转动动力学研究",
   authors: authors,
@@ -33,14 +34,6 @@
   keywords: keywords,
   eq-numbering: "(1.1)",
   eq-chapterwise: true,
-)
-
-#set par(
-  first-line-indent: (
-    amount: 1em,
-    all: true,
-  ),
-  leading: 1.5em,
 )
 
 #set super(typographic: false)
@@ -59,18 +52,18 @@
 $
   S[q] := integral L(q(t),dot(q)(t)) d t
 $
-实际上,由于变分的任意性,我们了解到运动轨迹的变化随任意坐标的变化而变化却不影响最终的动力学结果.这也意味着,对于任意作用量的变分是不随坐标的变换而改变的,即Hamilton原理包含了*坐标不变性*@holm_geometric_nodate[p~26],Lagrange作用量是比坐标的表示形式更为基础的代数对象. 
+实际上,由于变分的任意性,我们了解到运动轨迹的变化随任意坐标的变化而变化却不影响最终的动力学结果.这也意味着,对于任意作用量的变分是不随坐标的变换而改变的,即Hamilton原理包含了*坐标不变性*@holm_geometric_nodate[p~26],Lagrange作用量是比坐标的表示形式更为基础的代数对象.
 
 给予初始的演化参数$q_i (0), dot(q)_i (0)$,动力学的演化告诉我们坐标依照特定的约束轨迹行进,因而$bb(R)^3$空间下,即使我们没有流形的知识,直觉告诉我们,其约束的空间则是一个在其空间下的平面或者说子空间,质点的运动轨迹是一个可以用一定约束坐标描述的曲线.
 
 基础的坐标变换知识告诉我们,任意的曲线轨迹所在的邻域下所在的空间存在的函数$f(x_1,...,x_n)$具有其各个方向的变化@tu_differential_2017[p~22],等价于:
 $
-  x^i &= p^i + t a^i \
+  x^i & = p^i + t a^i \
 $
 $
-  D f &= lim_(t->0)(f(p+t a) - f(p)) / t \
-  &= d / (d t)|_(t=0)f(p+t a) \
-  &= sum (partial f) / (partial x^i)|_p (d x^i) / (d t)|_(t=0) = sum (partial f) / (partial x^i)|_p a^i \
+  D f & = lim_(t->0)(f(p+t a) - f(p)) / t \
+      & = d / (d t)|_(t=0)f(p+t a) \
+      & = sum (partial f) / (partial x^i)|_p (d x^i) / (d t)|_(t=0) = sum (partial f) / (partial x^i)|_p a^i \
 $
 
 我们知道任意坐标的变化的参数$a^i$是任意的,函数$f$也是任意的,但是求导的形式却是确定的.我们尝试抽象结构,邻域的所在的空间结构不会变化,只要我们既定坐标,我们都存在$(partial) / (partial x^i)$,不仅如此,它的形式仅随我们对此邻域的坐标表述变化而变化,而不随邻域的变化而变化.我们可以将其抽象为$bb(R)^n$下的线性空间,称其为关于点$p$的$T_p (M)$切空间. 若线性空间成立,则必然存在对应的对偶空间即类似于$v_j ((partial) / (partial x^i)) = delta_(i j)$的结构存在.幸运的是,我们已经知道了,即$d x^i^* : d x^i^*((partial) / (partial x^i)) = (partial) / (partial x^i)(d x^i) = 1$. 于此,我们可以定义内积,即对于任意既定的基向量$bold(x) = sum x^i e_i$存在:
@@ -150,8 +143,8 @@ $
 $
 平移元素并不改变群本身,这本身就是群的定义的一部分:
 $
-  "AD"_g (x_1)"AD"_g (x_2) &= g x_1 g^(-1) g x_2 g^(-1) \
-  &= g x_1 x_2 g^(-1) = "AD"_g (x_1 x_2)
+  "AD"_g (x_1)"AD"_g (x_2) & = g x_1 g^(-1) g x_2 g^(-1) \
+                           & = g x_1 x_2 g^(-1) = "AD"_g (x_1 x_2)
 $
 即同态同构.当然,对于李群亦是如此.同样,我们可以定义关于李群的$"AD"_g$.更重要的是处于其上的切向量:
 $
@@ -164,8 +157,8 @@ $
 $
 假若$g = e^(t Y)$, 更近一步我们可以定义群上切向量的关系:
 $
-  (d ) / (d t)(e^(t Y)X e^(- t Y))|_(t=0) &= e^(t Y)Y X e^(- t Y) - e^(t Y)X Y e^(-t Y)|_(t=0) \
-  &= Y X - X Y
+  (d ) / (d t)(e^(t Y)X e^(- t Y))|_(t=0) & = e^(t Y)Y X e^(- t Y) - e^(t Y)X Y e^(-t Y)|_(t=0) \
+                                          & = Y X - X Y
 $
 根据如上的分析,它仍然是切向量,即切向量至切向量的映射. 这一发现预示着我们能否如群一样定义其元素的映射关系,答案是肯定的.
 $
@@ -335,9 +328,10 @@ $
 它描述了两运动形式的微分差距, 值得注意的是第一项
 
 $
-  [omega_1, omega_2]v &= hat(omega)_1 times (hat(omega)_2 times v) - hat(omega)_2 times (hat(omega)_1 times v) \
-  &= hat(omega)_2(hat(omega)_1 dot v) - v (hat(omega)_2 dot hat(omega)_1) \ &-(hat(omega)_1 (hat(omega)_2 dot v) - v(hat(omega)_2 dot hat(omega)_1)) \
-  &= (hat(omega)_1 times hat(omega)_2) times v
+  [omega_1, omega_2]v & = hat(omega)_1 times (hat(omega)_2 times v) - hat(omega)_2 times (hat(omega)_1 times v) \
+                      & = hat(omega)_2(hat(omega)_1 dot v) - v (hat(omega)_2 dot hat(omega)_1) \
+                      & -(hat(omega)_1 (hat(omega)_2 dot v) - v(hat(omega)_2 dot hat(omega)_1)) \
+                      & = (hat(omega)_1 times hat(omega)_2) times v
 $
 
 它实际上正是不同次序的转动形成的微分差距.同样,我们可以看到提升的差距,即$v'_1 t'_2 - v'_2 t'_1$,假设相同的时间增量则该项消失.
@@ -403,14 +397,14 @@ $
 
 我们取$g_(...)^*$表明余切空间的作用.
 $
-  inpro(l:alpha',r:g_(*,q) v) = inpro(l:alpha,r:v) \
-  inpro(l:g'^*_(*,?) alpha,r: g_(*,q) v) = inpro(l:alpha, r:g'_(*,?) g_(*,q) v) \
+  inpro(l: alpha', r: g_(*,q) v) = inpro(l: alpha, r: v) \
+  inpro(l: g'^*_(*,?) alpha, r: g_(*,q) v) = inpro(l: alpha, r: g'_(*,?) g_(*,q) v) \
   g'_(*,?) = g^(-1)_(*,g dot q) \
-  g'^*_(*, g dot q) = g^(*,-1)_(*,g dot q) 
+  g'^*_(*, g dot q) = g^(*,-1)_(*,g dot q)
 $
 值得注意的是,该点必然抵消已经被$g$作用的点,而非$q$本身.值得注意的是,具体的形式下我们注意到:
 $
-((partial tilde(q)^j)/(partial q^i))^(-1) = (partial q^i)/(partial tilde(q)^j) = (...)^T
+  ((partial tilde(q)^j)/(partial q^i))^(-1) = (partial q^i)/(partial tilde(q)^j) = (...)^T
 $
 
 同样,因为作用群本身所在的逆也转换成$e^(-t X)$,携带一负号.所以无限小提升的结果仅仅只是原无限小元素的:
@@ -425,12 +419,12 @@ $
   {t, q} -> {tilde(t)(t,q,s), tilde(q)(t,q,s)} \
 $
 $
-  tau(t,q) = (d)/(d s)|_(s=0)tilde(t)(t,q,s) \
+  tau(t, q) = (d)/(d s)|_(s=0)tilde(t)(t,q,s) \
   xi^alpha (t,q) = (d)/(d s)|_(s=0) tilde(q)^alpha (t,q,s)
 $
 这给出了如下的微小展开:
 $
-  tit = t + s tau(t,q) quad tiq^alpha = q^alpha + s xi^alpha (t,q)
+  tit = t + s tau(t, q) quad tiq^alpha = q^alpha + s xi^alpha (t,q)
 $
 
 $
@@ -446,8 +440,8 @@ $
 #let Ldqdt = $(partial L)/(partial qdt)$
 #let Ldqqdt = $(partial^2 L)/(partial qdt partial dot(q)^beta)$
 $
-  S'[q',t'] &= integral L(tilde(q),tilde(dot(q))) d tit \
-  &= integral L(q,dot(q)) + Ldq D q + Ldqdt (D qdt - delta dot(t)qdt) ((1+delta dot(t))d t) \
+  S'[q',t'] & = integral L(tilde(q),tilde(dot(q))) d tit \
+            & = integral L(q,dot(q)) + Ldq D q + Ldqdt (D qdt - delta dot(t)qdt) ((1+delta dot(t))d t) \
 $
 展开全变分$D dot(q) = delta dot(q) + (d)/(d t)(dot(q) delta t)$并保留一阶变分:
 $
@@ -496,7 +490,7 @@ $
 
 $
   delta q^alpha = q'_0\
-  P =  Ldqdt q'_0\
+  P = Ldqdt q'_0\
 $
 以及能量:
 $
@@ -504,8 +498,8 @@ $
 $
 我们先对能量进行时间微分,注意$L=K$仅是关于$dot(q)$的函数:
 $
-  0 &= Ldqqdt dot(q)^alpha^2 + Ldqdt dot.double(q)^alpha - Ldqdt dot.double(q)^alpha \
-  &= Ldqqdt dot(q)^alpha dot.double(q)^beta
+  0 & = Ldqqdt dot(q)^alpha^2 + Ldqdt dot.double(q)^alpha - Ldqdt dot.double(q)^alpha \
+    & = Ldqqdt dot(q)^alpha dot.double(q)^beta
 $
 首先$L$作为标量且二阶导良定义的函数并不会恒为0.$dot(q)^alpha$同样作为切空间分量并不会恒为0.则$dot.double(q)^alpha = 0$.
 
@@ -514,8 +508,8 @@ $
   (d p_alpha)/(d dot(q)^beta) = c_(alpha beta) -> p_alpha = c_(alpha beta) dot(q)^beta
 $
 $
-  Ldqdt &= c_(alpha beta) dot(q)^beta \
-  L &= c_(alpha beta) dot(q)^alpha dot(q)^beta
+  Ldqdt & = c_(alpha beta) dot(q)^beta \
+      L & = c_(alpha beta) dot(q)^alpha dot(q)^beta
 $
 这便是动能的表达.我们可以看出这无非是内积的形式.这似乎意味着特定的度规,对应着特定的动能表达.因此它也被称为惯量度规.
 
@@ -560,7 +554,7 @@ $
 $
   delta integral L(g(t),dot(g)(t)) = 0 \
   g^(-1) delta integral L(g(t),dot(g)(t)) = 0 \
-  delta integral L(id_G,g^(-1)dot(g)(t)) = 0 
+  delta integral L(id_G,g^(-1)dot(g)(t)) = 0
 $
 
 这正是$xi_(R\/L)$的来源.它将任意一点的切空间元素即速度拉回至单位元.
@@ -586,10 +580,10 @@ $
 #let Ldg = $(delta L)/(delta g)$
 #let Ldxi = $(delta L)/(delta xi)$
 $
-  &quad integral inpro(l:Ldg,r:delta g) + inpro(l:Ldxi,r:delta xi) d t \
-  &= integral inpro(l:Ldg,r:g eta) + inpro(l:Ldxi,r:dot(eta)+"ad"_(xi)eta) \
-  &= integral inpro(l:Ldg, r:g_(*,e)eta) + inpro(l:Ldxi,r:dot(eta)) + inpro(l:Ldxi,r:"ad"_(xi)eta) \
-  &= integral inpro(l:g^*_(*,e) (Ldg),r:eta) + inpro(l:-(d)/(d t)(Ldxi)+"ad"^*_xi (Ldxi),r:eta) d t
+  & quad integral inpro(l: Ldg, r: delta g) + inpro(l: Ldxi, r: delta xi) d t \
+  & = integral inpro(l: Ldg, r: g eta) + inpro(l: Ldxi, r: dot(eta)+"ad"_(xi)eta) \
+  & = integral inpro(l: Ldg, r: g_(*,e)eta) + inpro(l: Ldxi, r: dot(eta)) + inpro(l: Ldxi, r: "ad"_(xi)eta) \
+  & = integral inpro(l: g^*_(*,e) (Ldg), r: eta) + inpro(l: -(d)/(d t)(Ldxi)+"ad"^*_xi (Ldxi), r: eta) d t
 $
 即:
 $
@@ -603,14 +597,15 @@ $
 我们会注意到因为元素的映射即为矩阵连乘,所以微分形式等于连乘本身,这便是矩阵表达下直接与坐标变换的呼应.
 
 $
-  g dot (h, dot(h)) &= (g h, g_(*,h)(dot(h))) \ &= (g h, (d)/(d t)(g h(t))|_(t=0)) = (g h, g dot(h))
+  g dot (h, dot(h)) & = (g h, g_(*,h)(dot(h))) \
+                    & = (g h, (d)/(d t)(g h(t))|_(t=0)) = (g h, g dot(h))
 $
 
 我们来验证一下:
 $
- inpro(l:mu, r:[xi,eta]) &= inpro(l:mu,r:xi eta) - inpro(l:mu,r:eta xi)  \
- &= inpro(l:xi^T mu,r:xi) -inpro(l:mu eta^T,r:xi) \
- &= -inpro(l:[mu,xi^T],r:eta)
+  inpro(l: mu, r: [xi,eta]) & = inpro(l: mu, r: xi eta) - inpro(l: mu, r: eta xi) \
+                            & = inpro(l: xi^T mu, r: xi) -inpro(l: mu eta^T, r: xi) \
+                            & = -inpro(l: [mu,xi^T], r: eta)
 $
 那么万事俱备,我们将这些构造直接运用至$S O(3)$,它应当给出旋转的动力学演化.
 
@@ -629,46 +624,45 @@ $
 注意,体坐标系的坐标不变而空间坐标系的坐标变化.所以前者是空间坐标系角速度,而后者则是体坐标系角速度.
 
 $
-  (d)/(d t)(delta L)/(delta omega)  - [(delta L)/(delta omega),omega^T] &= 0 \
-  (d)/(d t)(delta L)/(delta omega) + [(delta L)/(delta omega),omega] &= 0 \
+  (d)/(d t)(delta L)/(delta omega) - [(delta L)/(delta omega),omega^T] & = 0 \
+    (d)/(d t)(delta L)/(delta omega) + [(delta L)/(delta omega),omega] & = 0 \
 $
-因为$S O(3)$的切空间等价于一三维欧氏空间附带叉乘的代数结构.我们尝试转化成此表达.其中其内积结构为任意一对称矩阵$inpro(l:hat(omega),r:hat(omega))_II = hat(omega)^T II hat(omega)$.我们知道内积的结构定义了其上元素的自由运动,其良定义蕴含了元素作用不变性这一点:
+因为$S O(3)$的切空间等价于一三维欧氏空间附带叉乘的代数结构.我们尝试转化成此表达.其中其内积结构为任意一对称矩阵$inpro(l: hat(omega), r: hat(omega))_II = hat(omega)^T II hat(omega)$.我们知道内积的结构定义了其上元素的自由运动,其良定义蕴含了元素作用不变性这一点:
 $
   (delta L)/(delta omega) -> (delta L)/(delta hat(omega)) = II hat(omega)
 $
 $
-  
-  (d)/(d t)(delta L)/(delta omega) + [(delta L)/(delta omega),omega] &= 0 \
-  II dot(hat(omega)) + II hat(omega) times hat(omega) = 0
+  (d)/(d t)(delta L)/(delta omega) + [(delta L)/(delta omega),omega] & = 0 \
+             II dot(hat(omega)) + II hat(omega) times hat(omega) = 0
 $
 这便是Euler运动方程.因为质量的定义必然不包含在群的作用内,我们考虑旋转群对流形的作用,即流形本身具有一度规,其定义为:
 $
   m = integral_B rho(x) d^3 x
 $
-这意味着在一邻域内$"supp"(rho) subset U$定义了类似于$rho(x)|_(x in U) inpro(l:-,r:-)$形式的度规@tu_differential_2017[p~6],因为这实际上是对流形邻域划分(partition)所形成的全局度规.
+这意味着在一邻域内$"supp"(rho) subset U$定义了类似于$rho(x)|_(x in U) inpro(l: -, r: -)$形式的度规@tu_differential_2017[p~6],因为这实际上是对流形邻域划分(partition)所形成的全局度规.
 
 则$omega times q$的速度生成下所携带的动能形式具有如下表达:
 $
-  K &= (1)/(2) integral_B rho(x)||omega bold(x)||^2 d^3x \
-  &= (1)/(2) integral_B rho(x)||[x] hat(omega)||^2 d^3x \ 
-  &= (1)/(2) integral_B rho(x) ||hat(omega)^T [x]^T [x] hat(omega)||  d^3x \
-  &= (1)/(2) hat(omega)^T (integral_B rho(x) [x]^T [x] d^3 x)hat(omega)
+  K & = (1)/(2) integral_B rho(x)||omega bold(x)||^2 d^3x \
+    & = (1)/(2) integral_B rho(x)||[x] hat(omega)||^2 d^3x \
+    & = (1)/(2) integral_B rho(x) ||hat(omega)^T [x]^T [x] hat(omega)|| d^3x \
+    & = (1)/(2) hat(omega)^T (integral_B rho(x) [x]^T [x] d^3 x)hat(omega)
 $
 其中我们使用了:$omega bold(x) = hat(omega) times x = - x times hat(omega) = - [x]hat(omega)$.为了不模糊积分和矢量,暂且使用此区分.
 
 $
-  [x]^T [x]v &= - [x][x]v = - bold(x) times (bold(x) times v) \
-  &= v(bold(x) dot bold(x)) - bold(x)(bold(x) dot v) \
-  &= ||bold(x)||v - bold(x)(bold(x)^T v) \
-  &= (||bold(x)|| - bold(x)bold(x)^T)v \
+  [x]^T [x]v & = - [x][x]v = - bold(x) times (bold(x) times v) \
+             & = v(bold(x) dot bold(x)) - bold(x)(bold(x) dot v) \
+             & = ||bold(x)||v - bold(x)(bold(x)^T v) \
+             & = (||bold(x)|| - bold(x)bold(x)^T)v \
 $
 这正是$II$作为惯量度规的定义.我们能否定义含时的惯量度规即空间坐标系的惯量度规?这意味着该度规随参数不断变化,这并非一良定义的度规.实际上在经典力学里我们就可以理解这一点,那就是转动惯量在定义时必然选取一刚体的体坐标系进行分解,才能获得其分解项.同样的,关于转动的角动量也只在此时才能与转动惯量存在稳定关系.
 
 假若存在依赖于位置相关或者说并非左乘不变的作用量形式,意味着运动的形式不再自由而是受到限制.例如一转动相关的势能$V(O)$.
 
-$g eta = g_(*,e) dot eta$.即为其左作用.则同样的原因如前文所述它的对偶无非是$g^* eta = g^*_(*,e) dot eta = g^T eta $:
+$g eta = g_(*,e) dot eta$.即为其左作用.则同样的原因如前文所述它的对偶无非是$g^* eta = g^*_(*,e) dot eta = g^T eta$:
 $
-  inpro(l: mu,r: g eta) = inpro(l:g^T mu, r:eta) 
+  inpro(l: mu, r: g eta) = inpro(l: g^T mu, r: eta)
 $
 所以:
 $

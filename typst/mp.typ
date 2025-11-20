@@ -2,12 +2,10 @@
 
 #show: mine.with(
   title: "Math Physics",
-  eq-numbering: "(1.1)",
-  eq-chapterwise: true,
 )
 
-#let hyperreal = $attach(bb(R),tl:*)$
-#let tlstar(content) = $attach(content,tl:*)$
+#let hyperreal = $attach(bb(R), tl: *)$
+#let tlstar(content) = $attach(content, tl: *)$
 
 = Number System
 
@@ -24,14 +22,14 @@ That's, $(+1) ~ S(*)$. Arabians already knows addition which is multiple inclusi
 So $(+n) ~ overbrace(S dot S..., n "times")$ gives us the operation. The commutativity is trivial because we apply the same induction process as $S$, there's no permutation at all. It's useful to use our infinite process again, it giving us multiplication as multiple inclusion of $(+n) -> (+n)(+n)(*) -> ...$. Usually, Arabians use $a n$ to denote $a$ times addtition of $n$. But it implicate a vagueness in addition and multiplication process priority. So in such number system, we should use bracket or restrict a multiplication priority:
 
 $
-	n x + b != n(x + b)
+  n x + b != n(x + b)
 $
 
 Where we fix $x$ as applied element. The distribution property is a corollary of commutativity of $+$.
 
 $
-	n (a + b) &= overbrace((a+b)+(a+b)+...,n "times") = overbrace(a+b+a+b+...,n "times") \
-	&= overbrace(a+a+...,n "times") + overbrace(b+b+...,n "times") = n a + n b
+  n (a + b) & = overbrace((a+b)+(a+b)+..., n "times") = overbrace(a+b+a+b+..., n "times") \
+            & = overbrace(a+a+..., n "times") + overbrace(b+b+..., n "times") = n a + n b
 $
 
 We remove bracket is because there's no operation priority for $+$ as a repeated operation, we can place $+$ to anywhere with a element beside of it.
@@ -39,21 +37,21 @@ We remove bracket is because there's no operation priority for $+$ as a repeated
 Now, we have a simpler way to deduce commutativity.
 
 $
-	n a (*) = n (overbrace(1 + 1 + ..., a "times")) (*) = overbrace(n+n+..., a "times") (*) = a n (*)
+  n a (*) = n (overbrace(1 + 1 + ..., a "times")) (*) = overbrace(n+n+..., a "times") (*) = a n (*)
 $
 
 Finally, the relation of multiplication and successor:
 
 $
-	S(n)(*) = (n+1)(*) = n(*) + (*)
+  S(n)(*) = (n+1)(*) = n(*) + (*)
 $
 
 We apply induction process again to deduce power, $(* n) -> (* n)(* n) -> ... ~ n^(x)$ for $x$ times induction. We has the distribution, commutativity, and relation to addition(lower second order) in power too, with its multiplication as element:
 
 $
-	(a b)^x = overbrace((a b)(a b)..., x "times") = a^x b^x \
-	(n^x)^y = (overbrace(n..., x "times"))^y = overbrace(n^y..., x "times") = (n^y)^x \
-	(n)^(x + y) = overbrace(n..., x + y "times") = overbrace(n..., x "times")  overbrace(n..., y "times") = n^x n^y
+  (a b)^x = overbrace((a b)(a b)..., x "times") = a^x b^x \
+  (n^x)^y = (overbrace(n..., x "times"))^y = overbrace(n^y..., x "times") = (n^y)^x \
+  (n)^(x + y) = overbrace(n..., x + y "times") = overbrace(n..., x "times") overbrace(n..., y "times") = n^x n^y
 $
 
 You see that the operation commutativity and distribution is based on the lower order but not all order. You can apply it to addition too.
@@ -63,9 +61,9 @@ Now, what if we deduce again? $(n)^n -> ((n)^n)^n -> (((n)^n)^n)^n -> ... ~ over
 We need to acquire a inverse operation of such system. This is, the extension of number system. Suppose addition first, $a + x = b$. If such reverse operation is always defined, we should has $x = (a+)^(-1) (b)$ to give a pleasant result. The partial order indicates a violation if $a > b$. Where there shouldn't exist a number in successor logic. But if it's defined, the new number is coming out as a extension of original number system. We test that:
 
 $
-	x = (a +)^(-1) (0) = (a +)^(-1)(id_0) = (a +)^(-1) \
-	(a +)^(-1) (a +) x = x \
-	(a +)^(-1) (a +) = 0 \
+  x = (a +)^(-1) (0) = (a +)^(-1)(id_0) = (a +)^(-1) \
+  (a +)^(-1) (a +) x = x \
+  (a +)^(-1) (a +) = 0 \
 $
 
 If it's applicable, and indeed so, called negative number corresponding to positive number. $bb(N) -> bb(Z)$ as the answer. But what's there order? It should be a reverse successor that, if original is greater, this should be smaller to retains the correct order. That's, $S^(-1) (a) < a$, $S^(-1)(0) < 0$. Now, there's no lower bound.
@@ -73,16 +71,16 @@ If it's applicable, and indeed so, called negative number corresponding to posit
 We try multiplication too, $a x = b$ is also in such corner. Define $x = (a *)^(-1) b$ reveals a huger number system. The reverse operation should has the same property as the original to maintain consistency. Test that:
 
 $
-	(a *)^(-1) (b) + (a *)^(-1)(c) = (a*)^(-1)(b + c) \
+  (a *)^(-1) (b) + (a *)^(-1)(c) = (a*)^(-1)(b + c) \
 $
 $
-	(a *)^(-1) b + (c *)^(-1) d &= (a *)^(-1)(c *) (c *)^(-1) b + .... \
-	&= (a *)^(-1)(c *)^(-1)(b c + a d)
+  (a *)^(-1) b + (c *)^(-1) d & = (a *)^(-1)(c *) (c *)^(-1) b + .... \
+                              & = (a *)^(-1)(c *)^(-1)(b c + a d)
 $
 
-Such extension is $bb(Z) -> bb(Q)$, integer to rational number. It shows that given a rational number the order is determined by $b c - a d$. Where $ 0 < (n *)^(-1) 1 < 1$ is a results.
+Such extension is $bb(Z) -> bb(Q)$, integer to rational number. It shows that given a rational number the order is determined by $b c - a d$. Where $0 < (n *)^(-1) 1 < 1$ is a results.
 
-We summarize current cardinality where $abs(bb(Q)) = abs(bb(Z) times bb(Z)^*)$ Where we remove $0$, but reasonably, there could be a ${plus.minus infinity}$ as a additional number, but it will break the order. We can check any infinity has same order. But negative infinity is lower than any number, positive infinity is higher than any number, forming a circle order. 
+We summarize current cardinality where $abs(bb(Q)) = abs(bb(Z) times bb(Z)^*)$ Where we remove $0$, but reasonably, there could be a ${plus.minus infinity}$ as a additional number, but it will break the order. We can check any infinity has same order. But negative infinity is lower than any number, positive infinity is higher than any number, forming a circle order.
 #footnote[It's undefined and rather prohibited as we usually learned, but limit haven't been "created" now.]
 
 Now we proceed on power, or exponential. Because it's not commutative now. Such astonishing consequence derived from the canonical morphism that $n -> S^n$. $S^m S^n ~ S^n S^m$. But such distribution failed in exponential for $S$ that $S(n) m != S(m n)$ as we already shown in multiplication non-commutativity with successor.
@@ -102,17 +100,17 @@ We apply induction of finite sequence with element of $bb(Q)$, the new number sy
 
 A additional structure should be established. A usual procedure to reach a real number by infinitesimal is that, $lim_(n->infinity) (r - q_n) = 0$, where $r - q_n < epsilon$, $forall epsilon$ $exists n > N in bb(N)$. This is a standard analysis that $epsilon$ is a residual number exist in Real which can be arbitrary small. Presume for most of elements in sequence they are *same*. The two real numbers should be infinitesimally close, construct a equality. Such sequence procedure with a *nearness*, notates as $tlstar(bb(Q)) tilde.equiv bb(R)$ could be a intermediate procedure during extension. We can apply it to every that $bb(N)^abs(bb(N))$ to construct $tlstar(bb(N))$ etc, with same cardinality as $bb(R)$.
 #footnote[
-	Such construction is called *hyper*, which is a nonstandard extension. The tedious comes from a order field embedding and the equivalence proposition of $bb(R)$ and $hyperreal$
+  Such construction is called *hyper*, which is a nonstandard extension. The tedious comes from a order field embedding and the equivalence proposition of $bb(R)$ and $hyperreal$
 ]
 
 In order to create such *nearness*(or convergence), suggest a filter on infinite elements in canonical order#footnote[Indeed if we use digit expression, we should compare the higher digit first. The filter on sequence should be restricted to the canonical order to avoid prohibited expression of sequence.], against finite, the case for $tlstar(bb(R))$ as a intermediate number system could be constructed. Ultra filter said that we can select collections of subsets of $bb(N)$, where its infinite, so it contains $bb(N)$, but also a consistent selection for intersections or superset other than finite sets. Thus every sequence could be compared through a equivalence class of such filter ensured by axiom choice although the conrete form is unknown.
 #footnote[
-	Even sequence like $(1,2,3,1,2,3,...)$ is not a canonical number in $bb(R)$, it could be assigned a determined order in $hyperreal$. Notably, we only compare the number in $bb(R)$, that's why it's not standard.
+  Even sequence like $(1,2,3,1,2,3,...)$ is not a canonical number in $bb(R)$, it could be assigned a determined order in $hyperreal$. Notably, we only compare the number in $bb(R)$, that's why it's not standard.
 ]
 
-Thus for positive sequence that smaller than any number of $bb(R)^(>0)$, gives a infinitesimal(hypersmall) class $[epsilon]$, for positive sequence that greater than any number of $bb(R)^(>0)$, gives a infinite(hyperlarge) class $[infinity]$. 
+Thus for positive sequence that smaller than any number of $bb(R)^(>0)$, gives a infinitesimal(hypersmall) class $[epsilon]$, for positive sequence that greater than any number of $bb(R)^(>0)$, gives a infinite(hyperlarge) class $[infinity]$.
 
-Now, we try to formalize continuity as a attempt. $forall delta in hyperreal, delta ~ [epsilon]: tlstar(f)(c+delta) - f(c) ~ [epsilon]$, where $c$ is a standard number in $bb(R)$. 
+Now, we try to formalize continuity as a attempt. $forall delta in hyperreal, delta ~ [epsilon]: tlstar(f)(c+delta) - f(c) ~ [epsilon]$, where $c$ is a standard number in $bb(R)$.
 #footnote[It should be clear that if in continuous process both number could be non-standard, it's called uniform continuity, for example, $1/N, 1/(N+1) ~ [epsilon]$ for $1/x$ is $N+1 approx.not N$ is not uniform continuous.]
 Also the monotone boundary sequence has limit as $exists N ~ [infinity] in tlstar(bb(N))$
 #footnote[Where we give the same sequence procedure on $bb(N)$, in which $[infinity] ~ [1,2,3,...]$ could be a instance of such equivalence class.]
@@ -122,7 +120,7 @@ The final problem here is that the number system can be inductively constructed 
 
 = Function Space
 
-In function, we can consider each real number in source as the ordinal of sequence $bb(N)$, and each element in the sequence as domain. Thus natively, we inherit the property of every operation in number like addition, multiplication, exponential etc. $(f + g)(x), f(x)g(x), f(x)^g(x) ...$. A structure has a basic additional *completion*(Or induction process completion if you want) is called *vector space*#footnote[I choose such because a mathematical structure must stem from canonical number system, multiplication could be derived as a induction of addition therefore construct a endomorphism as $v+v+v... ~ n v $, $n in bb(Z)$ and contrive a extension if we could.]. It's usual, even it's not trivial to define a ultra filter to measure how close between functions.
+In function, we can consider each real number in source as the ordinal of sequence $bb(N)$, and each element in the sequence as domain. Thus natively, we inherit the property of every operation in number like addition, multiplication, exponential etc. $(f + g)(x), f(x)g(x), f(x)^g(x) ...$. A structure has a basic additional *completion*(Or induction process completion if you want) is called *vector space*#footnote[I choose such because a mathematical structure must stem from canonical number system, multiplication could be derived as a induction of addition therefore construct a endomorphism as $v+v+v... ~ n v$, $n in bb(Z)$ and contrive a extension if we could.]. It's usual, even it's not trivial to define a ultra filter to measure how close between functions.
 
 But wait here, such system seems, if acquire a total order by ultra filter, losing too much as we already seen in $bb(R)$. Where function space becomes a monotone space by a specific ultra filter. But if a ultra filter restrict too much, a less strict design should be considered. First we could define limit as usual.
 
@@ -130,8 +128,8 @@ The introduction of Lebesgue integral is highly resemble to filter#footnote[Rath
 
 $
   chi_E = cases(
-	1 quad x in E,
-	0 quad x in bb(R) \/ E
+    1 quad x in E,
+    0 quad x in bb(R) \/ E
   )
 $
 
@@ -165,7 +163,7 @@ $
 Now, we apply integral which is addition of sequence or the given limit of characteristic function.
 
 $
- integral abs(lambda f(t)+ (1-lambda) g(t))^p d mu <= lambda integral abs(f(t))^p d mu + (1-lambda) integral abs(g(t))^p d mu
+  integral abs(lambda f(t)+ (1-lambda) g(t))^p d mu <= lambda integral abs(f(t))^p d mu + (1-lambda) integral abs(g(t))^p d mu
 $
 
 Now a selection of $lambda$ is the trick to solve here. Suppose for $norm(x + y) <= norm(x) + norm(y)$:
@@ -184,7 +182,7 @@ So, what about $p in [infinity]$? We could take a insight from basic analysis th
 
 The completeness is a verification of efficiency of approximation. That's, the near point as $d(a,b) < epsilon$ for $epsilon in bb(R)^(>0)$ and $a$ or $b$ is standard(Not the infinitesimal here!), is a same set as $a approx b$ or $a = b + [epsilon]$, For all nonstandard number here. Which states that the metric is effective reflective of point nearness.
 
-The completeness criterion could be transferred from Cauchy in sequence into Cauchy in series. Suppose a absolute convergent $w_n = sum_(i=1)^n s_i$ that $norm(w_n - w_m) = norm(sum_m^n s_i) <= sum_m^n norm(s_i)$ where $n,m ~ [infinity]$, then $sum_m^n norm(s_i) ~ [epsilon]$, that's smaller than any $bb(R)^(>0)$, the completeness shows its converges. Reversely, a absolute convergent series converges, can be formulated as positive sequence 
+The completeness criterion could be transferred from Cauchy in sequence into Cauchy in series. Suppose a absolute convergent $w_n = sum_(i=1)^n s_i$ that $norm(w_n - w_m) = norm(sum_m^n s_i) <= sum_m^n norm(s_i)$ where $n,m ~ [infinity]$, then $sum_m^n norm(s_i) ~ [epsilon]$, that's smaller than any $bb(R)^(>0)$, the completeness shows its converges. Reversely, a absolute convergent series converges, can be formulated as positive sequence
 $w_n = sum_i^n (x_(i+1) - x_i)$. Which states that every sequence converges too. But what if the sequence contains negative? Where we separate here all $x_k = x_k^+ - x_k^-$ where positive part and negative is indeed converges $0 <= x_k^+ <= abs(x_k)$ suggests whole sequence converges, otherwise either part didn't converge cause a contradiction.
 
 The same logic applied to $L_p$ here, that, every bounded or absolute convergent series of positive functions as:
@@ -235,11 +233,11 @@ Which should be *bounded*. But how? We can select suitable $c$ to nudge over pos
 
 Indeed $alpha$ can be negative or positive so we turn around for all positive here and indeed smaller than the bound.
 $
-	(-1/alpha_1)(norm(v - alpha_1 z) + f(v)) <= c <= (v <-> w, alpha_1 <-> - alpha_2) quad forall v,w in W
+  (-1/alpha_1)(norm(v - alpha_1 z) + f(v)) <= c <= (v <-> w, alpha_1 <-> - alpha_2) quad forall v,w in W
 $
 We make a mess with algebra to yield:
 $
-	f(alpha_1 v + alpha_2 w) <= k norm(alpha_2 v + alpha_1 w) <= k (norm(alpha_1 v - alpha_1 alpha_2 z) + (v<-> w, alpha_1 <-> - alpha_2)) \
+  f(alpha_1 v + alpha_2 w) <= k norm(alpha_2 v + alpha_1 w) <= k (norm(alpha_1 v - alpha_1 alpha_2 z) + (v<-> w, alpha_1 <-> - alpha_2)) \
 $
 Which is reasonable. That's, we can always extend the *bounded* functional element to the maximal element as the union of them. Such theorem called *Hahn-Banach* theorem.
 
@@ -254,7 +252,7 @@ We reverse the theorem that for the dual space and ball $B_(X^(**))$ in weak top
 
 A non-trivial application is to consider a concave inequality:
 $
-  ln(lambda a + (1-lambda) b) &>= lambda ln a + (1-lambda) ln b \
+  ln(lambda a + (1-lambda) b) & >= lambda ln a + (1-lambda) ln b \
 $
 
 Choose $lambda = p$, $1-lambda = q$.
@@ -263,24 +261,24 @@ $
 $
 Choose $a = x^(1/p)$,$b = y^(1/q)$:
 $
-  ln(p x^(1/p) + q y^(1/q)) &>= ln x y \
-	e^(ln ...) & >= e^(ln ...) \
-	p x^(1/p) + q y^(1/q) &>= x y
+  ln(p x^(1/p) + q y^(1/q)) & >= ln x y \
+                 e^(ln ...) & >= e^(ln ...) \
+      p x^(1/p) + q y^(1/q) & >= x y
 $
 Such inequality is called *Young's inequality*.
 
 Take function evaluation pointwisely on $x,y$, we should take $1/p ~ p$ and $1/q ~ q$, rescaling $norm(f)_p = norm(g)_q = 1$ for simplicity.
 
 $
-	abs(f(t)g(t)) <= abs(f(t))^p/p + abs(g(t))^q/q \
-	integral abs(f g) d mu = norm(f g)_1 <= 1/p + 1/q = 1 = norm(f)_p norm(g)_q
+  abs(f(t)g(t)) <= abs(f(t))^p/p + abs(g(t))^q/q \
+  integral abs(f g) d mu = norm(f g)_1 <= 1/p + 1/q = 1 = norm(f)_p norm(g)_q
 $
 Called *Holder's inequality*. Rescaling on a different factor which is $s>=r$ that for bounded measure $mu(Omega)$:
 #footnote[You may seek a counter example that $1/x$ on $L_2 subset.not L_1$, That, $L_2$ is bounded integral, isn't the case in $L_1$.]
 
 $
-	norm(f)^r_r &<= norm(abs(f)^r)_(s/r) norm(1)_(q) quad 1/q + 1/(s/r) = 1 \
-	&= norm(f)_s mu(Omega) 
+  norm(f)^r_r & <= norm(abs(f)^r)_(s/r) norm(1)_(q) quad 1/q + 1/(s/r) = 1 \
+              & = norm(f)_s mu(Omega)
 $
 It means $L_r subset.eq L_s$ for $1 <= r <= s <= [infinity]$.
 
@@ -305,40 +303,40 @@ It means $L_r subset.eq L_s$ for $1 <= r <= s <= [infinity]$.
 
 The greatness comes from a minimal insight that:
 $
-	f(x) = f(x_mu(A) e_mu(A)) = x_mu(A) f(e_mu(A)) \
+  f(x) = f(x_mu(A) e_mu(A)) = x_mu(A) f(e_mu(A)) \
 $
 Define:
 $
-	f(e_mu(A)) := y_(mu(A))
+  f(e_mu(A)) := y_(mu(A))
 $
 Do I abuse notation? I hope not #footnote[It's called *Radon-Nikodym Theorem* where the all $f(1_A)$ is new mesure can be represented as $integral g d mu$ for a measurable function $g$ which is proved by arrange function of $mu + nu$.], even I don't suppose separable or countable basis but use the sequence view as before. Then for all $y_mu(A)$, there exist a $x$ s.t. Holder inequality is a equality, namely, choose $x := |y_mu(A)|^(q-1) e_mu(A)$ where $1/p + 1/q = 1$.
 
 $
-	abs(f(x)) = abs(x_mu(A) y_mu(A)) = abs(y^q_mu(A)) &<= norm(x_mu(A))_p norm(y_mu(A))_q \ 
-	&= abs(y^(q/p p)_mu(A))^(1/p) abs(y_(mu(A))^q)^(1/q) = abs(y^q_mu(A)) = abs(f(x))
+  abs(f(x)) = abs(x_mu(A) y_mu(A)) = abs(y^q_mu(A)) &<= norm(x_mu(A))_p norm(y_mu(A))_q \
+  &= abs(y^(q/p p)_mu(A))^(1/p) abs(y_(mu(A))^q)^(1/q) = abs(y^q_mu(A)) = abs(f(x))
 $
-With $abs(f(x)) <= norm(f) norm(x)_p$, so $norm(y_mu(A))_q <= norm(f) <= norm(y_mu(A))_q$. Giving us the results. 
+With $abs(f(x)) <= norm(f) norm(x)_p$, so $norm(y_mu(A))_q <= norm(f) <= norm(y_mu(A))_q$. Giving us the results.
 #footnote[Note we choose a specific $x$ for arbitrary $y$ to acquire the supreme as equality. Not reversely!]
 
 That's, $L_p^*$ can be represented as a weight function $y$ in integral form of $L_q$ where $1/p + 1/q = 1$. So we see that indeed, $L_p^(**) = L_p$ where in weak topology sense that converges element-wise. Generally, for a compact topology space $K$, the dual $C(K)^*$ is:
 $
-	f(x) := integral f d mu \
-	norm(f) = abs(mu)(K)
+  f(x) := integral f d mu \
+  norm(f) = abs(mu)(K)
 $
 
 Where $abs(mu)(K)$ is the total variation on the measured space, actually you are may acquainte like $integral d abs(mu) = integral abs(f) d x$ for some function but we shouldn't constraint ourselves at such concrete form. However, in $p=1$,$L_1^* = L_infinity$ by a bounded function as a compact space support, doesn't yield the same results on $L_infinity^*$ where the bounded restriction is lessen on the supreme support, that's we only need finite additive rather $sigma$-additive or countable additive, that bounded finite additive measure space is the $L_infinity^*$.
 
 A notice should be mentioned that in descrete space, the inclusion is reverse that, for $1 <= r <= s <= [infinity]$, suppose that $norm(x)_r = 1$:
 $
-	x_n^r < 1 \
-	x_n^s <= x_n^r \
-	norm(x)_s <= 1 = norm(x)_r \
+  x_n^r < 1 \
+  x_n^s <= x_n^r \
+  norm(x)_s <= 1 = norm(x)_r \
 $
 Is a reverse inclusion compared to $bb(R)$ cardinality integral space.
 
 For the special case where $X tilde.equiv X^*$ as its compact support, that $1/p + 1/p = 1$, $p = 2$ give us a symmetry space that the product representation of $f$ is in itself. Such product symmetry representation called *Inner Product*. That $X = X^*$ space called *Hilbert Space* denoted as $H$, where the famous *Cauchy-Schwartz inequality* is the special case of Holder inequality. With a elegant projection property that the minimal product form:
 $
-	D(t) := norm(v + t y)^2 = norm(v)^2 + 2 t (v,y) + t^2 norm(y)^2
+  D(t) := norm(v + t y)^2 = norm(v)^2 + 2 t (v,y) + t^2 norm(y)^2
 $
 Where $t=0$ is the projection for minimal distance, we can always decompose the space into a subspace and its orthogonal complement as $H = M plus.circle M^(perp)$.
 
@@ -346,7 +344,7 @@ We summarize above. Throughout the whole context, you won't see physics but it's
 
 = ?
 
-The cardinality start from $bb(R) arrow.t arrow.t 4$. However, the space is restricted to a symmetry in inner product evaluation. That's, $"Hom"(X -> X)$ for linear operator. Thus, given a base number system, we can construct the algebra indeed with addition, multiplication and norm inequality. 
+The cardinality start from $bb(R) arrow.t arrow.t 4$. However, the space is restricted to a symmetry in inner product evaluation. That's, $"Hom"(X -> X)$ for linear operator. Thus, given a base number system, we can construct the algebra indeed with addition, multiplication and norm inequality.
 
 We denote the operator domain as $D(T)$ for source space $E$, where the graph $(x,T x) in Gamma(T)$ for morphism system $(T, D(T))$, is a closed space if, given a canonical norm by $norm(x)_E +norm(T x)_F$ has limit. We know that bounded space will faithfully inject the whole space $E$ without lossing information, $norm(T)_F <= M$. Thus the *closed* graph suggests a bounded operator if $D(T) = E$. A operator can be extended to a closed space if the uniqueness is ensured by original operator that $u <-> T u$ is unique, a.k.a injection, for example $u_n -> 0 ~> T u_n -> 0$ by linearity. That's, $overline(Gamma(T)) ~ Gamma(overline(T))$ as the smallest close extension indeed.
 
@@ -364,8 +362,8 @@ Suppose a morphism $l: cal(B)(bb(C),bb(C)) -> bb(C)$ from a measurable function 
 
 Measure given on $(f(T)v,v) = integral_bb(R) f(x) d mu (x)$ for non vanishing function $f$ on spectrum with $mu(x) = mu_(T,v)(x)$ upon specific $T$ and $v$. The transformation giving by $U: L_2(sigma(T),mu) -> H$ is isometry which retains the norm. So that's the light comes from:
 $
-	T(U(f))(v) = T(f(T))(v) = (x f)(T)(v) = U(x f) v
-$ 
+  T(U(f))(v) = T(f(T))(v) = (x f)(T)(v) = U(x f) v
+$
 $S = U^(-1) T U = x(*)$, is a  multiplication operator on $L_2(sigma(T),mu_v)$. It should be clarified that we don't construct somehow isomorphism, such map between them is not injective, Therefore the $x$ corresponds to a unknown measurable function $g$ in original space.
 #footnote[Such technique corresponding to descrete space is also related to polynomial, that defines a $bb(F)[x]$-module with multiplication as endomorphism $x dot v = A v$ which has a non-zero kernel. Then $bb(F)^n [x]$ should construct a homomorphism $bb(F)^n [x] -> V$ to deduce the diagonal or rational form.]
 
@@ -373,8 +371,8 @@ We formalize a new measure on the inner product where the orthogonal projection 
 #footnote[It suggests that first is to quote $T$ can be transformed into the multiplicative function $g$, then we use projection measure to transform onto $lambda$ variable by $chi_g$. But I guess jumping to the projection measure is a fine idea.]
 
 $
-	integral_bb(R) f(lambda) d mu_v (lambda) &= integral_bb(R) lambda d nu_v (lambda) \
-	f(lambda) &= lambda'
+  integral_bb(R) f(lambda) d mu_v (lambda) & = integral_bb(R) lambda d nu_v (lambda) \
+                                 f(lambda) & = lambda'
 $
 
 If there's a $h in H$ that $(h, integral_bb(R) f(lambda)d Pi(lambda)(h)) <= norm(f(T)h)norm(h) = 0 -> f(T)h = 0$. That's, decompose the whole space except $"ker"(T)$ into its orthogonal projection. In practise, that's where $L v = lambda v$ comes from.
@@ -429,13 +427,13 @@ As the so called inverse Fourier transform.
 
 Now we impose the operator on $H[a,b]$ with periodic boundary condition that $f(a) = f(b)$, thus is self-adjoint for $i partial_x$:
 $
-  i partial_x f &= lambda f \
-  f(a) &= f(b) \
+  i partial_x f & = lambda f \
+           f(a) & = f(b) \
 $
 $
-  e^(i lambda a) &= e^(i lambda b) \
-  lambda &= (2 pi n)/(b-a) = (2 pi n)/(L)  \
-  f(x) &= e^(x (2 pi i n)/L) \
+  e^(i lambda a) & = e^(i lambda b) \
+          lambda & = (2 pi n)/(b-a) = (2 pi n)/(L) \
+            f(x) & = e^(x (2 pi i n)/L) \
 $
 With a orthogonal relation:
 $
@@ -461,10 +459,10 @@ $
 $
 Where $T u = f$ gives:
 $
-  u(x) &= integral u T(x') G(x,x') d mu(x') \ 
-  &= integral ((lambda + partial_x') u G d mu(x') + u G|^?_? \ 
-  &= integral f G d mu + u G|^?_? \
-  &= integral f e^(- lambda (x-x')) d mu(x') + (u e^(- lambda (x-x'))|^?_? \
+  u(x) & = integral u T(x') G(x,x') d mu(x') \
+       & = integral ((lambda + partial_x') u G d mu(x') + u G|^?_? \
+       & = integral f G d mu + u G|^?_? \
+       & = integral f e^(- lambda (x-x')) d mu(x') + (u e^(- lambda (x-x'))|^?_? \
 $
 Given a function where $x > x'$, or we change variable to $x - x' = t$, which called *Resolvent* of $partial_x$. Even through the operator is not equal to its dual. If you choose $t in L_1[0, infinity]$ that the boundary term only left with $-u(0)$. Now given a arbitrary $lambda$ as $R(partial_x)(lambda)$:
 $
@@ -540,14 +538,14 @@ Where $y'$ is also the original solution derivative. We thus take a recursion on
 
 Then we write as self-adjoint form by a suitable function $rho(z)$:
 $
-  (sigma rho y')' + lambda rho y &= 0 \
-  (sigma rho_n v'_n)' + mu_n rho_n v_n &= 0 \
+        (sigma rho y')' + lambda rho y & = 0 \
+  (sigma rho_n v'_n)' + mu_n rho_n v_n & = 0 \
 $
 With:
 $
-  sigma y'' + &tau y' + lambda y = 0 \
-  (sigma rho)' = &tau rho \
-  (sigma rho_n)' = &tau_n rho_n \
+       sigma y'' + & tau y' + lambda y = 0 \
+    (sigma rho)' = & tau rho \
+  (sigma rho_n)' = & tau_n rho_n \
 $
 
 After such transformation, the orthogonal property rely on the new ODE rather the old:
@@ -561,14 +559,14 @@ That's, we has a additional weight function $rho$ compared to original $L v = la
 
 The recursion can be taken:
 $
-  tau_n (z) &= tau(z) + n sigma' (z) \
-  (sigma rho_n)' &= tau_n rho_n =  (tau + n sigma') rho_n = ((sigma rho)'/rho + n sigma') rho_n \
+       tau_n (z) & = tau(z) + n sigma' (z) \
+  (sigma rho_n)' & = tau_n rho_n = (tau + n sigma') rho_n = ((sigma rho)'/rho + n sigma') rho_n \
 $
 $
-  sigma' rho_n + sigma rho'_n &= sigma' rho_n + (n sigma' + rho'/rho) rho_n \
-  rho'_n/rho_n &= rho'/rho + (n sigma')/sigma \
-  ln rho_n &= ln rho + n ln sigma \
-  rho_n &= rho sigma^n \
+  sigma' rho_n + sigma rho'_n & = sigma' rho_n + (n sigma' + rho'/rho) rho_n \
+                 rho'_n/rho_n & = rho'/rho + (n sigma')/sigma \
+                     ln rho_n & = ln rho + n ln sigma \
+                        rho_n & = rho sigma^n \
 $
 $
   mu_n = lambda + n tau' + n(n-1)/2 sigma'' \
@@ -593,12 +591,12 @@ Such form called *Rodrigue polynomial* in recursion.
 
 We has the tool to solve the *Legendre* polynomial:
 $
-  (1-x^2)d/(d x) P(x) - 2 x d/(d x) P(x) + lambda P(x) &= 0 \
-  d/(d x) ((1-x^2) P(x)) + lambda P(x) &= 0 \
+  (1-x^2)d/(d x) P(x) - 2 x d/(d x) P(x) + lambda P(x) & = 0 \
+                  d/(d x) ((1-x^2) P(x)) + lambda P(x) & = 0 \
 $
 $
-  sigma &= 1 \
-  rho &= (1-x^2)
+  sigma & = 1 \
+    rho & = (1-x^2)
 $
 $
   P_n = C_n (d/(d x))^(n) (1-x^2)^n \
@@ -617,9 +615,9 @@ $
 
 We then want to encompass the denominator of $sigma$ into $phi.alt'/phi.alt$.
 $
-  phi.alt'/phi.alt &= pi/sigma \
-  2 phi.alt'/phi.alt + gamma/sigma &= tilde(gamma)/sigma \
-  pi &= 1/2(tilde(gamma) - gamma)
+                  phi.alt'/phi.alt & = pi/sigma \
+  2 phi.alt'/phi.alt + gamma/sigma & = tilde(gamma)/sigma \
+                                pi & = 1/2(tilde(gamma) - gamma)
 $
 
 Thus one has:
@@ -649,7 +647,7 @@ If we assume $lambda - pi'$ is known:
 $
   pi = (sigma' - gamma)/2 plus.minus sqrt(((sigma'-gamma)/2)^2 - theta + (lambda - pi')sigma)
 $
-Current consequence is the final answer, a highly non-trivial equation hard to solve. 
+Current consequence is the final answer, a highly non-trivial equation hard to solve.
 
 However, for a polynomial form, or any arbitrary polynomial expansion:
 $
@@ -660,11 +658,11 @@ We must has a square term is also a polynomial too. Thus its discriminant is als
 
 Thus we get:
 $
-  &Delta((sigma' - gamma)/2 - theta + (lambda - pi') sigma) = 0 \
-  &tilde(gamma) = gamma + 2 pi \
-  &tilde(theta) = theta + pi^2 + pi(gamma-sigma') + pi' sigma \
-  &lambda = tilde(theta)/sigma \
-  &phi.alt'/phi.alt = (ln (phi.alt))' = pi/sigma
+  & Delta((sigma' - gamma)/2 - theta + (lambda - pi') sigma) = 0 \
+  & tilde(gamma) = gamma + 2 pi \
+  & tilde(theta) = theta + pi^2 + pi(gamma-sigma') + pi' sigma \
+  & lambda = tilde(theta)/sigma \
+  & phi.alt'/phi.alt = (ln (phi.alt))' = pi/sigma
 $
 Is the final answer.
 
@@ -679,8 +677,8 @@ $
 $
 We choose below constant representation:
 $
-  mu &= lambda_1/kappa + lambda_2 \
-  m &= lambda_4
+  mu & = lambda_1/kappa + lambda_2 \
+   m & = lambda_4
 $
 
 We can inspect that $sigma = 1-x^2, gamma = -2x, theta = mu(1-x^2) +m$. We can derive $pi$:
@@ -689,12 +687,12 @@ $
   pi = (sigma' - gamma)/2 plus.minus sqrt(((sigma'-gamma)/2)^2 - theta + (lambda - pi')sigma)
 $
 $
-  (sigma' - gamma)/2 &= 1/2 (-2x + 2x) = 0 \
-  lambda - pi' &= k \
+  (sigma' - gamma)/2 & = 1/2 (-2x + 2x) = 0 \
+        lambda - pi' & = k \
 $
 $
-  Delta &= k(1-x^2) - m - mu(1-x^2) = 0\
-  &= (mu - k)x^2 - m + k - mu
+  Delta & = k(1-x^2) - m - mu(1-x^2) = 0 \
+        & = (mu - k)x^2 - m + k - mu
 $
 We inspect that we has non-trivial solution by taking $lambda - pi' = k = "const"$ that:
 $
@@ -711,31 +709,31 @@ $
 $
 
 $
-  tilde(gamma) &= gamma + 2 pi = -2x plus.minus 2 sqrt(m) x = 2(plus.minus sqrt(m)-1)x \
+  tilde(gamma) & = gamma + 2 pi = -2x plus.minus 2 sqrt(m) x = 2(plus.minus sqrt(m)-1)x \
 $
 $
-  ln(phi.alt)' &= plus.minus sqrt(m)x/(1-x^2) \
-  phi.alt &= (1-x^2)^(plus.minus sqrt(m)/2) \
+  ln(phi.alt)' & = plus.minus sqrt(m)x/(1-x^2) \
+       phi.alt & = (1-x^2)^(plus.minus sqrt(m)/2) \
 $
 
 In order to take Rodrigue form, we need to take a self-adjoint form first, with new parameter $rho$:
 $
-  (sigma rho)' &= tilde(gamma) rho \
-  sigma' rho + sigma rho' &= tilde(gamma) rho \
-  (sigma' - tilde(gamma))rho + sigma rho' &= 0 \
+                             (sigma rho)' & = tilde(gamma) rho \
+                  sigma' rho + sigma rho' & = tilde(gamma) rho \
+  (sigma' - tilde(gamma))rho + sigma rho' & = 0 \
 $
 $
-  (-2x - 2(sqrt(m) - 1)x) rho + (1-x^2) rho' &= 0 \
-  (1-x^2) rho' &= 2 plus.minus sqrt(m)x rho \
-  rho &= C_m (1-x^2)^(plus.minus sqrt(m))
+  (-2x - 2(sqrt(m) - 1)x) rho + (1-x^2) rho' & = 0 \
+                                (1-x^2) rho' & = 2 plus.minus sqrt(m)x rho \
+                                         rho & = C_m (1-x^2)^(plus.minus sqrt(m))
 $
 Thus we has:
 $
   (rho sigma y')' + lambda rho y = 0 \
 $
 $
-  rho &= (1-x^2)^(plus.minus sqrt(m)) \
-  sigma &= (1-x^2) \
+    rho & = (1-x^2)^(plus.minus sqrt(m)) \
+  sigma & = (1-x^2) \
 $
 Choose $sqrt(m) ~ m$ to ease burden:
 $
@@ -751,15 +749,15 @@ Is the final answer.
 We can inspect that for a self-adjoint form ODE, we has $sigma' = gamma$. Thus we only has:
 
 $
-  pi &= sqrt((lambda - pi') sigma - theta) = sqrt(k sigma - theta) \
+  pi & = sqrt((lambda - pi') sigma - theta) = sqrt(k sigma - theta) \
 $
 
 We then try to develop the operator induction form on $Phi = psi(phi)$. For a operator $D psi = lambda psi$ we gain a spectrum. However it's actually a reduced form of component of general $f(D)psi = f(lambda)psi$. Such function set, can reduce to $D psi = lambda psi$. Thus for $partial psi = lambda psi$, one has $psi = e^(lambda x)$. In angular part, we has $phi ~ (0,2pi)$ with periodic form $psi(phi + 2pi) = psi(phi)$ forming a skew-symmetric operator, where all spectrum is imaginary and integer form.
 
 $
-  D^2 psi &= partial^2 psi = lambda^2 psi \
-  lambda &= i lambda' quad lambda' in bb(Z) \
-  psi &= e^(i lambda x) \
+  D^2 psi & = partial^2 psi = lambda^2 psi \
+   lambda & = i lambda' quad lambda' in bb(Z) \
+      psi & = e^(i lambda x) \
 $
 
 It should be clarified that $Theta = P_(l m)$ is only orthogonal in $l$ rather in $m$, unless we encompass the $Phi$ part too. It's because the coefficient dependence of $m$ which is external to the ODE rather as the spectrum. Generally $nabla^2 v = lambda v$ will construct the whole basis, and indeed, $nabla^2 v = 0$ only construct a part of it, which the radial part forms no orthogonal basis.
@@ -767,9 +765,9 @@ It should be clarified that $Theta = P_(l m)$ is only orthogonal in $l$ rather i
 Thus we reduce any form into algebraic equation for certain operator $D$. Especially many coefficients derivatives polynomial form $f(partial_x)$ must has a general form $e^(lambda x)$ where there may not exist a self-adjoint form, thus resolvent must intervene with $R(D)(f)(lambda)$ for certain special function with special solution, it's a generalization of linear algebra that one has rank and null for vector expansion, we call it *Fredholm theory*. Now we gonna develop a derivative operator form:
 
 $
-  p y' + y &= q \
-  p(partial+1) y &= q \
-  y &= 1/(p partial + 1) q \
+        p y' + y & = q \
+  p(partial+1) y & = q \
+               y & = 1/(p partial + 1) q \
 $
 If we expand it as:
 $
@@ -778,9 +776,9 @@ $
 
 For spectrum:
 $
-  p partial v &= lambda v \
-  (d v)/v &= lambda/(p) d x \
-  v &= C exp(integral lambda/p d x)
+  p partial v & = lambda v \
+      (d v)/v & = lambda/(p) d x \
+            v & = C exp(integral lambda/p d x)
 $
 Is unbounded for many function set $p$. Actually we know $p partial$ is a unbounded operator as we developed before, choose $p = 1$:
 $
@@ -789,16 +787,16 @@ $
 Thus generally, we can only acquire a part of solution upon $p partial$ operator with $norm(lambda) <= 1$ for above series expansion. However, integral operator is compact:
 
 $
-  integral^x p v d x &= lambda v \
-  p v &= lambda v' \
-  v &= C exp (integral^x p/lambda d x) \
+  integral^x p v d x & = lambda v \
+                 p v & = lambda v' \
+                   v & = C exp (integral^x p/lambda d x) \
 $
 
 We inspect that given a finite boundary initial condition e.g. $v(c) = C$, we has:
 
 $
-  integral^x_c p v d x &= lambda v \
-  v(c) &= integral^c_c p v d x = 0 = C exp(integral^c_c p/lambda d x) = C \
+  integral^x_c p v d x & = lambda v \
+                  v(c) & = integral^c_c p v d x = 0 = C exp(integral^c_c p/lambda d x) = C \
 $
 Giving that $v = 0$ for general $lambda$, thus we only has $lambda = 0$ in $L_1[c, infinity]$, indicating a inverse always exist, where we restrict the function all into the domain of integral operator where the function should be bounded after integral.
 
@@ -831,12 +829,12 @@ $
 // Certainly not a pleasant procedure. We only denote a shift property for general case on $D psi = lambda psi$
 
 $
-  D (psi u) &= psi (D + lambda) u \
-  psi^(-1) D (psi u) &= (D + lambda) u \
+           D (psi u) & = psi (D + lambda) u \
+  psi^(-1) D (psi u) & = (D + lambda) u \
 $
 Or, if there exist a inverse:
 $
-  u &= psi^(-1) D^(-1)(psi (D+lambda) u) \
+  u & = psi^(-1) D^(-1)(psi (D+lambda) u) \
 $
 $
   psi^(-1) D^(-1) (psi (*)) ~ (D+lambda)^(-1) \
@@ -853,10 +851,10 @@ $
 $
 Which solve as:
 $
-  y' + p y &= q \
-  (1/p partial + 1) y &= q/p \
-  e^(- integral p d x) 1/p partial e^(integral p d x) u &= q/p \
-  u &= e^(- integral p d x)(integral q e^(integral p d x) + C)
+                                               y' + p y & = q \
+                                    (1/p partial + 1) y & = q/p \
+  e^(- integral p d x) 1/p partial e^(integral p d x) u & = q/p \
+                                                      u & = e^(- integral p d x)(integral q e^(integral p d x) + C)
 $
 
 Now, if $lambda_1/kappa = 0$, we can acquire a Euler differential equation:
@@ -870,9 +868,9 @@ $
 $
 Where we can thus formulate the spectrum:
 $
-  x partial v &= lambda v \
-  (ln v)' &= lambda / x \
-  v &= x^(lambda) \
+  x partial v & = lambda v \
+      (ln v)' & = lambda / x \
+            v & = x^(lambda) \
 $
 Then we take the solution set:
 $
@@ -898,48 +896,48 @@ $
 $
 Or in $x partial$, we has:
 $
-  x partial y &= 0 \
-  y &= c = c x^0 \
+  x partial y & = 0 \
+            y & = c = c x^0 \
 $
 $
-  x partial y &= c \
-  y &= ln x \
+  x partial y & = c \
+            y & = ln x \
 $
 $
-  x(partial y) &= ln x \
-  partial y &= ln x (ln x)' \
-  y &= 1/2 ln^2 x \
-  ~> psi y &= x^(lambda) sum_0^(n-1) c_i ln^i x
+  x(partial y) & = ln x \
+     partial y & = ln x (ln x)' \
+             y & = 1/2 ln^2 x \
+      ~> psi y & = x^(lambda) sum_0^(n-1) c_i ln^i x
 $
 
 We evaluate Rodrigue further:
 
 $
-  Phi(z,t) = sum_(n=0)^(infinity) y_n/(n!) t^n \
+  Phi(z, t) = sum_(n=0)^(infinity) y_n/(n!) t^n \
   y_n = 1/rho (d/(d z))^n (sigma^n rho) = 1/rho n!/(2 pi i) integral_C (sigma^n (s) rho (s))/(s - z)^(n+1) d s
 $
 
 $
-  Phi(z,t) = 1/(2 pi i rho) integral_C rho(s)/(s - z) [sum_(n=0)^(infinity) ((sigma(s)t)/(s - z))^n] d s \
+  Phi(z, t) = 1/(2 pi i rho) integral_C rho(s)/(s - z) [sum_(n=0)^(infinity) ((sigma(s)t)/(s - z))^n] d s \
 $
-We interchange summation and interaction because if $Phi(z,t)$ is not convergent, there's no need to evaluate a concrete form indeed. We apply geometric series too:
+We interchange summation and interaction because if $Phi(z, t)$ is not convergent, there's no need to evaluate a concrete form indeed. We apply geometric series too:
 
 $
   sum_(n=0)^(infinity)((sigma(s)t)/(s - z))^n = 1/(1- (sigma(s)t)/(s-z)) = (s-z)/(s-z- sigma(s) t) \
 $
 $
-  Phi(z,t) = 1/(2pi i rho) integral_C rho(s)/(s - z - sigma(s) t) d s
+  Phi(z, t) = 1/(2pi i rho) integral_C rho(s)/(s - z - sigma(s) t) d s
 $
 Where we can evaluate on single pole of $s-z-sigma(s)t$ which must be $(s-xi)f'(s) = (s-xi)(1-sigma'(s)t)$:
 $
   C_(-1) = rho(s)/(1 - sigma'(s)t) \
-  Phi(z,t) = rho(s)/rho(z) 1/(1-sigma'(s)t)bar_(s=xi(z,t))
+  Phi(z, t) = rho(s)/rho(z) 1/(1-sigma'(s)t)bar_(s=xi(z, t))
 $
 
 For Legendre polynomial, we can check that:
 $
-  sigma(s) &= 1-s^2 \
-  s - z - sigma(s) t &= s - z - (1-s^2) t = 0\
+            sigma(s) & = 1-s^2 \
+  s - z - sigma(s) t & = s - z - (1-s^2) t = 0 \
 $
 
 $
@@ -948,20 +946,20 @@ $
 $
 
 $
-  Phi(z,t) = 1/(1+2s t)|_(s=xi(z,t)) = 1/(sqrt(1+4 t z + 4t^2)) = sum_(n=0)^(infinity) (P_n (z))/n! t^n \
+  Phi(z, t) = 1/(1+2s t)|_(s=xi(z, t)) = 1/(sqrt(1+4 t z + 4t^2)) = sum_(n=0)^(infinity) (P_n (z))/n! t^n \
   P_n = (d/(d z))^n (1-z^2)^n
 $
 Normalize to determine the coefficients:
 $
-  t &-> t/2 \
-  (P_n (z))/(2^n n!) &-> P_n (z) \
-  sum_(n=0)^(infinity) P_n (z) t^n &= 1/sqrt(1+ 2 t z + t^2)
+                                 t & -> t/2 \
+                (P_n (z))/(2^n n!) & -> P_n (z) \
+  sum_(n=0)^(infinity) P_n (z) t^n & = 1/sqrt(1+ 2 t z + t^2)
 $
 
 For $z = cos theta in (-1,1)$, $abs(t) < 1$ is the convergence condition, if we want to expand a distance:
 
 $
-  1/(abs(r_1 - r_2)) = 1/(sqrt(r_1^2 + r_2^2 - 2  r_1 r_2 cos theta))
+  1/(abs(r_1 - r_2)) = 1/(sqrt(r_1^2 + r_2^2 - 2 r_1 r_2 cos theta))
 $
 You can take out the denominator to normalize it as you want $r_1/r_2$ or $r_2/r_1$ as long as $r_1 < r_2$ or $r_1 > r_2$.
 
@@ -975,38 +973,38 @@ $
   z^2 u'' + z u' + (z^2 - v^2) u = 0 \
 $
 $
-  &sigma = z \
-  &gamma = 1 \
-  &theta = z^2 - v^2 \
+  & sigma = z \
+  & gamma = 1 \
+  & theta = z^2 - v^2 \
 $
 
 $
-  &pi = sqrt(k sigma - theta) = sqrt(k z - z^2 + v^2) \
-  &Delta = k^2 + 4 v^2 = 0 -> k = plus.minus 2 i v \
-  &pi = plus.minus (i z + v) \
+  & pi = sqrt(k sigma - theta) = sqrt(k z - z^2 + v^2) \
+  & Delta = k^2 + 4 v^2 = 0 -> k = plus.minus 2 i v \
+  & pi = plus.minus (i z + v) \
 $
 
 $
-  (ln (phi.alt))' &= plus.minus(i z + v)/(z) = plus.minus(i + v/z) \
-  phi.alt &= z^(plus.minus v)e^(plus.minus i z) \
+  (ln (phi.alt))' & = plus.minus(i z + v)/(z) = plus.minus(i + v/z) \
+          phi.alt & = z^(plus.minus v)e^(plus.minus i z) \
 $
 $
-  tilde(gamma) &= 2pi + gamma =  plus.minus 2(i z + v) + 1 \
-  lambda &= k + pi' =  plus.minus 2 i v + plus.minus i = plus.minus i (2 v + 1) \
-$
-
-$
-  (sigma rho)' &= tau rho \
-  (sigma' - tilde(gamma)) rho + sigma rho' &= 0 \
-  minus.plus 2(i z + v) rho + z rho ' &= 0 \
-  (ln (rho))' &= plus.minus 2(i + v/z) \
-  rho &= z^(plus.minus 2 v) e^(plus.minus 2 i z) \ 
+  tilde(gamma) & = 2pi + gamma = plus.minus 2(i z + v) + 1 \
+        lambda & = k + pi' = plus.minus 2 i v + plus.minus i = plus.minus i (2 v + 1) \
 $
 
 $
-  lambda + n tilde(gamma)' + 1/2 n(n-1) sigma'' &= 0 \
-  lambda plus.minus n 2i = plus.minus i(2v+1) plus.minus n 2i &= 0 \
-  n &= - v - 1/2 \
+                              (sigma rho)' & = tau rho \
+  (sigma' - tilde(gamma)) rho + sigma rho' & = 0 \
+       minus.plus 2(i z + v) rho + z rho ' & = 0 \
+                               (ln (rho))' & = plus.minus 2(i + v/z) \
+                                       rho & = z^(plus.minus 2 v) e^(plus.minus 2 i z) \
+$
+
+$
+                lambda + n tilde(gamma)' + 1/2 n(n-1) sigma'' & = 0 \
+  lambda plus.minus n 2i = plus.minus i(2v+1) plus.minus n 2i & = 0 \
+                                                            n & = - v - 1/2 \
 $
 
 $
@@ -1022,8 +1020,8 @@ $
 
 We know:
 $
-  v(r,phi) &= u_n (r) e^(i n phi) \
-  u_n (r) &= 1/(2 pi) integral_(-pi)^(pi) v(r,phi) e^(- i n phi) d phi
+  v(r,phi) & = u_n (r) e^(i n phi) \
+   u_n (r) & = 1/(2 pi) integral_(-pi)^(pi) v(r,phi) e^(- i n phi) d phi
 $
 
 For simplest solution $v(r,phi) = e^(i k r sin phi)$:
@@ -1066,15 +1064,15 @@ For cylindrical coordinates, indeed you will find we construct $J_n$ for specifi
 Generating function is suitable to deduce induction relation, but it's not useful in contemporary practise, however, Bessel equation has a shift property worth mention.
 
 $
-  (partial G(z,phi))/(partial z) &= i sin phi G(z,phi) = sum_(-infinity)^(infinity) J'_n (z) e^(i n phi) \
-  i sin phi &= (e^(i phi) - e^(-i phi))/2 \
-  J'_n (z) &= 1/2 (J_(n-1) (z) - J_(n+1) (z)) \
+  (partial G(z,phi))/(partial z) & = i sin phi G(z,phi) = sum_(-infinity)^(infinity) J'_n (z) e^(i n phi) \
+                       i sin phi & = (e^(i phi) - e^(-i phi))/2 \
+                        J'_n (z) & = 1/2 (J_(n-1) (z) - J_(n+1) (z)) \
 $
 
 $
-  (partial G(z,phi))/(partial phi) &= i z cos phi G(z,phi) = sum_(-infinity)^(infinity) i n J_n (z) e^(i n phi) \
-  i cos phi &= i ((e^(i phi) + e^(-i phi))/2) \
-  n/z J_n (z) &= 1/2 (J_(n-1) (z) + J_(n+1) (z))
+  (partial G(z,phi))/(partial phi) & = i z cos phi G(z,phi) = sum_(-infinity)^(infinity) i n J_n (z) e^(i n phi) \
+                         i cos phi & = i ((e^(i phi) + e^(-i phi))/2) \
+                       n/z J_n (z) & = 1/2 (J_(n-1) (z) + J_(n+1) (z))
 $
 
 If you are astute enough to inspect the shift property already seen in $x partial$:
@@ -1094,7 +1092,7 @@ $
 Which is a pleasant deduction form, then for half integer part, it can be written as:
 
 $
-  H^(1,2)_(n-1/2) (z) &= C_n z^(-1/2 + n) (-1/z d/(d z))^n e^(plus.minus i z) \
-  J_(n-1/2) (z) &= (...) cos z \
-  Y_(n-1/2) (z) &= (...) sin z \
+  H^(1,2)_(n-1/2) (z) & = C_n z^(-1/2 + n) (-1/z d/(d z))^n e^(plus.minus i z) \
+        J_(n-1/2) (z) & = (...) cos z \
+        Y_(n-1/2) (z) & = (...) sin z \
 $

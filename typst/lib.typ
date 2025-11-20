@@ -1,1 +1,1 @@
-#import "mine/conf.typ": *
+#import "mine/mine.typ": *

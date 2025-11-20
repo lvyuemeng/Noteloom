@@ -2,9 +2,7 @@
 
 
 #show: mine.with(
-  title: "",
-  eq-numbering: "(1.1)",
-  eq-chapterwise: true,
+  title: "Phil",
 )
 
 Realizing Reason(Abbr. RR). Macbeth describes three stages of cognition for world. First is ancient greek. It claims that *cognition* is a perception ability owned by reason animal. Thus thought relates to object through perception. Thus cognition and perception are form a mixture. For greeks, the problem is why perception can't _perceive_ properly rather why perception can _perceive_ succesfully. For example, math is a transcendent(rather Kant terminology, over-perception) object.
