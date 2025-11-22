@@ -3,8 +3,6 @@
 
 #show: mine.with(
   title: "Statistical Mechanics",
-  eq-numbering: "(1.1)",
-  eq-chapterwise: true,
 )
 
 = Priori

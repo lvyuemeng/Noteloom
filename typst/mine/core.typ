@@ -4,17 +4,21 @@
 #let normal-size = 10.00002pt
 #let large-size = 17pt
 
+#let config-store = state("tmpl-config", (:))
+
 #let core-styles = (
   // text
   lang: "en",
-  font-main: "Libertinus Serif",
-  font-cjk: "SimHei",
-  text-size: normal-size,
+  fonts: (
+    main: "Libertinus Serif",
+    cjk: "Microsoft YaHei",
+    head: "Libertinus Serif",
+  ),
+  normal-size: normal-size,
   script-size: script-size,
   // page
   paper: "a4",
   // heading
-  font-head: "Libertinus Serif",
   head-numbering: "1",
   head1-size: 1.4em,
   head2-size: 1.2em,
@@ -29,32 +33,32 @@
   fig-gap: 17pt,
 )
 
+// #let core-appendix-styles = (
+//   head-numbering: "A.1",
+//   eq-numbering: "1.1",
+//   eq-chapterwise: true,
+//   reset: true,
+// )
+
 // overwritten style
 #let resolve-config = (tmpl-base, cfg) => {
   let base = core-styles + tmpl-base
   base + cfg
 }
 
-#let compose(cfg,content,..modifiers) = {
-  for modifier in modifiers.pos() {
-    content = modifier(cfg,content)
-  }
-  content
-}
-
-#let with-text-style(cfg,content) =  {
+#let with-text-style(cfg, content) = {
   set text(
     font: (
-      (name: cfg.font-main, covers: "latin-in-cjk"),
-      cfg.font-cjk,
+      (name: cfg.fonts.main, covers: "latin-in-cjk"),
+      cfg.fonts.cjk,
     ),
-    size: cfg.text-size,
+    size: cfg.normal-size,
     lang: cfg.lang,
   )
   content
 }
 
-#let with-page-style(cfg,content) = {
+#let with-page-style(cfg, content) = {
   set page(
     paper: cfg.paper,
     // margin: if cfg.paper != "a4" {
@@ -87,36 +91,53 @@
   content
 }
 
-#let with-heading-style(cfg,content) = {
-  set heading(numbering: cfg.head-numbering)
-  show heading: it => {
-    let number = if it.numbering != none {
-      counter(heading).display(it.numbering)
-      h(7pt, weak: true)
-    }
-
-    set align(left)
-    set text(font: cfg.font-head, lang: cfg.lang, weight: "bold")
-    set par(first-line-indent: 0em)
-
-    let size = if it.level == 1 { cfg.head1-size } else if it.level == 2 { cfg.head2-size } else { cfg.head-size }
-    let spacing = if it.level == 1 { cfg.head1-spacing } else if it.level == 2 { cfg.head2-spacing } else {
-      cfg.head-spacing
-    }
-    let vtop = if it.level == 1 { 1.8em } else if it.level == 2 { 1.8em } else { 1.2em }
-    let vbottom = if it.level == 1 { 1.0em } else if it.level == 2 { 1.0em } else { 0.8em }
-
-    set text(size: size)
-    set par(spacing: spacing)
-    v(vtop, weak: true) // Top spacing
-    number
-    it.body
-    v(vbottom, weak: true) // Bottom spacing
+#let core-heading(cfg, it, content) = {
+  let size = if it.level == 1 { cfg.head1-size } else if it.level == 2 { cfg.head2-size } else { cfg.head-size }
+  let spacing = if it.level == 1 { cfg.head1-spacing } else if it.level == 2 { cfg.head2-spacing } else {
+    cfg.head-spacing
   }
+  let vtop = if it.level == 1 { 1.8em } else if it.level == 2 { 1.8em } else { 1.2em }
+
+  set align(left)
+  set text(font: cfg.fonts.head, lang: cfg.lang, weight: "bold", size: size)
+  set par(spacing: spacing, first-line-indent: 0em)
+  v(vtop, weak: true) // Top spacing
+  content
+  v(1.0em, weak: true) // Bottom spacing
+}
+
+#let appendix-heading-it(it) = {
+  if it.level == 1 and it.numbering != none {
+    [#it.supplement #counter(heading).display():]
+  } else if it.numbering != none {
+    [#counter(heading).display()]
+  }
+  h(0.3em)
+  it.body
+}
+
+#let normal-headidng-it(it) = {
+  if it.numbering != none {
+    counter(heading).display(it.numbering)
+    h(0.3em)
+  }
+  it.body
+}
+
+#let with-heading-style(cfg, content) = {
+  set heading(numbering: cfg.head-numbering)
+  set heading(supplement: cfg.supplement) if "supplement" in cfg
+
+  show heading: it => {
+    let content = normal-headidng-it(it)
+    show: core-heading.with(cfg, it)
+    content
+  }
+
   content
 }
 
-#let with-math-style(cfg,content) = {
+#let with-math-style(cfg, content) = {
   let chapterwise-numbering = (..num) => numbering(cfg.eq-numbering, counter(heading).get().first(), num.pos().first())
 
   set math.equation(numbering: eq-numbering) if not cfg.eq-chapterwise
@@ -126,11 +147,10 @@
   set list(indent: 24pt, body-indent: 5pt)
   set enum(indent: 24pt, body-indent: 5pt)
 
-  set std.bibliography(style: "springer-mathphys", title: [References])
   content
 }
 
-#let with-figure-style(cfg,content) = {
+#let with-figure-style(cfg, content) = {
   set figure(
     gap: cfg.fig-gap,
   )
@@ -151,5 +171,35 @@
 
     it
   }
+  content
+}
+
+#let appendix(
+  supplement: "Appendix",
+  head-numbering: "A.1",
+  eq-numbering: "1.1",
+  eq-chapterwise: true,
+  reset: true,
+  content,
+) = {
+  if reset {
+    counter(heading).update(0)
+    counter(figure.where(kind: image)).update(0)
+    counter(figure.where(kind: table)).update(0)
+  }
+
+  set heading(numbering: head-numbering, supplement: supplement)
+  show heading: it => context {
+    let cfg = config-store.get()
+    let inner = appendix-heading-it(it)
+    show: core-heading.with(cfg, it)
+    inner
+  }
+
+  let chapterwise-numbering = (..num) => numbering(eq-numbering, counter(heading).get().first(), num.pos().first())
+
+  set math.equation(numbering: eq-numbering) if not eq-chapterwise
+  set math.equation(numbering: chapterwise-numbering) if eq-chapterwise
+
   content
 }

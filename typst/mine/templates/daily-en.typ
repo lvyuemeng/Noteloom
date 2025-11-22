@@ -1,10 +1,11 @@
 #import "../core.typ": *
-#import "../utils.typ": *
 
 #let base-styles = (
   lang: "en",
-  font-main: "Libertinus Serif",
-  font-cjk: "Microsoft YaHei",
+  fonts: (
+    main: "Libertinus Serif",
+    cjk: "Microsoft YaHei",
+  ),
   title-size: 2.2em,
   head1-size: 1.4em,
   head2-size: 1.2em,
@@ -14,12 +15,14 @@
 
 #let tmpl = args => {
   let cfg = resolve-config(base-styles, args)
+  config-store.update(cfg)
 
   show: with-page-style.with(cfg)
   show: with-text-style.with(cfg)
   show: with-math-style.with(cfg)
   show: with-heading-style.with(cfg)
   show: with-figure-style.with(cfg)
+  set std.bibliography(style: "springer-mathphys", title: [References])
 
   align(center, {
     text(size: 2.2em, weight: "bold", args.title)

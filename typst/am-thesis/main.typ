@@ -29,23 +29,13 @@
   template: "am-zh",
   lang: "zh",
   title: "基于李群的伽利略不变性与刚体转动动力学研究",
-  authors: authors,
+  authors: authors-am,
   abstract: abstract,
   keywords: keywords,
-  eq-numbering: "(1.1)",
-  eq-chapterwise: true,
 )
 
 #set super(typographic: false)
 
-#show cite.where(style: auto): it => {
-  if it.supplement != none {
-    let (key, ..args) = it.fields()
-    cite(it.key, ..args, style: "cite-page.csl")
-  } else {
-    it
-  }
-}
 = 导言
 
 我们已经了解Euler-Lagrange等式的形式等价于对于Lagrange作用量泛函的静态变分,即对于如下结构,由Hamilton原理给出$delta S = 0$:
