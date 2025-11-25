@@ -1,5 +1,5 @@
 #import "../core.typ": *
-#import "../deps.typ": components as c, fakebold, kouhu, show-fakebold, utils, zh
+#import "../deps.typ": components as c, fakebold, kouhu, show-cn-fakebold, utils, zh
 
 // KaiTi/SimSun/SimHei
 #let title-size = zh(-2)
@@ -11,7 +11,7 @@
 
 #let base-styles = (
   // text
-  lang: "zh",
+  lang: "en",
   fonts: (
     main: "Times New Roman",
     cjk: "SimSun",
@@ -22,8 +22,10 @@
   // page
   paper: "a4",
   // heading
-  head-numbering: "1",
+  head-numbering: "1.1",
   head1-size: head-size,
+  head2-size: head-size,
+  head-size: head-size,
   // math
   eq-numbering: "(1.1)",
   eq-chapterwise: true,
@@ -37,6 +39,7 @@
   student-id: "",
   department: "",
   fonts: (
+    title: ("Times New Roman", "KaiTi"),
     label: ("Times New Roman", "SimSun"),
     value: ("Times New Roman", "KaiTi"),
   ),
@@ -48,9 +51,9 @@
     size-value: title-size,
   )
 
-  show: show-fakebold
+  show: show-cn-fakebold
   set align(center + horizon)
-  set text(size: title-size, font: fonts.label, weight: "bold")
+  set text(size: title-size, font: fonts.title, weight: "bold")
 
   if type(title) == dictionary {
     par([
@@ -85,8 +88,7 @@
     value: ("Times New Roman", "SimSun"),
   ),
 ) = {
-  show: show-fakebold
-  // set text(font: (name: "Times New Roman", covers: "latin-in-cjk"))
+  show: show-cn-fakebold
   set par(justify: true)
 
   align(center, {
@@ -114,7 +116,7 @@
   let cfg = resolve-config(base-styles, args)
   config-store.update(cfg)
 
-  set std.bibliography(style: "../bib/science-foundation-in-china.csl", title: [参考文献])
+  set std.bibliography(style: "../bib/bib-xjnu.csl", title: [参考文献])
   show cite.where(style: auto): it => {
     if it.supplement != none {
       let (key, ..args) = it.fields()
@@ -124,7 +126,7 @@
     }
   }
 
-  show: show-fakebold
+  show: show-cn-fakebold
 
   // Single author
   let author = cfg.authors.at(0).name
@@ -142,6 +144,7 @@
   show: with-figure-style.with(cfg)
 
   set par(justify: true, leading: 1.5em, spacing: 1em, first-line-indent: 2em)
+  //
   args.body
 }
 

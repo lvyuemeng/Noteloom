@@ -2,15 +2,6 @@
 
 #let base-styles = (
   lang: "en",
-  fonts: (
-    main: "Libertinus Serif",
-    cjk: "Microsoft YaHei",
-  ),
-  title-size: 2.2em,
-  head1-size: 1.4em,
-  head2-size: 1.2em,
-  script-size: 8pt,
-  paper: "us-letter",
 )
 
 #let tmpl = args => {
@@ -25,7 +16,17 @@
   set std.bibliography(style: "springer-mathphys", title: [References])
 
   align(center, {
-    text(size: 2.2em, weight: "bold", args.title)
+    if type(args.title) == dictionary {
+      set text(size: 2.2em, weight: "bold")
+      par([
+        #args.title.zh
+      ])
+      par([
+        #args.title.en
+      ])
+    } else {
+      text(size: 2.2em, weight: "bold", args.title)
+    }
     v(25pt, weak: true)
     for author in args.authors {
       if "name" in author {

@@ -56,7 +56,7 @@
   </macro>
   <macro name="pages">
     <group>
-      <label variable="page" form="short" suffix=" " strip-periods="true"/>
+      <!-- <label variable="page" form="short" suffix=" " strip-periods="true"/> -->
       <text variable="page"/>
     </group>
   </macro>
@@ -75,53 +75,37 @@
     </layout>
   </citation>
   <bibliography second-field-align="flush" et-al-min="99" et-al-use-first="98">
-    <layout>
+    <layout suffix=". ">
       <text variable="citation-number" prefix="[" suffix="]"/>
-      <group delimiter=" " prefix=" ">
+      <group delimiter=", ">
+        <!-- Author -->
         <text macro="author"/>
+        <!-- Title -->
+        <text macro="title"/>
+        <!-- Publisher / Institution -->
+        <choose>
+          <if type="thesis report" match="any">
+            <text macro="publisher"/>
+          </if>
+          <else>
+            <text macro="publisher"/>
+          </else>
+        </choose>
+        <!-- Journal / container-title -->
+        <text variable="container-title"/>
+        <!-- Year -->
         <date variable="issued">
           <date-part name="year"/>
         </date>
-        <text macro="title"/>
+        <!-- Volume -->
+        <text macro="volume"/>
+        <!-- Issue -->
+        <text variable="issue"/>
+        <!-- Pages -->
+        <text macro="pages"/>
+        <!-- URL -->
+        <!-- <text variable="URL"/> -->
       </group>
-      <choose>
-        <if type="bill book graphic legal_case legislation motion_picture report song" match="any">
-          <group prefix=" " delimiter=" ">
-            <group delimiter=", ">
-              <text macro="volume"/>
-              <text macro="editor"/>
-            </group>
-            <text macro="publisher"/>
-          </group>
-        </if>
-        <else-if type="chapter paper-conference" match="any">
-          <group prefix=" " delimiter=" ">
-            <text variable="container-title" font-style="italic"/>
-            <text variable="collection-title"/>
-            <text variable="event"/>
-            <group delimiter=", ">
-              <text macro="volume"/>
-              <text macro="editor"/>
-            </group>
-            <text macro="publisher"/>
-            <text macro="pages"/>
-          </group>
-        </else-if>
-        <else-if type="thesis">
-          <group prefix=" " delimiter=" ">
-            <text variable="genre"/>
-            <text macro="publisher"/>
-          </group>
-        </else-if>
-        <else>
-          <group prefix=" " delimiter=" ">
-            <text macro="editor"/>
-            <text variable="container-title" font-style="italic" form="short"/>
-            <text variable="volume" font-weight="bold"/>
-            <text variable="page"/>
-          </group>
-        </else>
-      </choose>
     </layout>
   </bibliography>
 </style>

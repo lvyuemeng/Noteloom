@@ -33,13 +33,6 @@
   fig-gap: 17pt,
 )
 
-// #let core-appendix-styles = (
-//   head-numbering: "A.1",
-//   eq-numbering: "1.1",
-//   eq-chapterwise: true,
-//   reset: true,
-// )
-
 // overwritten style
 #let resolve-config = (tmpl-base, cfg) => {
   let base = core-styles + tmpl-base
@@ -129,9 +122,9 @@
   set heading(supplement: cfg.supplement) if "supplement" in cfg
 
   show heading: it => {
-    let content = normal-headidng-it(it)
+    let inner = normal-headidng-it(it)
     show: core-heading.with(cfg, it)
-    content
+    inner
   }
 
   content
@@ -142,6 +135,13 @@
 
   set math.equation(numbering: eq-numbering) if not cfg.eq-chapterwise
   set math.equation(numbering: chapterwise-numbering) if cfg.eq-chapterwise
+
+  // text for italic
+  show math.equation: set text(font: (
+    (name: "Libertinus Serif", covers: regex("\p{Latin}")),
+    "New Computer Modern Math",
+  ))
+
   show math.equation: set block(above: 2em, below: 2em)
 
   set list(indent: 24pt, body-indent: 5pt)
