@@ -666,3 +666,71 @@ if let Some(t) = message_queue.receive() {
     }
 }
 ```
+
+## Driver Revisit
+
+```rust
+mod state {
+	// FREE -> WAKER -> COMPLETED -> FREE
+	/// FREE: at initiation
+    pub const FREE: u8 = 0;
+	/// WAKER: with `waker`, without `payload`
+	pub const WAKER:u8 = 1;
+	/// COMPLETED: with `payload`, possibly with `waker`
+    pub const COMPLETED: u8 = 3;
+}
+
+struct CachePool<T,const N:usize> {
+    inits: AtomicUsize,
+    free_head: AtomicUsize,
+    entries: [Cache<T>; N],
+}
+
+type TokenCache<H,M> = Cache<PackToken<H,M>>
+
+struct Cache<T> {
+    next_free: AtomicUsize,
+    live: AtomicU32,
+    state: AtomicU8,
+    waker: UnsafeCell<MaybeUninit<Waker>>,
+    payload: UnsafeCell<MaybeUninit<T>>,
+}
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+#[repr(C)]
+pub struct Id {
+    idx: usize,
+    live: u32,
+}
+
+struct CacheGuard<'a, T> {
+    cache: &'a Cache<T>,
+    id: Id,
+}
+
+unsafe impl<T: Send> Send for Cache<T> {}
+unsafe impl<T: Sync> Sync for Cache<T> {}
+unsafe impl<T: Send> Send for CacheGuard<T> {}
+unsafe impl<T: Sync> Sync for CacheGuard<T> {}
+
+// state: init -> waiting(waker) -> completed(T) (after polled, automatically clean itself)
+impl<T> Cache<T> {
+    pub const fn null() -> Self {
+
+    }
+
+    unsafe fn write_waker(&self, ctx: &Context<'_>) {}
+
+    unsafe fn write_payload(&self,payload:T) {}
+
+    unsafe fn take_payload(&self) -> T {}
+
+    pub fn clean(&self) -> {
+        {needs_drop?}
+    }
+
+    pub fn complete() -> bool {}
+
+    pub fn poll() -> Poll<T> {}
+}
+```

@@ -1,1 +1,1 @@
-#import "mine/mine.typ": *
+#import "manus/mine.typ": *

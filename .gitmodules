@@ -1,3 +1,3 @@
-[submodule "typst/zh-draft"]
-	path = typst/zh-draft
-	url = https://github.com/lvyuemeng/zh-draft
+[submodule "typst/manus"]
+	path = typst/manus
+	url = git@github.com:lvyuemeng/Manus.git

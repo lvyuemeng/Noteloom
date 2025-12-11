@@ -1040,3 +1040,40 @@ impl<T: ShmInit> Ipc<T> {
     }
 }
 ```
+
+```rust
+pub trait AddrSpec {
+    type Addr: memory_addr::MemoryAddr;
+    type Flags: Copy;
+}
+
+pub trait Mmap<S: AddrSpec>: Sized {
+    type Config;
+    type MapFlags: Copy;
+    type Error: core::fmt::Debug;
+
+    fn map(
+        self,
+        start: Option<S::Addr>,
+        size: usize,
+        mflags: Self::MapFlags,
+        pflags: S::Flags,
+        conf: Self::Config,
+    ) -> Result<RawMemBlk<S, Self>, Self::Error>;
+    fn unmap(area: &mut RawMemBlk<S, Self>) -> Result<(), Self::Error>;
+}
+
+pub trait Mprotect<S: AddrSpec>: Mmap<S> {
+    fn protect(area: &mut RawMemBlk<S, Self>, new_flags: S::Flags) -> Result<(), Self::Error>;
+}
+
+pub enum Access {
+    Write,
+    Read,
+    ReadWrite, 
+}
+
+pub trait SharedMmap<S:AddrSpec> : Mmap<S>{
+    fn 
+}
+```
