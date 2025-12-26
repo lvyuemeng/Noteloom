@@ -1,6 +1,6 @@
 #import "../lib.typ": *
 #import "../info.typ": *
-#import "@preview/physica:0.9.5": *
+#import "@preview/physica:0.9.7": *
 
 #let abstract-en = [In this work, we present a unified and pedagogical introduction to several fundamental numerical methods for solving partial differential equations arising in computational physics. We begin by reviewing the finite difference method and providing a general framework for analyzing the stability and convergence of schemes for parabolic equations. Both classical von Neumann (Fourier) analysis and the energy/entropy method are discussed, highlighting their respective roles in understanding numerical stability.
 

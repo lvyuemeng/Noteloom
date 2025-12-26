@@ -12,7 +12,7 @@
   config-info(
     title: [焦耳定律],
     subtitle: [微观*透视*下的电热],
-    author: [吕粤蒙],
+    author: [202326002086 吕粤蒙],
     date: datetime.today(),
     institution: [],
     logo: emoji.leaf,

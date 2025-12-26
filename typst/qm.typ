@@ -1,5 +1,5 @@
 #import "lib.typ": *
-#import "@preview/physica:0.9.5": *
+#import "@preview/physica:0.9.7": *
 #import "@preview/fletcher:0.5.8" as fletcher: diagram, edge, node
 
 #show: mine.with(
@@ -1400,7 +1400,7 @@ $
 $
 
 $
-  expval(l_1 dots.c l_N) := planck^(-d/2) e^(S(c)/planck) integral_D l_1(x) dots.c l_N (x) e^(-S(x)/planck) d x \
+  expval(l_1 dots.c l_N) := planck^(d/2) e^(S(c)/planck) integral_D l_1(x) dots.c l_N (x) e^(-S(x)/planck) d x \
 $
 
 $
@@ -1408,7 +1408,7 @@ $
 $
 
 $
-  Z = I[1;S(x)] = planck^(-d/2) integral_V e^(-S(x)/planck) d x
+  Z = I[1;S(x)] = planck^(d/2) integral_V e^(-S(x)/planck) d x
 $
 
 $
@@ -1417,9 +1417,13 @@ $
 $
 
 $
-  x & -> y = planck^(-1/2)x \
-  B_i (x,dots.c,x) & -> planck^(i/2) B_i (x,dots.c,x) \
-  Z_(vf(n)) & = integral_V e^(- B(y,y)/2) product_i g_i^n_i/((i!)^(n_i) n_i !) (planck^(i/2-1) B_i (y,dots.c,y))^(n_i) d y
+  x -> y = planck^(-1/2)x \
+  B_i (x,dots.c,x) -> planck^(i/2) B_i (x,dots.c,x) \
+$
+
+$
+  Z = sum_(vf(n)) Z_(vf(n)) \
+  Z_(vf(n)) = integral_V e^(- B(y,y)/2) product_i g_i^n_i/((i!)^(n_i) n_i !) (planck^(i/2-1) B_i (y,dots.c,y))^(n_i) d y
 $
 
 Contract each vertex.
@@ -1588,18 +1592,18 @@ $
   beta_1(Gamma) & = E - V + 1
 $
 
-It suggests $hbar^(-chi(gamma))$ will contribute in different order of $O(hbar)$. For *tree*, $beta_1 = 0$, thus a connected graph contribute $-chi(gamma) = -(V-E) = - (beta_0 - beta_1) = - 1 ~ O(hbar^(-1))$ order. For *1-loop* graph, $beta_1 = 1$, thus contribute $O(hbar)$ order, and so forth. Given a set of classes of graphs with *$j$* loops:
+It suggests $planck^(-chi(gamma))$ will contribute in different order of $O(planck)$. For *tree*, $beta_1 = 0$, thus a connected graph contribute $-chi(gamma) = -(V-E) = - (beta_0 - beta_1) = - 1 ~ O(planck^(-1))$ order. For *1-loop* graph, $beta_1 = 1$, thus contribute $O(planck)$ order, and so forth. Given a set of classes of graphs with *$j$* loops:
 
 $
-  hbar^(j-1) (ln Z/Z_0)_j := sum_vf(n) product_i (g_i^(n_i (gamma)) hbar^(j-1) sum_(gamma in G_c (vf(n))) tilde(F)_gamma/(abs("Aut"(gamma)))
-$
-
-$
-  ln Z/Z_0 = sum_(j>=0) (ln Z/Z_0)_j hbar^(j-1)
+  planck^(j-1) (ln Z/Z_0)_j := sum_vf(n) product_i g_i^(n_i (gamma)) planck^(j-1) sum_(gamma in G_c (vf(n))) tilde(F)_gamma/(abs("Aut"(gamma)))
 $
 
 $
-  Z := hbar^(-d/2) integral_V e^(-S(x)/hbar) d x = e^(- S(x_0)/hbar) I [1;B = B_2] = e^(- S(x_0)/hbar) (det B)^(1/2) det(S''(x_0))^(-1/2) sum_(i>=0) a_i hbar^i \
+  ln Z/Z_0 = sum_(j>=0) (ln Z/Z_0)_j planck^(j-1)
+$
+
+$
+  Z := planck^(-d/2) integral_V e^(-S(x)/planck) d x = e^(- S(x_0)/planck) I [1;B = B_2] = e^(- S(x_0)/planck) (det B)^(1/2) det(S''(x_0))^(-1/2) sum_(i>=0) a_i planck^i \
 $
 
 By steepest descent formula in the neighborhood of critical point $x_0$ where $S'(x_0) = 0$.
@@ -2295,3 +2299,49 @@ $
 $
 
 Where the pairing sign is depended on the order. We can see by swapping times, one swap corresponds to one minus sign. Quicker, we can see if each pairing number crossing each other. ${{1,4},{2,5},{3,6}}$, we see by ${1,4}$ across else two terms, and ${2,5}$ cross ${3,6}$, thus $(-1)^3 = -1$, is minus sign. Thus the maximal minus sign must be $m - 1 + m - 2 + dots = (m(m-1))/2$ times.
+
+$
+  Z (s_1,dots,s_n) = integral e^(-1/2 B(xi,xi) + sum_(i=1)^n s_i lambda_i (xi)) d xi \
+$
+
+$
+  lr(pdv(, s_n) dots pdv(, s_1) Z(vf(s))bar)_(s=0) = integral e^(1/2 B(xi,xi)) product_i^n lambda_i (xi) d xi
+$
+
+$
+  eta := sum_(i=1)^n s_i lambda_i => xi' := xi - B^(-1) eta in V => -1/2 B(xi,xi) + eta (xi) = -1/2 B(xi',xi') + 1/2 B^(-1) (eta,eta)
+$
+
+Where $B^(-1) eta = B^(-1) (eta, dot)$ with $B (B^(-1) eta, dot) = (B B^(-1) eta, dot) = (eta, dot) = eta(dot)$.
+
+$
+  B^(-1)(eta,eta) = sum_(i,j) s_i s_j B^(-1) (lambda_i, lambda_j) => sum_(sigma in Pi_m) s_(i_1) s_(j_1) dots s_(i_m) s_(j_m) product_(r=1)^m B^(-1) (lambda_(i_r), lambda_(j_r))
+$
+
+$
+  S(v) = 1/2 B(v,v) - sum_(r >= 3) (B_r (v,dots,v))/r!
+$
+
+$
+  B_r (v,dots,v) = sum_(s=0)^r vec(r, s) B_(s,r-s) (v_1,dots,v_1,v_0,dots,v_0)
+$
+
+$
+  I[S](planck) = ((2pi planck)^(dim V_0)/(det B_0))^(1/2) (planck^(-(dim V_1)) "sDet"(-B_1))^(1/2) sum_(Gamma) planck^(eta(Gamma))/(abs("Aut"(Gamma))) bb(F)_Gamma (l_1,dots,l_m;lambda_1,dots,lambda_n)
+$
+
+$
+  dot(f) = [f,H]_(plus.minus)
+$
+
+$
+  [a,b]_(plus.minus) = i innerproduct(a,b) \
+$
+$
+  &a b - b a = i innerproduct(a,b) "for Weyl" \
+  &a b + b a = i innerproduct(a,b) "for Clifford" \
+$
+
+$
+  
+$
