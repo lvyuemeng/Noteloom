@@ -7,8 +7,8 @@
 )
 
 #let non(content) = $overline(content)$
-#let xor = $plus.circle$
-#let nxor = $dot.circle$
+#let xor = $plus.o$
+#let nxor = $dot.o$
 
 = Analog
 

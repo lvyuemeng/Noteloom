@@ -338,7 +338,7 @@ For the special case where $X tilde.equiv X^*$ as its compact support, that $1/p
 $
   D(t) := norm(v + t y)^2 = norm(v)^2 + 2 t (v,y) + t^2 norm(y)^2
 $
-Where $t=0$ is the projection for minimal distance, we can always decompose the space into a subspace and its orthogonal complement as $H = M plus.circle M^(perp)$.
+Where $t=0$ is the projection for minimal distance, we can always decompose the space into a subspace and its orthogonal complement as $H = M plus.o M^(perp)$.
 
 We summarize above. Throughout the whole context, you won't see physics but it's appearance. The truth is, the sole appearance. Evaluate the number system is the quantification of the metric which represents the world, for example, time-space. A function is a state of the system which represents a evaluation of background for potential world. Therefore functional is the evaluation of the state, and operator is a transformation of the state, thus the system.
 
@@ -377,7 +377,7 @@ $
 
 If there's a $h in H$ that $(h, integral_bb(R) f(lambda)d Pi(lambda)(h)) <= norm(f(T)h)norm(h) = 0 -> f(T)h = 0$. That's, decompose the whole space except $"ker"(T)$ into its orthogonal projection. In practise, that's where $L v = lambda v$ comes from.
 
-All above is just a rephrase of $T = lambda_mu v_mu times.circle w_mu$ for certain measure. Thus we has $(T - lambda)^(-1) ~ 1/(lambda - lambda_mu) w_mu times.circle v_mu$, thus $1/(2pi i)integral.cont_C (...) = w_mu times.circle v_mu$, take product on arbitrary function inducing $(x_mu, w_mu) times.circle (v_mu,y_mu) = delta(x-y)$ called *Green Function* or *Resolvent* of $T$ as $G(x,y,lambda)$. Usually we take $lambda=0 -> G(x,y)$, where $T G = w_mu times.circle v_mu$, thus, $G(x,x') = 1/lambda_mu (x_mu, w_mu) times.circle (v_mu,x'_mu)$.
+All above is just a rephrase of $T = lambda_mu v_mu times.o w_mu$ for certain measure. Thus we has $(T - lambda)^(-1) ~ 1/(lambda - lambda_mu) w_mu times.o v_mu$, thus $1/(2pi i)integral.cont_C (...) = w_mu times.o v_mu$, take product on arbitrary function inducing $(x_mu, w_mu) times.o (v_mu,y_mu) = delta(x-y)$ called *Green Function* or *Resolvent* of $T$ as $G(x,y,lambda)$. Usually we take $lambda=0 -> G(x,y)$, where $T G = w_mu times.o v_mu$, thus, $G(x,x') = 1/lambda_mu (x_mu, w_mu) times.o (v_mu,x'_mu)$.
 
 We has the below form for spectrum where the $sigma(T)$ is the set of all $lambda$ support that $T-lambda$ is not injective on $D(T)$ where the support $x$ losing information. Suppose $v in "Ker"(T-lambda_0)$:
 $
