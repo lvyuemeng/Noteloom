@@ -42,7 +42,7 @@ $
 
 #grid(
   columns: 2,
-  image("static/magnetic.png"),
+  image("assets/magnetic.png"),
   align(center)[
     #set text(1.3em);
     假设一联通电路，其中与一螺线管相连接用以放大电磁感应效应. \ \ 我们如何检验磁铁作用呢？
@@ -57,7 +57,7 @@ $
 
 ==
 
-#image("static/lenz.png")
+#image("assets/lenz.png")
 
 我们能否找到一统一的表示方法来解释该现象？
 
@@ -100,7 +100,7 @@ $
 
   #grid(
     columns: 2,
-    image("static/magnetic_fallen.png"),
+    image("assets/magnetic_fallen.png"),
     [
 			#text(1.5em)[*能量的转换告诉我们阻碍运动必然使得这部分能量转移*]
        \

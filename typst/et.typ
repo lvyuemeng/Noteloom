@@ -90,7 +90,7 @@ Then Karnaugh map said that we can list all possibilities and use merge operatio
 
 A full adder, should record the two bit as "addee", and one bit for "carry-out". First, we evaluate "addee" first, when both are $0$ or $1$, it's $0$, if one of it is $1$, we has $1$ as output, so it's $a xor b$. Then consider carry-out, if the output and carry-out is both $0$ or $1$, we has $0$, if one of them is $1$, we has $1$ as final output. So it's $C_"in" xor (a xor b)$. Then, what's the new carry-out from the adder machine? It's only possible when the addee or carry-out, two of them or three of them is $1$ to create a new carry-out. So we has $(a+b)(a+C_"in")(b+C_"in") = a b + C_"in" (a + b) $, three of them is $1$ is already in the term.
 
-#image("static/4-bit-adder.png")
+#image("assets/4-bit-adder.png")
 
 To chain series of adders form a higher bits adder.
 
@@ -127,7 +127,7 @@ Using OR gate too.
 
 However, if $S = R = 1$, we see $Q_(n+1) = 0$! We aren't luck, this indicates it's not robust that we should forbid such state.
 
-#align(center)[#image("static/latches.png", width: 80%)]
+#align(center)[#image("assets/latches.png", width: 80%)]
 
 From the first latch, we see:
 $
@@ -141,18 +141,18 @@ $
 
 That's the deduction of simple latches. In digital circuit, time or frequency is important because such square waves can order different speed gate into a standard sequential logic. It's important to share a global clock for each state process machine. How to take effect, we know it should be $1$ in square wave pulse to allowing others pass, so we add a AND gate in front of each input $S$ and $R$.
 
-#image("static/clock-latch.png")
+#image("assets/clock-latch.png")
 #footnote[It use NAND is due to previous shown _reverse_ input design].
 
 Now, if we only need a single data input, control all bit by its input $0$ or $1$, $R = non(D), S = D$ indeed, and we remove the violated state! Reversely, we can construct $T$-latch which reverse $Q$ state!
 
-#image("static/D-latch.png")
+#image("assets/D-latch.png")
 
 we leave a forceful input $non(S)$ or $non(R)$ to allowing asynchronous operation. Now we try to learn how to read this sequential diagram, in the period $"R" = 0$, D can only trigger the bit when it's high and CLK is high too. Finally, we see R = 1 suddenly make Q = 0.
 
 The underneath problem is if D changes when CLK = 1, /* the response of Q would be depended on the response delay, especially on the edge of CLK transition. */ In data transmission, it indicates a unacceptable change of state in only one clock time, causing confusion. So we want a design only triggered on up or down of CLK, to identify the presumed state from $D$ present.#footnote[There's also ambuguity exist if $D$ is on the CLK transition collide with D transition. But already reduced too much.]
 
-#align(center,image("static/pulse-latch.png",height: 20%))
+#align(center,image("assets/pulse-latch.png",height: 20%))
 
 It first store the change tendency on the first latch, and then apply it's tendency on the second latch which is output only when CLK is down, and we can reverse the design to acquire a output only when CLK is high.
 
@@ -171,7 +171,7 @@ In practise, we often use edge triggered JK or D-latch.
 
 Flip-flop can be connected as series, but in order to keep synchronous logic, we should use CLK, when the before is ready, it gonna to trigger the next. However, in order to avoid previous mentioned state changed in one CLK period problem, we use edge triggered flip-flop. 
 
-#image("static/counter.png")
+#image("assets/counter.png")
 
 Here $Q' = D = non(Q)$ only when the previous CLK = $"Q"^(n-1)$ is falling. That's, only when previous $"Q"^(n-1)$ finishes its state period, the next state triggered, and switch between $Q <-> non(Q)$ in previous one's full period. It means, to construct a counter, we should let next state contains previous one's $2$ switched state period to completely encompass counts, suggesting to trigger the next one when previous one falling and until one falling, a.k.a completely finishes it works. Therefore, the current one gonna trigger next next one etc...
 

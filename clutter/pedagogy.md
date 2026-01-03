@@ -1,16 +1,18 @@
-## Investigation
+# Investigation
 
-### Educational Scheme
+## Educational Scheme
+
 - Dual
 - Single
 - Branch(Ours)
 
-Trend: 
+Trend:
+
 - quality
-- age limit: preschool/lifelong 
+- age limit: preschool/lifelong
 - open, diverse
 
-### Course
+## Course
 
 Contemporarily, the construction of course is the summation of content, process throughout various subject, activity.
 
@@ -25,6 +27,7 @@ Contemporarily, the construction of course is the summation of content, process 
 Thus based on it, we form a hierarchy from country -> locale -> school.
 
 Trend:
+
 - Country/Locale parallel
 - high tech/self experience
 - diverse
@@ -36,18 +39,19 @@ _The eighth course reform_: aims for nationality and every students.
 _Core Attainment_:
 
 - Self
-	- learning
-	- Health
+  - learning
+  - Health
 - Society
-	- Responsibility: ideology
-	- Practise and innovation
+  - Responsibility: ideology
+  - Practise and innovation
 - Culture
-    - humanity
-    - science, criticize
+  - humanity
+  - science, criticize
 
 ## Education
 
 From above, we can summarize that contemporary education still focus on four factor:
+
 - educator
 - learner
 - content(**Course Plan**, **Course Standard** **Text book**, potential: values etc...)
@@ -58,6 +62,7 @@ It mostly focus on _official education_, but _unofficial education_ is also exis
 ## Teaching
 
 Teaching is the activity of interaction between teacher and students in education factor and trait:
+
 - indirect
 - guidance
 - clear/simple
@@ -66,12 +71,14 @@ Teaching is the activity of interaction between teacher and students in educatio
 (knowledge/skill) -> (intellectual/physcal) -> (moral/aesthetics)
 
 (Ours): principle from _Core Attainment_:
+
 - ideology guidance
 - gradual learning
 - diversity
 - ethic: respect choice and development of children.
 
 From Course Standard, teacher need to design and implement a whole teaching process.
+
 - Prepare
   - Course Standard/Text book
   - text book analysis -> design qualified content -> distill perspective and connotation -> achieve target
@@ -85,6 +92,7 @@ From Course Standard, teacher need to design and implement a whole teaching proc
 **Teaching Organization**: in common(...) teaching process, organize in different structure to achieve target.
 
 **Assessment**:
+
 - Relative/Absolute: standard defined in the applied group, and measure relative position/presumed standard, independent to applied group but only depended on ability of trial subjects.
 
 diagnostic -> feedback -> management and dispatch -> guidance
@@ -95,6 +103,7 @@ diagnostic -> feedback -> management and dispatch -> guidance
 - environment as various condition depended on individual interacted with individual
 
 Education in individual:
+
 - individualization: act by oneself conscisousness -> respect difference -> difference as a individual process and innovation
 - socialization: identification consciousness -> acquired social consciousness -> skill -> character
 

@@ -7,7 +7,34 @@
   title: "Computational Physics",
 )
 
+= Error
+
+Suppose approximation $Z^*$ for $Z$, define the function _significant figures_ by:
+
+$
+  #pseudocode-list[
+    + Input: $Z^*$: Number, $Z$: Number
+    + aid_bit := if significant_digits($abs(Z-Z^*)$) < 5: 0 else: $-1$
+    + return digits($Z^*$) + aid_bit
+  ]
+$
+
+Suppose $Z = pi = 3.14159dots$, $Z^* = 3.141$:
+
+$
+  #pseudocode-list[
+    + aid_bit := eval(if significant_digits($0.00059$) < 5: 0 else: $-1$) = -1
+    + return eval(digits($3.141$) - 1) = 3
+  ]
+$
+
+Which is same as $Z^* = 3.14$.
+
+If $Z^* = 3.142$, aid_bit := $0$, therefore return $4$ as results.
+
 = Linear Algebra
+
+== Direct Method
 
 $
   A x = b
@@ -88,6 +115,8 @@ $
       + return ($U,c$)
   ]
 $
+
+== Iteration Method
 
 Jacobi iteration method:
 
@@ -186,6 +215,48 @@ $
   ]
 $
 
+== Problem
+
+=== LU Algorithm
+
+$
+  A: mat(2,2,3;4,7,7;-2,4,5), b = vec(3,1,-7) \
+$
+
+$
+  A = mat(2,2,3;4,7,7;-2,4,5) -> mat(1,0,0;2,1,0;-1,0,1) mat(2,2,3;0,3,1;0,6,8) -> mat(1,0,0;2,1,0;-1,2,1) mat(2,2,3;0,3,1;0,0,6) = L U \
+  b = vec(3,1,-7) -> vec(3,-5,-4) -> vec(3,-5,6) 
+$ 
+  
+$ 
+  mat(2,2,3;0,3,1;0,0,6) vec(3,-5,6) -> 
+  mat(2,2,3;0,3,1;0,0,1) vec(3,-5,1) &-> \
+  mat(2,2,3;0,1,0;0,0,1) vec(3,(-5 - 1)\/3=-2,1) &-> 
+  mat(1,0,0;0,1,0;0,0,1) vec((3-3+4)\/2=2,-2,1)
+$
+
+$
+  x = vec(2,-2,1)
+$
+
+=== Jacobi Algorithm
+
+$
+  A= mat(1,5,-3;5,-2,1;2,1,-5), b = vec(2,4,-11) \
+$
+
+Switch pivot:
+
+$
+  A' = mat(5,-2,1;1,5,-3;2,1,-5), b' = vec(4,2,-11)
+$
+
+$
+  &x_1^((k)) = 1/5 (4 + 2 x_2^((k-1)) - x_3^((k))) \
+  &x_2^((k)) = 1/5 (2 - x_1^((k-1)) + 3x_3^((k))) \
+  &x_1^((k)) = 1/5 (11 + 2 x_1^((k-1)) + x_2^((k))) \
+$
+
 = Roots Finding
 
 Bisection finding is based on the function property that $f(a) dot f(b) < 0$ due to intermediate value theorem. To avoid oscillation problem for multiple zeros, we should focus on the interval contains only *single* zero to avoid confusion problem.
@@ -228,7 +299,7 @@ Suppose the toleration is $epsilon$, we want $abs(x-c_n) < epsilon$
 $
   abs(x-c_n) < L_n & < epsilon \
    (1/2)^(n+1) L_0 & < epsilon \
-                 n & < log_2 (L_0/epsilon) - 1
+                 n & > log_2 (L_0/epsilon) - 1
 $
 
 The convergence speed can be estimated by:
@@ -302,6 +373,12 @@ $
   sum_(i=1)^n p^i = (p^n - 1)/(p - 1)
 $
 
+If $p = 1$, then:
+
+$
+  lim_(p->1) (p^n-1)/(p-1) -> n
+$
+
 $
   abs(E_n) = C^((p^n - 1)/(p-1)) abs(E_0)^(p^n) & < epsilon \
          (p^n - 1)/(p-1) ln C + p^n ln abs(E_0) & < epsilon \
@@ -312,6 +389,15 @@ Since $C abs(E_0) < 1$ for most case:
 
 $
   n & gt.tilde log_p (ln 1/epsilon)/(ln (1/(C abs(E_0))))
+$
+
+If $p=1$, choose $log_(p->1)(x) = 1(x)$.
+
+Now $C < 1$ is necessary for convergence:
+
+$
+  C^n < epsilon/abs(E_0) \
+  n > log_(1\/C) (abs(E_0)/epsilon)
 $
 
 = Function Approximation
@@ -480,19 +566,59 @@ $
 Expanding $f(hat(x)) = sum_(i=0)^n f^((i))(x_0) (hat(x) - x_0)^i$, but wait, which local point?
 
 $
-  phi.alt(x) = f(x) - p(x) + lambda w(x) "contains" n+1 "zeros" \ => phi.alt^((n))(x) = f^((n))(x) - (p^((n)) (x) + lambda w^((n)) (x)) = f^((n)) (x) - lambda (n+1)! "contains" 1 "zero" \
+  phi.alt(x) = f(x) - p(x) + lambda w(x) "contains" n+1 "zeros" \ => phi.alt^((n))(x) = f^((n))(x) - (p^((n)) (x) + lambda w^((n)) (x)) = f^((n)) (x) - lambda (n)! "contains" 1 "zero" \
 $
 
 Due to _Mean Value Theorem_.
 
 $
-  phi.alt^((n)) (xi) = 0 = f^((n)) (xi) - lambda (n+1)!
+  phi.alt^((n)) (xi) = 0 = f^((n)) (xi) - lambda (n)!
 $
 
 Finally:
 
 $
-  E = lambda w(x) = (f^((n))(xi))/(n+1)! product_(i=1)^n (hat(x) - x_i)
+  E = lambda w(x) = (f^((n))(xi))/n! product_(i=1)^n (hat(x) - x_i)
+$
+
+==== Problem
+
+Give a fit curve for a actual $x^2$ function by Newton's interpolation and Lagrange's interpolation:
+$
+  (x_i,f_i) = {(1,1),(2,4),(4,16)}
+$
+
+$
+  f_1 (x) = f(x_0) + f[x_0,x_1](x-x_0) = 1 + (4-1)/(2-1) (x-1) = 1 + 3(x-1) = 3 x - 2
+$
+
+$
+  f_2 (x) &= f_1 (x) + (y_2-f_1(x_2))/((x_2 - x_0)(x_2 - x_1)) (x - x_0)(x-x_1) \
+  &= f_1 (x) + (16 - 10)/(3 dot 2) (x - 1) (x-2) \
+  &= f_1 (x) + (x-1) (x-2) \
+  &= 3 x - 2 + x^2 - 3 x + 2 = x^2
+$
+
+Is what we expected.
+
+$
+  &l_(0,2) = ((x-2)(x-4))/((1-2)(1-4))  = 1/3 (x-2)(x-4) \
+  &l_(1,2) = ((x-1)(x-4))/((2-1)(2-4)) = -1/2 (x-1)(x-4) \
+  &l_(2,2) = ((x-1)(x-2))/((4-1)(4-2)) = 1/6 (x-1)(x-2) \
+$
+
+$
+  f(x) &= l_(0,2) + 4 l_(1,2) + 16 l_(2,2) \
+  &= 1/3 (x^2-6x+8) -2(x^2 - 5 x + 4) + 8/3(x^2 - 3 x + 2) \
+  &= x^2 + (-2 + 19 -8) x + (8/3 - 8 + 16/3) = x^2
+$
+
+Is what we expected.
+
+Now we estimate error:
+
+$
+  abs(E(x)) = (f^((3)))/(3!)(x(x-1)(x-2))
 $
 
 === Splines
@@ -531,7 +657,7 @@ $
 Notice that $product_(j=0,j!=i)^k (x-x_j)$ is $k$-degree, so for $k+1$-divided difference:
 
 $
-  [x_0,dots,x_k]f = product_(i=0)^k f(x_i)/(product_(j!=i) (x_i-x_j))
+  [x_0,dots,x_k]f = sum_(i=0)^k f(x_i)/(product_(j!=i) (x_i-x_j))
 $
 
 Explicitly evaluate Newton's basis, the leading coefficient must be $omega_k (x) = c_(k) product_(i=0)^(k) (x - x_i)$. So $c_(k) = [x_0,dots,x_k]f$. Plus, it's known that $p_(n+1) (x) = p_n (x) + omega_(n+1) (x)$, so by deduction, each coefficient must also be $c_i = [x_0,dots,x_i]f$. The formal expression is:
@@ -613,12 +739,69 @@ $
   S(x_j) = sum_(i=0)^n c_i B_(i,3) (x_j) = y_j
 $
 
+Each node ${t_i}$ must be covered by any possible support. It shows that if we only cover by $B_(d,i)$ is not enough. To extend the support as slide window for each node such that $B_(d,i-d)$ to $B_(d,i)$ by:
+
+$
+  {underbrace(t_0 \, t_0 \, dots,d),t_1,t_2,dots,underbrace(t_n\,t_n\,dots,d)}
+$.
+
 $
   B_(i,d) (x) &= (t_(i+d+1) - t_i) [t_i,dots,t_(i+d+1)](x-t)_+^(d-1) (x-t)_+ \
   &= (dots) sum_(j=i)^(i+d+1) [t_i,dots,t_j](x-t)_+^(d-1) [t_j,dots,t_(i+d+1)](x-t)_+ \
   &= (dots) [t_i,dots,t_(i+d+1)](x-t)_+^(d-1) (x - t_(i+ d+1)) + [t_i,dots,t_(i+ d)] (x-t)^(d-1) \
   &= (dots) (x-t_(i+d+1)) ([t_i,dots,t_(i+d)] (x-t)_+^(d-1) - [t_(i+1),dots,t_(i+d+1)](x-t)_+^(d-1))/(t_(i+d+1) - t_i) + (dots) \
   &= (x-t)/(t_(i+d) - t_i) B_(i,d-1) (x) + (t_(i+d+1) - x)/(t_(i+d+1) - t_(i+1)) B_(i+1,d) (x)
+$
+
+=== Problem
+
+I will introduce a way simpler for manual work.
+
+Interpolates below data points by quadratic spline:
+
+$
+  (x_i,y_i) = {(0,0),(1,1),(2,1),(3,0)} "for" [0,1], [1,2], [2,3]
+$
+
+$
+  S_i = a_i + b_i x + c_i x^2, quad [x_i,x_(i+1)] "for" 9 "unknowns"
+$
+
+However, I will introduce a simpler way to achieve this that, the step polynomial must only occur in $2$-degree due to $C^1$ condition. Therefore whole problem can be reduce to solve:
+
+$
+  S(x) = a + b x + c x^2 + alpha_1 (x-1)_+^2 + alpha_2 (x-2)_+^2
+$
+
+Only $5$ unknowns!
+
+Interpolation condition:
+
+$
+  &S(0) = a = 0 \ 
+  &S(1) = a + b + c = b+c = 1 \ 
+  &S(2) = a+2b+4c+alpha_1 = 2b+4c+alpha_1 = 1\
+  &S(3) = a+3b+9c+4alpha_1 + alpha_2 = 3b+9c+4alpha_1+alpha_2=0
+$
+
+We only need to impose one extra condition for boundary condition, due to property of step polynomial, the necessity is only for *left* boundary.
+$
+  S''(x) = 0 "for" x < 1 => S''(x) = 2 c+2alpha_1 H(x-1) + 2alpha_2 H(x-2) = 0 => c=0
+$
+
+From boundary condition:
+$
+  &(1): b = 1 \
+  &(2): alpha_1 = -1 \
+  &(3): alpha_2 = 1 \
+$
+
+$
+  S(x) = cases(
+    x quad &x in [0,1],
+    x - (x-1)^2 = - x^2 + 3x - 1 quad &x in [1,2],
+    x - (x-1)^2 +(x-2)^2 = 3 - x quad &x in [2,3],
+  )
 $
 
 == Differential
@@ -664,6 +847,50 @@ $
 
 Called $(n+1)$-point formula to approximate $f'(x_j)$.
 
+=== Problem
+
+Using three points ${x_0, x_0 + h, x_0 + 2h}$ derive $3$-point forward difference formula for $x_0$ and determine the order of error.
+
+Evaluate $f'(0)$ for $f(x) = e^x$.
+
+$
+  &f(x_0) = f_0 \
+  &f(x_0 + h) = f_0 + h f'_0 + h^2/2 f''_0 + h^3/6 f'''_0 + O(h^4) \
+  &f(x_0 + 2h) = f_0 + 2h f'_0 + (2h)^2/2 f''_0 + (2h)^3/6 f'''_0 + O(h^4) \ 
+$
+
+$
+  f'(x_0) approx A f(x_0) + B f(x_0 + h) + C f(x_0 + 2h)
+$
+
+$
+  &(A + B + C) f_0 = 0 \
+  &h(B + 2 C) f'_0 = f'_0 \
+  &h^2 (B/2 + 2 C) f''_0 = 0 \
+$
+
+Can fully determine the equation, now we normalize that $A_i = A_i\/h$ due to division $h$ coefficient.
+
+$
+  &B/2 + 2C = 0 => B = -4C \
+  &B + 2 C = 1 => C = -1/2, B = 2 \
+  &A + B + C = 0 => A = -3/2 \
+$
+
+$
+  f'(x_0) = (-3 f(x_0) + 4 f(x_0 + h) - f(x_0 + 2h))/(2 h) + O(h^2)
+$
+
+Suppose $h = 0.1$ for $f(x) = e^x$:
+
+$
+  f(0) = 1, quad f(0.1) = e^(0.1), quad f(0.2) = e^(0.2)
+$
+
+$
+  f'(0) = (-3 + 4 e^(0.1) - e^(0.2))/(0.2)
+$
+
 == Integration
 
 $
@@ -705,8 +932,10 @@ $
 Called _Trapezoidal Rule_.
 
 $
-  integral f(x) d x approx h/3 (f(x_0) + 4 f(x_1) + f(x_2)) - h^5/(2880) f^((4)) (xi)
+  integral f(x) d x approx h/3 (f(x_0) + 4 f(x_1) + f(x_2)) - h^5/(90) f^((4)) (xi)
 $
+
+Or $E = -f^((4)) (xi) (b-a)^5\/2880 $.
 
 Called _Simpson's Rule_.
 
@@ -730,5 +959,43 @@ $
 $
 
 $
-  E (f) = - sum_(i=0)^(m\/2-1) (2h)^5/2880 f^((4)) (xi_i) = - h^5/90 sum_(i=0)^(m\/2-1) f^((4)) (xi_i) = - h^5m/180 2/m (dots) = - (b-a)/180 h^4 f^((4))(xi)
+  E (f) = - sum_(i=0)^(m\/2-1) h^5/90 f^((4)) (xi_i) = - h^5/90 sum_(i=0)^(m\/2-1) f^((4)) (xi_i) = - h^5m/180 2/m (dots) = - (b-a)/180 h^4 f^((4))(xi)
 $
+
+Where $h = x_i - x_(i-1)$.
+
+=== Problem
+
+Approximate:
+
+$
+  I = integral_0^1 e^x d x
+$
+
+Where $abs(E) < 10^(-6)$ by composite Simpson's rule.
+
+$
+  E = -h^5/(90) f^((4))(xi)
+$
+
+Split $[0,1]$ into $N$ *even* intervals where based on the section counts for each single integration:
+
+$
+  h = 1/N, quad M = N/2 => abs(E) <= M dot h^5/90 max(abs(f^((4))(x)))
+$
+
+$
+  abs(E) <= 1/(2h) dot h^5/90 max(abs(f^((4))(x))) = e/180 h^4 <10^(-6)
+$
+
+$
+  h^4 < 180/e times 10^(-6) => h < 0.09, thick N > 11.1
+$
+
+Choose $N=12$:
+
+$
+  integral_a^b e^x d x = sum_(i=1)^N h/3 (f(x_i) + 4 f(x_(i+1)) + f(x_(i+2)))
+$
+
+By calculation.

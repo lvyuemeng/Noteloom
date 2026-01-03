@@ -35,7 +35,7 @@
 #grid(
 	columns: 2,
 	gutter: 0.8em,
-	image("static/suction_cup.png"),
+	image("assets/suction_cup.png"),
 	[
 		#set text(1.5em)
 		邀请力气大的同学 \ 尝试拉开！\
@@ -49,7 +49,7 @@
 #grid(
 	columns: 2,
 	gutter: 0.8em,
-	image("static/reversed_cup.png"),
+	image("assets/reversed_cup.png"),
 	[
 		#set text(1.5em)
 		是胶水吗？❌ \ 
@@ -70,7 +70,7 @@
 #grid(
 	columns: 2,
 	gutter:0.8em,
-	image("static/pressure.png"),
+	image("assets/pressure.png"),
 	[
 		#[
 			#set text(1.2em)

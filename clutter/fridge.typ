@@ -66,7 +66,7 @@
 #grid(
   columns: 2,
   gutter: 1em,
-  image("static/fridge.png"),
+  image("assets/fridge.png"),
   [
     #set par(leading: 3em)
     - *压缩机:* 压缩气体升温 \
@@ -81,7 +81,7 @@
 #grid(
   columns: 2,
   gutter: 0.2em,
-  image("static/refrigerant.png"),
+  image("assets/refrigerant.png"),
   [
     *关键在于合适的热物质！*
     - 沸点：通过*合理*的压力使其可以液化

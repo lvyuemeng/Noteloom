@@ -28,7 +28,7 @@
 
 #grid(
   columns: 2,
-  image("static/estove.png"),
+  image("assets/estove.png"),
   [
     #set text(1.2em)
     电流为什么会产生热量？\ \
@@ -79,7 +79,7 @@ $
 #grid(
   columns: 2,
   column-gutter: 12pt,
-  image("static/scatter.png"),
+  image("assets/scatter.png"),
   [
     - 电子同阳离子发生碰撞；
     - 电子同电子发生碰撞；

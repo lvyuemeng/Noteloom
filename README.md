@@ -8,7 +8,7 @@ This repository is a collection of notes and documents (kernel experiments, phys
 - `physics/` — long-form markdown and generated HTML pages.
 - `typst/` — Typst sources, thesis and templates (`typst/*/main.typ`, `typst/mine/templates`).
 - `clutter/` — misc notes and sketches.
-- `static/` — site static assets.
+- `assets/` — site static assets.
 
 ## How the site is assembled
 

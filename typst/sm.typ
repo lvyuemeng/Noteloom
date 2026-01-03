@@ -1111,7 +1111,7 @@ Which prove the theorem. It said that for a non-dissipative or closed(*invertibl
 
 
 #figure(
-  image("static/sm-flipper.png", width: 80%),
+  image("assets/sm-flipper.png", width: 80%),
   caption: [Left: A configuration of the Kac ring with $N = 16$ sites and $F = 4$ flippers. The flippers, which live on the links, are represented by blue dots. Right: The ring system after one time step. Evolution proceeds by clockwise rotation. Spins passing through flippers are flipped."],
 )
 
@@ -1140,7 +1140,7 @@ $
 $
 
 #figure(
-  image("static/sm-kac-test.png", width: 80%),
+  image("assets/sm-kac-test.png", width: 80%),
   caption: [Three simulations of the Kac ring model with $N = 2500$ sites and three different concentrations of flippers. The red line shows the magnetization as a function of time, starting from an initial configuration in which 100% of the spins are up. The blue line shows the prediction of the Stosszahlansatz, which yields an exponentially decaying magnetization with time constant $tau$.],
 )
 
