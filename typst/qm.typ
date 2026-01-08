@@ -422,9 +422,17 @@ $
   & tensor(M, -mu, -nu) = gamma_mu and gamma_nu \
   & tensor(M, -mu, -nu) = gamma_mu gamma_nu - tensor(g, -mu, -nu) \
 $
+
+$
+ tensor(M,-mu,-nu) = [gamma_mu,gamma_nu]_- 
+$
+
 $
   tensor(M, -mu, -nu) and gamma_rho = gamma_mu gamma_nu and gamma_rho = gamma_mu g_(nu rho) - gamma_nu g_(mu rho)
 $
+
+By $[A B,C]_- = dots$.
+
 $
   tensor(M, -mu, -nu) and tensor(M, -rho, -sigma) = gamma_mu gamma_nu and gamma_rho gamma_sigma = gamma_mu gamma_sigma g_(v rho) - gamma_mu gamma_rho g_(nu sigma) + gamma_nu gamma_rho g_(mu sigma) - gamma_nu gamma_sigma g_(mu rho)
 $
@@ -708,7 +716,7 @@ And we actually acquire a more ease representation as $H_bold(alpha)$.
       diagram({
         let nodes = range(6).map(i => {
           if i == 4 {
-            return node((i * 0.5, 0))[dots.c]
+            return node((i * 0.5, 0))[$dots.c$]
           }
           dynkin_node((i * 0.5, 0))
         })
@@ -790,7 +798,7 @@ And we actually acquire a more ease representation as $H_bold(alpha)$.
       {
         let nodes = range(4).map(i => {
           if i == 2 {
-            return node((i * 0.5, 0))[dots.c]
+            return node((i * 0.5, 0))[$dots.c$]
           }
           dynkin_node((i * 0.5, 0))
         })
@@ -823,7 +831,7 @@ And we actually acquire a more ease representation as $H_bold(alpha)$.
       {
         let nodes = range(4).map(i => {
           if i == 2 {
-            return node((i * 0.5, 0))[dots.c]
+            return node((i * 0.5, 0))[$dots.c$]
           }
           dynkin_node((i * 0.5, 0))
         })

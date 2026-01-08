@@ -59,16 +59,34 @@ $
 $
 
 $
+  mu = beta^(-1) ln (N lambda^d)/V
+$
+
+$
   p V = beta^(-1) e^(beta mu) lambda_beta^(-d) V = N/beta = N k_B T
 $
 
 $
-  expval(H) = - pdv(ln italic(Xi), beta) + mu N = - (V mu e^(beta mu))/(lambda_beta^d) + mu N + V e^(beta mu) d/(lambda_beta^(d+1)) dot 1/2 lambda_beta^(-1) beta^(-1/2) beta^(-1/2) = N d beta^(-1)
+  expval(H) = - pdv(ln italic(Xi), beta) + mu N = - (V mu e^(beta mu))/(lambda_beta^d) + mu N + V e^(beta mu) d/(lambda_beta^(d+1)) dot 1/2 lambda_beta^(-1) beta^(-1/2) beta^(-1/2) = (N d)/2 beta^(-1)
 $
 
-// $
-//   (Delta E)^2 = pdv(ln italic(Xi),beta,2) =
-// $
+$
+  expval(H) - S T - mu expval(N) & = Omega \
+               S & = (expval(H) - mu expval(N) - Omega)/T \
+               S & = k beta^(-1) ( beta pdv(Omega, beta) - mu pdv(Omega, mu) - Omega) \
+               S & = k (beta pdv(ln Xi, beta) - mu beta^(-1) pdv(Xi, mu) - ln Xi)
+$
+
+$
+  S = - pdv(Omega,T) = - pdv(Omega,beta) dv(beta,T) = 1/(k_B T^2) pdv(Omega,beta) = k_B beta pdv(Omega,beta)
+$
+
+Set $k_B = 1$ as Gibbs entropy:
+
+$
+  S &= V/(lambda_B^d)e^(beta mu) ((d+2)/2 - mu beta) \
+  &= ln Xi + beta expval(H) - beta mu expval(N)
+$
 
 The state relation can also be computed:
 
@@ -90,11 +108,27 @@ $
 $
 
 $
-  expval(H^2) - expval(H)^2 = "Var"(H) = - pdv(H, beta) = (N d)/2 beta^(-2)
+  expval(H^2) - expval(H)^2 = "Var"(H) = - pdv(expval(H), beta) = (N d)/2 beta^(-2)
 $
 
 $
   ("Var"(H))^(1/2)/(expval(H)) = (2/(d N))^(1/2) ->(N -> infinity) = 0
+$
+
+$
+  beta expval(H) - S = ln Z
+$
+
+$
+  S = - pdv(F,T) = - pdv(F,beta) dv(beta,T) = 1/(k_B T^2) pdv(F,beta) = k_B beta pdv(F,beta)
+$
+
+Set $k_B = 1$ as Gibbs entropy:
+
+$
+  S = beta expval(H) - ln Z & = (N d)/2 + (N (ln V - d ln lambda_B) - ln N!) \
+  &= N (ln V/(lambda_B^d) + d/2 - ln N!)\
+  &approx N (ln V/(lambda_B^d) + (d+2)/2 - ln N)
 $
 
 The notorious _Maxwell Velocity Distriution_ can also be established by given empirical vector of momentum.
@@ -327,9 +361,9 @@ Now:
 - If $expval(n) <= expval(n)_c (T)$: there's a unique $mu < epsilon_0$ solving integration.
 - If $expval(n) >= expval(n)_c (T)$: no solution exists, any possible $mu$ can't make the integral reaching $expval(n) >= expval(n)_c (T)$.
 
-That's, the *continuum assumption* of energy density failed. Where the freedom *froze* at low enough temperature in which energy is the base energy $epsilon_0$.
+That's, the *continuum assumption* of energy density failed. Where the freedom *freeze* at low enough temperature in which energy is the base energy $epsilon_0$.
 
 $
   expval(n)(beta) &= 1/V (g_s (epsilon_0))/(e^(beta(epsilon_0 - mu)) - 1) + integral_0^infinity d epsilon' thin g(epsilon' + epsilon_0)/(e^(beta epsilon') - 1), quad epsilon' = epsilon - epsilon_0 \
-  &= n(epsilon_0) + integral_(epsilon_0)^infinity n(epsilon)  = n(epsilon_0) + expval(n)_c (beta)
+  &= n(epsilon_0) + integral_(epsilon_0)^infinity n(epsilon) = n(epsilon_0) + expval(n)_c (beta)
 $

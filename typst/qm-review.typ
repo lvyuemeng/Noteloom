@@ -5,6 +5,92 @@
   title: "Review of Quantum",
 )
 
+= Operator
+
+For Hermitian:
+
+$
+	expval(A) = braket(psi,A psi) = braket(A psi, psi) = braket(psi,A psi)^* = expval(A)^*
+$
+
+Reversely, if $forall psi$ s.t. $braket(psi,A psi)$ is real:
+
+$
+	psi = psi_1 + psi_2 \
+	braket(psi, A psi) = braket(psi_1,A psi_1) + braket(psi_1,A psi_2) + braket(psi_2,A psi_1) + braket(psi_2,A psi_2) = braket(A psi,psi) = dots
+$
+
+$
+	braket(psi_1,A psi_2) + braket(psi_2, A psi_1) &= braket(A psi_2,psi_1) + braket(A psi_1, psi_2) \
+	braket(psi_1,A psi_2) - braket(A psi_1,psi_2) &= (dots) 
+$
+
+The composition is arbitrary because:
+
+$
+	psi = psi_1 + psi' +  psi_2 - psi' = psi'_1 + psi'_2
+$
+
+Therefore the only choice is: $braket(psi_1,A psi_2) = braket(psi_2, A psi_1)$
+
+$
+	i planck dv(A,t) = [A,H]
+$
+
+$
+	- planck^2 dv(A,t,2) = [[A,H],H]
+$
+
+$
+	i planck dv(,t) braket(psi,e^(- i/planck H t) A e^(i/planck H t), psi) = braket(psi(t),[A,H],psi(t))
+$
+
+$
+	- planck^2 (,t,2) braket(psi,e^(- i/planck H t) A e^(i/planck H t), psi) &= braket(psi(t),[[A,H],H],psi(t)) \
+	dv(,t,2) expval(A) = braket([[A,H],H])
+$
+
+$
+	E_n &= braket(psi_n (t),H,psi_n (t)) \
+	dv(E_n,lambda) &= dv(,lambda) braket(psi_n,e^(- i H t) H e^(i H t), psi_n) \
+	dv(E_n,lambda) &= braket(psi_n, dv(H,lambda),psi_n)
+$
+
+So one often say:
+
+$
+	dv(A,t) = dv(A_H,t) = -i/planck [A,H]
+$
+
+$
+	braket(n,dv(A,t),n') = -i/planck braket(n,[A,H],n') = - i/planck (E_n' - E_n) braket(n,A,n')
+$
+
+$
+	[[A,H],A] = [A,H] A - A [A,H] \
+$
+
+$
+	braket(n,[A,H] A - A [A,H],n') &= sum_k (E_n - E_k) braket(n,A,k) braket(k,A,n') - (n <-> n') \
+$
+
+If $n = n'$:
+
+$
+	"LHS" = 2 sum_k (E_n - E_k) F_(n k)^2
+$
+
+Suppose $A = hat(x)$ for $H = p^2/(2m) + V(bold(r))$:
+
+$
+	[[x, H],x] = i planck [p/m, x] = -planck^2/m
+$
+
+$
+	sum_k (E_n - E_k) x^2_(n k)  &= -planck^2/(2m) \
+	sum_k (E_k - E_n) x^2_(k n)  &= planck^2/(2m) \
+$
+
 = Spin
 
 $
@@ -96,6 +182,105 @@ $
 	(P_(s=0) - P_(s=1)) v = P_(1 2) v = - lambda_(v) v
 $
 
+== Zeeman Effect
+
+A electron with angular momentum $bold(L)$:
+
+$
+	mu_L = - e/(2m_e) bold(L) = - g_l bold(L)
+$
+
+Suppose $bold(B) = B hat(z)$:
+
+$
+	H_L = - mu_L dot bold(B) = (e B)/(2m_e) L_z
+$
+
+A electron intrinsic spin $bold(S)$:
+
+$
+	mu_S = - g_s bold(S) approx - e/(m_e) bold(S) 
+$
+
+Usually, we have a *approximation* relation:
+
+$
+	2 g_l = g_s
+$
+
+$
+	H_S = - mu_S dot bold(B) approx - (e B)/(m_e) S_z 
+$
+
+$
+	H_B approx g_l B (L_z + 2 S_z), quad H = H_0 + xi(bold(r)) bold(L) dot bold(S) + H_B
+$
+
+Or generally:
+
+$
+	H_B = g_l B_z (L_z + alpha S_z)
+$
+
+Since $bold(B)$ is weak, we perturbs by $H_B = H'$ and solve in $ket(n j s j m_j)$ eigenstate.
+
+Now beside $n,l$ state, we use composite state $j = l + s$ rather their own, with the $m_j$ as axial momentum.
+
+$
+	bold(J) = bold(L) + bold(S) \
+$
+
+Focus only on $ket(j m_j)$:
+
+$
+	Delta E = g_l braket(j m_j, L_z + alpha S_z, j m_j)
+$
+
+$
+	mu_"eff" = g_j bold(J), quad mu_"eff" dot bold(B) = g_j J_z \
+	Delta E = g_j braket(j m_j, J_z ,j m_j)
+$
+
+Because we are in $ket(j m_j)$ basis, therefore any vector must *project* into $J$ subspace.
+
+$
+	expval(bold(L) + alpha bold(S)) = expval((bold(L) + alpha bold(S)) dot bold(J))/(expval(bold(J)^2)) expval(bold(J))
+$
+
+$
+	mu_"eff" = g_l expval((bold(L) + alpha bold(S)) dot bold(J))/(expval(bold(J)^2)) bold(J) = g_j bold(J)
+$
+
+$
+	(bold(L) + alpha bold(S))(bold(L) + bold(S)) = bold(L)^2 + (alpha + 1) bold(L) dot bold(S) + alpha bold(S)^2
+$
+
+$
+	bold(L) dot bold(S) = 1/2 (bold(J)^2 - bold(L)^2 - bold(S)^2)
+$
+
+$
+	(bold(L) + alpha bold(S))(bold(L) + bold(S)) =  ((1+alpha) bold(J)^2 + (1-alpha)bold(L)^2 + (alpha - 1)bold(S)^2)/2
+$
+
+$
+	g_j  = g_l expval((bold(L) + alpha bold(S)) dot bold(J))/(expval(bold(J)^2)) = g_l ((1+alpha)j(j+1) + (1-alpha)(l(l+1) - s(s-1)))/(2 j(j+1))
+$
+
+$
+	Delta E = g_j planck m_j quad m_j in {-j,-j+1,dots,j}
+$
+
+Where we gets $2j+1$ split state.
+
+If there's no $xi(bold(r)) bold(L) dot bold(S)$, we have no need to apply perturbation calculation and use eigenstate $ket(n l m_l m_s)$:
+
+$
+	Delta E = g_l B (m_l + alpha m_s)
+$
+
+Totally $(2 l + 1) dot 2$ states.
+
 == Problem
 
 $
@@ -110,45 +295,6 @@ $
 	v(t) = e^(- i H t) v(0) = e^(- i E_0 t) chi_(0 0) + e^(- i E_1 t) chi_(10)
 $
 
-= Perturbation
-
-$
-	H = H_0 + lambda H', quad ket(n) = sum_(i=0) lambda^i ket(n^i), quad E_n = sum_(i=0) lambda^i E^i_n
-$
-
-$
-	H ket(n) &= E_n ket(n) \
-	H_0 + lambda H' sum_(i=0) lambda^i ket(n^i) &= sum_(j=0) lambda^j E_n^j sum_(k=0) lambda^k ket(n^k) \
-	H_0 ket(n^0) + sum_(i=1) lambda^(i) (H_0 ket(n^i) + H' ket(n^(i-1))) &= E_n^0 ket(n^0) + sum_(i=1) sum_(j+k = i) E_n^j ket(n^k) \
-$
-
-$
-	&lambda^0: quad H_0 ket(n^0) = E_n^0 ket(n^0) \
-	&lambda^1: quad H_0 ket(n^1) + H' ket(n^0) = E^0_n ket(n^1) + E^1_n ket(n^0) \
-	&lambda^2: quad H_0 ket(n^2) + H' ket(n^1) = E^0_n ket(n^2) + E^1_n ket(n^1) + E^2_n ket(n^0)
-$
-
-By orthogonality:
-
-$
-	ket(n^i) = sum_(m!=n^0) c_m^i ket(m^0) => braket(n^i,n^0) = 0
-$
-
-$
-	lambda^1: quad braket(n^0,H_0,n^1) + braket(n^0,H',n^0) &= E_n^1 \
-	E_n^1 &= braket(n_0,H',n_0) \
-$
-
-$
-	lambda^1: quad braket(k^0,H_0,n^1) + braket(k^0,H',n^0) &= E_n^0 braket(k^0,n^1) + E^1_n braket(k^0,n^0) \
-	E_k^0 c_k^1 + braket(k^0,H',n^0) &= E_n^0 c_k^1 \
-	c_k^1 &= braket(k^0,H',n^0)/(E_n^0 - E_k^0)
-$
-
-$
-	lambda^2: quad braket(n^0,H_0,n^2) + braket(n^0,H',n^1) &= E_n^2 \
-	sum_(k^0 != n^0) (braket(n^0,H',k^0) braket(k^0,H',n^0))/(E^0_n - E^0_k) &= E_n^2
-$
 
 = Typical Model
 
@@ -274,4 +420,44 @@ $
 $
 	[m omega^2 x^2] = [planck omega], [x] = ([planck]/[m omega])^(1/2) \
 	[p^2/m] = [planck omega], [p] = ([m omega] [planck]])^(1/2) \
+$
+
+= Perturbation
+
+$
+	H = H_0 + lambda H', quad ket(n) = sum_(i=0) lambda^i ket(n^i), quad E_n = sum_(i=0) lambda^i E^i_n
+$
+
+$
+	H ket(n) &= E_n ket(n) \
+	H_0 + lambda H' sum_(i=0) lambda^i ket(n^i) &= sum_(j=0) lambda^j E_n^j sum_(k=0) lambda^k ket(n^k) \
+	H_0 ket(n^0) + sum_(i=1) lambda^(i) (H_0 ket(n^i) + H' ket(n^(i-1))) &= E_n^0 ket(n^0) + sum_(i=1) sum_(j+k = i) E_n^j ket(n^k) \
+$
+
+$
+	&lambda^0: quad H_0 ket(n^0) = E_n^0 ket(n^0) \
+	&lambda^1: quad H_0 ket(n^1) + H' ket(n^0) = E^0_n ket(n^1) + E^1_n ket(n^0) \
+	&lambda^2: quad H_0 ket(n^2) + H' ket(n^1) = E^0_n ket(n^2) + E^1_n ket(n^1) + E^2_n ket(n^0)
+$
+
+By orthogonality:
+
+$
+	ket(n^i) = sum_(m!=n^0) c_m^i ket(m^0) => braket(n^i,n^0) = 0
+$
+
+$
+	lambda^1: quad braket(n^0,H_0,n^1) + braket(n^0,H',n^0) &= E_n^1 \
+	E_n^1 &= braket(n_0,H',n_0) \
+$
+
+$
+	lambda^1: quad braket(k^0,H_0,n^1) + braket(k^0,H',n^0) &= E_n^0 braket(k^0,n^1) + E^1_n braket(k^0,n^0) \
+	E_k^0 c_k^1 + braket(k^0,H',n^0) &= E_n^0 c_k^1 \
+	c_k^1 &= braket(k^0,H',n^0)/(E_n^0 - E_k^0)
+$
+
+$
+	lambda^2: quad braket(n^0,H_0,n^2) + braket(n^0,H',n^1) &= E_n^2 \
+	sum_(k^0 != n^0) (braket(n^0,H',k^0) braket(k^0,H',n^0))/(E^0_n - E^0_k) &= E_n^2
 $
