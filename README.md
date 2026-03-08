@@ -5,7 +5,7 @@ This repository is a collection of notes and documents (kernel experiments, phys
 ## Quick Layout (recommended)
 
 - `kernel/` — OS/kernel notes and experiments. Many subfolders are mounted into the Hugo site.
-- `physics/` — long-form markdown and generated HTML pages.
+- `katex/` — long-form markdown and generated HTML pages.
 - `typst/` — Typst sources, thesis and templates (`typst/*/main.typ`, `typst/mine/templates`).
 - `clutter/` — misc notes and sketches.
 - `assets/` — site static assets.
@@ -30,7 +30,7 @@ To add a new post that appears on the site:
 
 ## Templates and Typst
 
-- Typst templates and bibliographies live under `typst/mine/` and `typst/*/refs.bib` — update those when changing PDF templates or references.
+- Typst templates live under `typst/manus/`, A general template dependency.
 - To compile a Typst document locally:
 
 ```bash
@@ -49,9 +49,3 @@ hugo --minify    # build static site
 ```
 
 - Go toolchain: a `go.mod` exists at the project root; some tools or modules may require a Go toolchain (`go 1.25.1` specified).
-
-## Notes for contributors and agents
-
-- Preserve author voice and Chinese/technical comments when editing notes. Prefer small, content-preserving edits unless asked to rewrite.
-- For site changes, edit top-level source folders and update `config.toml` mounts rather than creating `content/` files directly.
-- See `.github/copilot-instructions.md` for AI-agent-specific guidance.
