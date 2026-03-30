@@ -3,15 +3,17 @@
 ### Conclusion
 
 Finish Task：
+
 - `sys_mmap/sys_munmap`
 - `sys_trace/sys_get_time`
 - add `get_mut_data`
 - refactor check for `translate_byte_buffer`
 
 Thanks to:
+
 - AI: DeepSeek, Claude(Help to read panic info and provide suggestion for achieving `get_data` by `translate_byte_buffer`), Kimi(Help to provide page related infos of RISC-V)
 
-### Q1:
+### Q1
 
 Page Entry to bundle permission and physical page.
 
@@ -33,7 +35,7 @@ pub fn flags(&self) -> PTEFlags {
 - `A`(accessed): whether be accessed after set to zero.
 - `D`(Dirty): whether be modified after set to zero.
 
-### Q2:
+### Q2
 
 mcause(Thanks to DeepSeek):
 
@@ -47,6 +49,7 @@ mcause(Thanks to DeepSeek):
 ---
 
 Benefit of Lazy Load(Thanks to Kimi):
+
 - Reduce memory load.
 - Reduce IO operations.
 - Speed start.(only load necessary code)
@@ -70,6 +73,7 @@ pub struct MapArea {
     map_perm: MapPermission,
 }
 ```
+
 when alloced, init as `unused`, then if operation take memory, we will really map it to one `FrameTracker`.
 
 ---
@@ -78,15 +82,16 @@ Behavoir of Swap(Thanks to DeepSeek):
 
 - the page `V` bits(valid) will be set to 0.
 - `RSW` is custom bits to indicate infos, in this case, it can be used to store `swap` info.
-  
+
 Workflow:
+
 - trigger `V` as 0.
 - `stval` will be routed to virtual address for this page.
 - Check `swap info to ensure.
 - Read memory and set new `ppn`, set `V` to 1.
 - Back to `mepc` and reimplement instructions.
 
-### Q3:
+### Q3
 
 **Side Channel Attack**(Thanks to DeepSeek):
 Based on hardware bugs or time, power consumption etc... infos, stealing data bypassing permission isolation.
@@ -101,10 +106,12 @@ Restriction:
 Set `U` bits to restrict `U`-level behavoir.
 
 Benefit:
+
 - No need to change table to reduce operations in Trap.
 - Only maintain one table for simplicity.
 
 Switch Case:
+
 - Two-Page:
   - U-level S-level switch, for example: Trap.
 - Single-Page:
@@ -124,5 +131,3 @@ Switch Case:
 3. 我独立完成了本次实验除以上方面之外的所有工作，包括代码与文档。 我清楚地知道，从以上方面获得的信息在一定程度上降低了实验难度，可能会影响起评分。
 
 4. 我从未使用过他人的代码，不管是原封不动地复制，还是经过了某些等价转换。 我未曾也不会向他人（含此后各届同学）复制或公开我的实验代码，我有义务妥善保管好它们。 我提交至本实验的评测系统的代码，均无意于破坏或妨碍任何计算机系统的正常运转。 我清楚地知道，以上情况均为本课程纪律所禁止，若违反，对应的实验成绩将按“-100”分计。
-
-

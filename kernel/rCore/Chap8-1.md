@@ -11,9 +11,11 @@ Therefore, process will be the container of threads, each threads contain its `i
 Now, clarify our resource dispatch for one thread:
 
 Immutable:
+
 - kernel stack
 
 Mutable:
+
 - thread id
 - user stack
 - trap context
@@ -366,4 +368,3 @@ pub fn sys_waittid(tid: usize) -> i32 {
     }
 }
 ```
-

@@ -18,11 +18,13 @@ graph TD
     App <--> Runtime
     Runtime <--> HAL
 ```
+
 The design of Aceros is simple, first **HAL**(`axhal`) is the abstraction of hardware to initiation trap, stack, MMU, registers based on various architectures. Then **Runtime**(`ax*`) will be classified as many components to support various environments, like net, task, fs etc...
 
 Each arrow is reversible, in boot, it will be from bottom to top to initiate App. Then when App call something, it will be from top to bottom to evoke functionality.
 
-In real situation, we choose thing based on *features*. 
+In real situation, we choose thing based on *features*.
+
 ```mermaid
 graph TD
 	App --> axstd
@@ -33,5 +35,3 @@ graph TD
 	axruntime -->|irq| irq
 	axruntime -->|multitask| axtask
 ```
-
-

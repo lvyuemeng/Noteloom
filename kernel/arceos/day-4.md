@@ -9,7 +9,7 @@ A physical computer system can build multiple virtual computer system with its o
 **Hypervisor** will execute most instructions directly as a isomorphism of the stimulated virtual system to gain a huge efficiency.
 
 ***I** type*: Each virtual OS is equal on hardware.
-***II** type*: Virtual OS is on host OS. 
+***II** type*: Virtual OS is on host OS.
 
 Each instance as **Guest(OS Image)** be loaded on our host os kernel.
 
@@ -39,6 +39,5 @@ Timer will be injected to `sbi-call` by setting a virtual clock in `VS`, when `s
 Memory will be separated based on guest and host too. `GVA` will be a map of `GPA` as guest memory. However, `HPA` take responsibility of handle `GPA` as the virtualization process.
 
 ---
+
 Dev will record each start `vaddr` and when `VM-Exit` of `PageFault`, it will find`vmdevs.find(addr)` and call `handle_mmio` for corresponding request.
-
-

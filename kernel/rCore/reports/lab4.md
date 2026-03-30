@@ -3,6 +3,7 @@
 ### Conclusion
 
 Finish Task:
+
 - `Inode`: `is_dir`, `is_file`, `add_link`, `remove_link`
 - `File`: add `stat` method
 - `OSInode`: add `ino`, `nlink`, `is_dir`, `is_file`
@@ -10,6 +11,7 @@ Finish Task:
 - Syscall: `sys_linkat`, `sys_unlinkat`, `sys_stat`
 
 Thanks to:
+
 - AI: DeepSeek(Thanks to exposit part of error message.)
 
 ### Q1
@@ -19,6 +21,7 @@ Root inode is denoted as the root dir of our file system. If part of content(`Di
 ## Lab 5
 
 Thanks to:
+
 - AI: DeepSeek(Thanks to give a finer design of shared message queue for each process)
 
 ### Q1

@@ -15,22 +15,22 @@ Time 0: Arena created
   - Main memory: [empty, capacity=1000]  
   - Freelist: [sentinel only]  
   - Allocation: Uses fast path ✓  
-  
+
 Time 1: Allocate 300 bytes  
   - Main memory: [used=300, remaining=700]  
   - Freelist: [sentinel only]  
   - Allocation: Uses fast path ✓  
-  
+
 Time 2: Allocate 500 bytes  
   - Main memory: [used=800, remaining=200]  
   - Freelist: [sentinel only]  
   - Allocation: Uses fast path ✓  
-  
+
 Time 3: Drop the 300-byte allocation  
   - Main memory: [used=800, remaining=200]  
   - Freelist: [sentinel → 300-byte segment]  
   - Now freelist has 1 usable segment!  
-  
+
 Time 4: Allocate 400 bytes (main memory too small)  
   - Fast path fails (want=1200 > cap=1000)  
   - Slow path: Uses 300-byte segment from freelist ✓  
@@ -43,7 +43,7 @@ Time 4: Allocate 400 bytes (main memory too small)
 - A contiguous block of memory (from heap allocation, file mapping, or anonymous mapping)
 Divided into:
 
-```
+```text
 Reserved Space → Metadata/Header → Allocation Space
 ```
 
@@ -86,7 +86,8 @@ Reserved Space → Metadata/Header → Allocation Space
   - Atomically update allocation position (thread-safe) or directly increment (single-threaded)
 
   - Return offset to allocated memory
- Otherwise, proceed to **Phase 2**
+
+  Otherwise, proceed to **Phase 2**
 
 ### Phase 2: Slow Path (Freelist)
 

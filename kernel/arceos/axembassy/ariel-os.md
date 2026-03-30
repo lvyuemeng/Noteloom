@@ -33,6 +33,7 @@ fn init() -> ! {
         .run(|spawner| spawner.must_spawn(init_task(p)))
 }
 ```
+
 [![View Source Code](https://img.shields.io/badge/Source_Code-L145-blue?style=flat-square&logo=github)](https://github.com/ariel-os/ariel-os/blob/main/src/ariel-os-embassy/src/lib.rs#L145-L155)
 
 Above code exported as a entry point. It create a static life time instance and then run it.
@@ -48,6 +49,7 @@ we serve a unused hardware or prescribed `SWI` software interruption for executo
 Thus, after setup, it contains a `on_interrupt` that should be called by potential designed `SWI`.
 
 Ariel achieve this by declaration macro to register specified one in embassy:
+
 ```rust
 /// ```Rust
 /// executor_swi!(SWI_IRQ_1);
@@ -82,6 +84,7 @@ macro_rules! executor_swi {
     };
 }
 ```
+
 [![View Source Code](https://img.shields.io/badge/Source_Code-L27-blue?style=flat-square&logo=github)](https://github.com/ariel-os/ariel-os/blob/58a29321be20b50bf018d6e7917cc7aeac4d1c14/src/ariel-os-embassy-common/src/executor_swi.rs#L27-L42)
 
 Thus:
@@ -104,17 +107,19 @@ pub(crate) fn init() {
 }
 ```
 
-Here after spawn the task we doesn't go to `run` rather we first start the `SWI` and then schedule independently. 
+Here after spawn the task we doesn't go to `run` rather we first start the `SWI` and then schedule independently.
 
 Ariel-OS use procedural macro by `linkme` to register the function on `INIT_FUNCS` rather export it on boot process.
 
 The usual usage of `linkme` is to declare a array:
+
 ```rust
 use linkme::distributed_slice;
 
 #[distributed_slice]
 pub static INIT_FUNCS: [fn()] = [..];
 ```
+
 [![View Source Code](https://img.shields.io/badge/Source_Code-L83-blue?style=flat-square&logo=github)](https://github.com/ariel-os/ariel-os/blob/58a29321be20b50bf018d6e7917cc7aeac4d1c14/src/ariel-os-rt/src/lib.rs#L83-L86)
 
 After that, we can register function by above macro with identifier such as `$crate::ident`.
@@ -138,6 +143,7 @@ pub fn set(thread_id: ThreadId, mask: ThreadFlags) {
     SCHEDULER.with_mut(|mut scheduler| scheduler.flag_set(thread_id, mask));
 }
 ```
+
 [![View Source Code](https://img.shields.io/badge/Source_Code-L17-blue?style=flat-square&logo=github)](https://github.com/ariel-os/ariel-os/blob/main/src/ariel-os-threads/src/thread_flags.rs#L17-L26)
 
 ```rust
@@ -156,6 +162,7 @@ pub fn wait_any(mask: ThreadFlags) -> ThreadFlags {
     }
 }
 ```
+
 [![View Source Code](https://img.shields.io/badge/Source_Code-L44-blue?style=flat-square&logo=github)](https://github.com/ariel-os/ariel-os/blob/main/src/ariel-os-threads/src/thread_flags.rs#L44-L57)
 
 We know executor use `__pender(...)` to wake itself to poll. Indeed, we can therefore `set` in `__pender`. And in `run`, we `wait_any` after `poll` to park itself.
@@ -175,6 +182,7 @@ fn __pender(context: *mut ()) {
     thread_flags::set(thread_id, THREAD_FLAG_WAKEUP);
 }
 ```
+
 [![View Source Code](https://img.shields.io/badge/Source_Code-L18-blue?style=flat-square&logo=github)](https://github.com/ariel-os/ariel-os/blob/main/src/ariel-os-embassy/src/thread_executor.rs#L18-L23)
 
 ```rust
@@ -190,6 +198,7 @@ fn __pender(context: *mut ()) {
         }
     }
 ```
+
 [![View Source Code](https://img.shields.io/badge/Source_Code-L68-blue?style=flat-square&logo=github)](https://github.com/ariel-os/ariel-os/blob/main/src/ariel-os-embassy/src/thread_executor.rs#L68-L79)
 
 Ariel-OS use procedural macro to initiate a thread.
@@ -212,6 +221,7 @@ fn init() {
         .run(|spawner| spawner.must_spawn(init_task(p)));
 }
 ```
+
 [![View Source Code](https://img.shields.io/badge/Source_Code-L159-blue?style=flat-square&logo=github)](https://github.com/ariel-os/ariel-os/blob/main/src/ariel-os-embassy/src/lib.rs#L159-L172)
 
 The only difference is we initiate in a thread. The key of the macro is:
@@ -236,6 +246,7 @@ pub fn thread(args: TokenStream, item: TokenStream) -> TokenStream {
     TokenStream::from(expanded)
 }
 ```
+
 [![View Source Code](https://img.shields.io/badge/Source_Code-L81-blue?style=flat-square&logo=github)](https://github.com/ariel-os/ariel-os/blob/58a29321be20b50bf018d6e7917cc7aeac4d1c14/src/ariel-os-macros/src/thread.rs#L81-L94)
 
 `autostart_thread!` actually use scheduler to initiate the thread.
@@ -253,6 +264,7 @@ We can extract the `spawner` as a global static instance.
 However, it means if user spawn a task in a thread, it should be sended to the thread where executor located or the interrupt stack space. Which should implement `Send` unless the task can't be sended.
 
 We has such instance in embassy:
+
 ```rust
 /// Handle to spawn tasks into an executor from any thread.
 ///
@@ -266,6 +278,7 @@ pub struct SendSpawner {
     executor: &'static raw::SyncExecutor,
 }
 ```
+
 [![View Source Code](https://img.shields.io/badge/Source_Code-L239-blue?style=flat-square&logo=github)](https://github.com/embassy-rs/embassy/blob/b024d5e892618947f81efd72f2c4224ae830d891/embassy-executor/src/spawner.rs#L239-L242)
 
 ```rust
@@ -281,6 +294,7 @@ pub fn spawner() -> SendSpawner {
     SPAWNER.lock(|x| *x.get().unwrap())
 }
 ```
+
 [![View Source Code](https://img.shields.io/badge/Source_Code-L21-blue?style=flat-square&logo=github)](https://github.com/ariel-os/ariel-os/blob/main/src/ariel-os-embassy/src/asynch.rs#L21-L31)
 
 Allocation of new task instance is workable if we extract the spawner of our executor into global spawner.
@@ -294,6 +308,7 @@ async fn init_task(mut peripherals: hal::OptionalPeripherals) {
     ...
 }
 ```
+
 [![View Source Code](https://img.shields.io/badge/Source_Code-L176-blue?style=flat-square&logo=github)](https://github.com/ariel-os/ariel-os/blob/main/src/ariel-os-embassy/src/lib.rs#L176-#178)
 
 `autostart` is a parameter to tell system automatically start specified function. Usually used for peripherals manipulation.
@@ -320,6 +335,7 @@ Then, we can follow the routine as `INIT_FUNC` to create `EMBASSY_TASKS`.
 ///   the function (defaults to `1`).
 ///   Cannot be used on `autostart` tasks.
 ```
+
 [![View Source Code](https://img.shields.io/badge/Source_Code-L7-blue?style=flat-square&logo=github)](https://github.com/ariel-os/ariel-os/blob/58a29321be20b50bf018d6e7917cc7aeac4d1c14/src/ariel-os-macros/src/task.rs#L7-L22)
 
 Thus `task` macro dispatch a special routine for `autostart` rather than directly initiate a task by embassy macro, it will again register function into `EMBASSY_TASKS`.
@@ -349,6 +365,7 @@ pub fn task(args: TokenStream, item: TokenStream) -> TokenStream {
     ...
 }
 ```
+
 [![View Source Code](https://img.shields.io/badge/Source_Code-L95-blue?style=flat-square&logo=github)](https://github.com/ariel-os/ariel-os/blob/58a29321be20b50bf018d6e7917cc7aeac4d1c14/src/ariel-os-macros/src/task.rs#L95-L111)
 
 Which we use a callback function.
@@ -392,6 +409,7 @@ ariel_os::hal::define_peripherals!(Peripherals {
     spi_cs: P1_12,
 });
 ```
+
 [![View Source Code](https://img.shields.io/badge/Source_Code-L22-blue?style=flat-square&logo=github)](https://github.com/ariel-os/ariel-os/blob/80619c2e/tests/spi-main/src/pins.rs#L22-L30)
 
 Each is a special field can only be taken once:
@@ -411,6 +429,7 @@ macro_rules! define_peripherals {
         }
 }
 ```
+
 [![View Source Code](https://img.shields.io/badge/Source_Code-L42-blue?style=flat-square&logo=github)](https://github.com/ariel-os/ariel-os/blob/80619c2e/src/ariel-os-hal/src/define_peripherals.rs#L42-L51)
 
 So what does `hal::init()` do in previous code? Actually it routes to `hal` crate which only compiles specified concrete hardware crate containing the initialization of `OptionalPeripherals` solely defined for its hardware resource.
@@ -426,6 +445,7 @@ impl From<Peripherals> for OptionalPeripherals {
     }
 }
 ```
+
 [![View Source Code](https://img.shields.io/badge/Source_Code-L61-blue?style=flat-square&logo=github)](https://github.com/ariel-os/ariel-os/blob/main/src/ariel-os-hal/src/dummy/mod.rs#L61-L70)
 
 Now we can see the full view of `init_task()`.
@@ -442,6 +462,7 @@ async fn init_task(mut peripherals: hal::OptionalPeripherals) {
     ...
 }
 ```
+
 [![View Source Code](https://img.shields.io/badge/Source_Code-L205-blue?style=flat-square&logo=github)](https://github.com/ariel-os/ariel-os/blob/main/src/ariel-os-embassy/src/lib.rs#L205-L206)
 
 Some of them is a task should be spawned such as `net`.
@@ -467,4 +488,5 @@ async fn init_task(mut peripherals: hal::OptionalPeripherals) {
     ...
 }
 ```
+
 [![View Source Code](https://img.shields.io/badge/Source_Code-L328-blue?style=flat-square&logo=github)](https://github.com/ariel-os/ariel-os/blob/main/src/ariel-os-embassy/src/lib.rs#L328-L341)

@@ -6,7 +6,7 @@ We gonna load our `easy-fs` to kernel. First, we need to know our device interfa
 
 ### MMIO-Memory-Mapped I/O
 
-The device registers of peripherals can be accessed through specific physical memory addresses, **VirtIO** MMIO physical address range for the peripheral bus is 4KiB starting at 0X10001000. 
+The device registers of peripherals can be accessed through specific physical memory addresses, **VirtIO** MMIO physical address range for the peripheral bus is 4KiB starting at 0X10001000.
 
 ```rust
 // os/src/config.rs
@@ -79,7 +79,7 @@ impl OSInode {
 
 #### File Descriptor Table
 
-Now we need to connect file operations with process, each process need a descriptors table(which manage many files!) to indicate file record infos. 
+Now we need to connect file operations with process, each process need a descriptors table(which manage many files!) to indicate file record infos.
 
 ```rust
 // os/src/task/task.rs

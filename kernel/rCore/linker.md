@@ -1,17 +1,20 @@
 ## Linker
 
-### Syntax:
+### Syntax
 
 - Declaration
-```
+
+```text
 OUTPUT_ARCH(riscv)    /* 指定目标架构为 RISC-V */
 ENTRY(_start)         /* 明确入口点为 _start 符号 */
 ```
+
 - `OUTPUT_ARCH`: Architecture defined.
 - `ENTRY`: Define symbolic name of `ENTRY`, usually defined as `_start` as convention.
 
 - Basic Structure:
-```
+
+```text
 SECTIONS {
 	// definition
 	s<name> = .;
@@ -19,6 +22,7 @@ SECTIONS {
 	. = ALIGN(4K);
 }
 ```
+
 - `SECTIONS`: Main skeleton, define the layout of memory.
 - `.`: Current **Location Counter**, output current addr.
 
@@ -28,39 +32,46 @@ SECTIONS {
 ---
 
 - Load:
-```
+
+```text
 . = BASE_ADDRESS;
 ```
+
 - BASE_ADDRESS: Usually defined as `0x8000_0000`(RISC-V QEMU convention).
 - `.`: When it defined, it will arrange successively.
 
 ---
 
 - `.text`(Code):
-```
+
+```text
 .text : {
     *(.text.entry)  /* 强制将 _start 函数放在最前面 */
     *(.text*)       /* 合并所有输入文件的 .text* 段 */
 }
 ```
+
 - `.text.entry`: Corresponding `_start` as entry.(Defined in Rust as `#[no_mangle] pub extern "C" fn _start()`)
 - `*(.text*)`: Wildcard `*` will match all file with `.text` s.t `.text.foo`
 
 ---
 
 - `.rodata`(Read Only Data)(R-X):
-```
+
+```text
 .rodata : { 
 	*(.rodata .rodata.*)   /* 匹配所有 .rodata 和 .rodata.xxx 段 */
 	*(.srodata .srodata.*) /* 匹配所有 .srodata 和 .srodata.xxx 段 */
 }  /* 合并所有只读数据（如字符串常量） */
 ```
+
 - `*(.rodata*)`: Match data s.t. `&str` or `const` in Rust.
 - `.srodata`: **Small Read-Only Data** only for RISC-V.(usually access by `gp`(global ptr))
 ---
 
 - `.data`(Initiated Data)(RW-):
-```
+
+```text
 .data : { *(.data*) }  /* 已初始化的全局变量（如 static mut X = 1;） */
 ```
 
@@ -69,7 +80,8 @@ SECTIONS {
 ---
 
 - `.bss`(Uninitiated Data):
-```
+
+```text
 .bss : { 
     sbss = .;          /* 记录 .bss 段起始地址 */
 	*(.bss.stack)		/* 内核专用段 */ 
@@ -78,6 +90,7 @@ SECTIONS {
     ebss = .;          /* 记录 .bss 段结束地址 */
 }
 ```
+
 - `.bss.stack`: custom segment, used for Kernel stack allocation.
 
 ```rust
@@ -94,10 +107,10 @@ unsafe {
 ---
 
 - `/DISCARD/`(discard ...):
-```
+
+```text
 /DISCARD/ : { *(.eh_frame) }  /* 丢弃调试帧信息（减少内核体积） */
 ```
+
 - `.eh_frame`: used for exception handling, usually useless in bare-metal.
 - Less binary size.
-
-

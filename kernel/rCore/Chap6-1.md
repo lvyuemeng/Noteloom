@@ -73,6 +73,7 @@ Play the role of mapping the given dir tree structure to persistent storage. For
 For a persistent external storage, it will separate file in basic storage unit. Which is called **sector**(usually 512 bytes, 4KB), rather, file system will set its own storage unit which is called **block**, usually different from sector, but in this implementation, we set it as 512 bytes, same as sector.
 
 A basic interface from device is:
+
 ```rust
 // easy-fs/src/block_dev.rs
 
@@ -226,7 +227,7 @@ impl Bitmap {
 
 Based on such structure, we could exposit what is **Inode** and **Data** Block, not all block will store real data because some of them need to be used as guidance. However, we also need to know where and how these route blocks be allocated. That's the reason of **Bit Map**! Now we delve into **Inode**.
 
-To make one inode control many data blocks, we will design layer of route for it. Beside direct index, it also store the index of layer 1 and layer 2 to route other index block(which is considered same as data block), and route to real data block. Notice one block contains 512 bytes, which is 512 u8, so it contains 512/4 = 128 u32, so one index block can route 128 * 512 bytes = 128 * 0.5 KB = 64 KB in one layer. In second layer, it can route as much as 128 * 64 KB = 64 MB.
+To make one inode control many data blocks, we will design layer of route for it. Beside direct index, it also store the index of layer 1 and layer 2 to route other index block(which is considered same as data block), and route to real data block. Notice one block contains 512 bytes, which is 512 u8, so it contains 512/4 = 128 u32, so one index block can route 128 *512 bytes = 128* 0.5 KB = 64 KB in one layer. In second layer, it can route as much as 128 * 64 KB = 64 MB.
 
 ```rust
 // easy-fs/src/layout.rs
@@ -329,7 +330,6 @@ loop {
     start = end_current_block;
 }
 ```
-
 
 ---
 
@@ -459,7 +459,7 @@ pub struct DirEntry {
 pub const DIRENT_SZ: usize = 32;
 ```
 
-First, we will 
+First, we will
 
 ```rust
 // easy-fs/src/vfs.rs
@@ -510,21 +510,12 @@ impl Inode {
 ```
 
 Usually, the workflow of create or delete, read or write would be:
+
 - read/write
-    - get root inode which is dir type
-    - read/write closure of disk inode through root inode
-    - resize specified inode
+  - get root inode which is dir type
+  - read/write closure of disk inode through root inode
+  - resize specified inode
 - create/clear
-    - allocation/deallocation: alloc/dealloc inode by bitmap and get its index
-    - initialization/clear by get its block cache by its index
-    - resize root inode
-
- 
-
-
-
-
-
-
-
-
+  - allocation/deallocation: alloc/dealloc inode by bitmap and get its index
+  - initialization/clear by get its block cache by its index
+  - resize root inode

@@ -7,6 +7,7 @@ If a process want to notify other process with event semantics, such one-side me
 For example, a program could receive the stop event sended by `Ctrl+C`, and stop itself.
 
 The abstraction of handling of signal:
+
 - ignore: do own thing and ignore signal
 - trap: call corresponding operation of the received signal
 - stop: stop itself
@@ -244,6 +245,7 @@ Finally, we will design `sys` operations to construct interface.
 We will construct it one by one.
 
 `procmask` is simple, we just set it directly and return original one.
+
 ```rust
 // os/src/process.rs
 

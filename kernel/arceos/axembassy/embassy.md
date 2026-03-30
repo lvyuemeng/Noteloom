@@ -8,7 +8,7 @@ author = ["nostalgia"]
 
 # Embassy Investigation
 
-## Asynchronous 
+## Asynchronous
 
 `Future` Trait will be given with a `poll` to check pending or ready. And the ability to prod `Waker` to poll again in the future.
 
@@ -25,6 +25,7 @@ However, it suitable only for I/O intensive rather CPU intensive operations, bec
 `embassy` is a light runtime for embedded system.
 
 Expansion of `#[embassy_executor::task]`
+
 ```rust
 #[doc(hidden)]
 async fn __run1_task() {
@@ -51,20 +52,24 @@ Another design is `TaskStorage` which is the raw `Executor` should be alive thro
 - `transmute()` with a static lifetime notation
 
 Struct:
+
 - `TaskStorage`/`TaskPool ~ [TaskStorage;N]` spawn task.
 - `AvailableTask` reuse `TaskStorage` by `claim` to recycle and `initialize` to spawn new function.
 
 ## Attempt of U-Level Embassy
 
 - implement simple `CondVar`(`axsync` module).
-    - implement `FUTEX_WAIT_QUEUES`:
+  - implement `FUTEX_WAIT_QUEUES`:
+
     ```rust
     pub type Futex = AtomicU32
     fn futex_wake(futex:&Futex);
     fn futex_wake_all(futex:&Futex);
     fn futex_wait(futex: &Futex, expected: u32, timeout: Option<Duration>) -> bool;
     ```
-    - implement S-level code:
+
+  - implement S-level code:
+
     ```rust
         fn wait_optional_timeout<'a, T>(
         &self,
@@ -85,7 +90,8 @@ Struct:
         }
     }
     ```
-    - implement U-level, roughly same.
+
+  - implement U-level, roughly same.
 - implement `embassy_executor::Executor` with style same like `features = std`. Which use `CondVar` as `Signaler`.
 
 There's no timer logic here, so we can't wait.
@@ -104,6 +110,7 @@ embassy-time-queue-utils = { version = "..." }
 - `next_expiration(current_time: u64) -> u64`: Returns the target time of the earliest event still remaining in the queue whose time is strictly greater than `current_time`. Returns `u64::MAX` or a similar indicator if the queue is empty or all events are in the past/current.
 
 Workflow:
+
 - An `async` task in your application calls an `embassy-time` function like `Delay::delay_ms(1000).await`
 - The `embassy-time` calculates the absolute target wake-up time in embassy ticks (`current_embassy_ticks + duration_in_embassy_ticks`).
 - `embassy-time` calls your driver's `Driver::schedule_wake(target_time, task_waker)`.
@@ -122,17 +129,18 @@ Workflow:
 - axtask should wake specific future in specific task. Then executor will rerun to poll.
 
 Executor Workflow:
+
 - keeps a queue of tasks
 - poll task sequentially until it blocks and yielding
 - enqueue the block task and proceed to poll next
 - repeat...
 
 Interrupts Workflow:
+
 - polled task will trigger peripherals to make a interruption
 - interruption will be received by handler
 - handler will update peripherals state
 - handler will notify executor to poll the task.
-
 
 ## Embassy Preempt
 
@@ -142,6 +150,7 @@ Coroutine: Owns a shared stack
 We don't know which is real sync or which is async, we only know the poll reason and wether it has stack or not.
 
 We follow the rule of the reason:
+
 - await poll for no stack no matter task has or not. After await poll, it has no stack no matter previous.
 - interrupt poll for stack no matter task has or not, if not, we make one. After interrupt poll, it has private stack no matter previous.
 
@@ -158,8 +167,11 @@ We follow the rule of the reason:
   - run task until `pending`
   - update task state to `NotReady`
   - Seek next and repeat
-Stack will be reused after poll due to yielding actively.
+
+## Stack will be reused after poll due to yielding actively
+
 ---
+
 - interupt poll(preemptive)
   - common
   - Here for stackless task, it will allocate a stack to mimic just as stack task.
@@ -171,8 +183,9 @@ Stack will be reused after poll due to yielding actively.
     - back to normal and execute.
   - trigger **PendSV**
 Stack will be transformed to its own private stack.
-  
+
 Life Time:
+
 - Sync:
   - Encapsulated in future as pesudo async.
   - Behavoir like a coroutine before interuption.
@@ -190,6 +203,7 @@ Embassy Logic:
 
 - Initialize a `AvaialableTask` contains:
   `TaskStorage` which contains `poll_fn` and `future`:
+
   ```rust
     fn initialize_impl<S>(self, future: impl FnOnce() -> F) -> SpawnToken<S> {
         unsafe {
@@ -202,7 +216,9 @@ Embassy Logic:
         }
     }
   ```
+
   Spawn token is nothing but a ptr to the raw task.
+
   ```rust
     pub fn spawn(&'static self, future: impl FnOnce() -> F) -> SpawnToken<impl Sized> {
         let task = AvailableTask::claim(self);
@@ -212,7 +228,9 @@ Embassy Logic:
         }
     }
   ```
+
 - Executor is:
+
   ```rust
   #[repr(transparent)]
   pub struct Executor {
@@ -221,6 +239,7 @@ Embassy Logic:
       _not_sync: PhantomData<*mut ()>,
   }
   ```
+
   Where inner will spawn, which enqueue by head to its `RunQueue` every `TaskRef`.
 
 - `__pender` will be the context of executor to notify event.

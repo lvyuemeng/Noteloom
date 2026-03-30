@@ -110,6 +110,7 @@ pub fn handle_page_fault(...) -> ...
 ```
 
 `MemoryArea` has two way:
+
 - Linear: direct construct map relation of memory based on physical contiguous mmemory.
 - Alloc: only construct null-map, and call `handle_page_fault` to really allocate memory.
 
@@ -120,4 +121,3 @@ pub fn handle_page_fault(...) -> ...
 Notice the offset of file and virtual space may be different due to optimization of **ELF**.
 
 In order to load apps from linux, we will construct a **Posix Api** given interface mimic to linux.
-

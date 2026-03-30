@@ -12,7 +12,6 @@ author = ["nostalgia"]
 
 Embassy use head insertion to add a new task, adn poll every task in sequence. In order to add preemption, we can't modify embassy itself due to self-referent structure. Another strategy is to modify `Future` itself with a priority system to change the probability of polling distribution.
 
-
 To ensure a trace of future, we use `TaskId`. After a initiation of future, we insert it in `Scheduler`.
 
 ```rust

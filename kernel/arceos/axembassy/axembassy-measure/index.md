@@ -94,11 +94,13 @@ With the assemble experiment construction, we list few adaptation for this.
 
 - We change the sleep time as `(i % 20 + 1)` in millisecond rather second ti mimic latency.
 - We add:
+
   ```rust
     output: {
         iters.fetch_add(1, core::sync::atomic::Ordering::SeqCst);
     },
   ```
+
   in macro process for atomic read and write.
 
 - We varying `volume` to acquire `sum per secs`. Because iterations increase cause the same effect and huge level will break the original intention of such experiment.

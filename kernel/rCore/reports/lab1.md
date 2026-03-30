@@ -5,13 +5,13 @@
 Finish Task for `syscall record`.
 Add few `println` for debug.
 
-Thanks to assistant: Fontlos(for check `make` failed in workflow`), 洋洋, stone-san(for check `sleep` time problem); AI: DeepSeek.
+Thanks to assistant: Fontlos(for check `make` failed in workflow`), 洋洋, stone-san(for check`sleep` time problem); AI: DeepSeek.
 
-### Q1:
+### Q1
 
 > [rustsbi] RustSBI version 0.3.0-alpha.2, adapting to RISC-V SBI v1.0.0
 
-```
+```text
 /// 由于 rustsbi 的问题，该程序无法正确退出
 /// > rustsbi 0.2.0-alpha.1 已经修复，可以正常退出
 ```
@@ -19,7 +19,8 @@ Thanks to assistant: Fontlos(for check `make` failed in workflow`), 洋洋, ston
 So in current rustsbi, it will exit normally without any panic behavoir.
 
 Here the reference in output:
-```
+
+```text
 [kernel] PageFault in application, bad addr = 0x0, bad instruction = 0x804003a4, kernel killed it.
 [kernel] IllegalInstruction in application, kernel killed it.
 [kernel] IllegalInstruction in application, kernel killed it.
@@ -27,17 +28,18 @@ Here the reference in output:
 
 We can see it's identified as illegal instruction in Trap process.
 
-### Q2:
+### Q2
 
-#### (1):
+#### (1)
 
 `sp` is the stack pointer which designed in `riscv`, currently it will point to `TrapContext` in `KernelStack`.
 
 // (refer DeepSeek)
+
 - restore from S-level to U-level.
 - restore from switch new TaskContext.
 
-#### (2):
+#### (2)
 
 It load the stored CSR info from `TrapContext` to `t0-t2` register and then assign to CSR.
 
@@ -45,27 +47,28 @@ It load the stored CSR info from `TrapContext` to `t0-t2` register and then assi
 - `sepc`: store the addr of next instruction in U-level.
 - `sstratch`: a pointer for temporary storage that designed for storing `KernelStack` and `UserStack` currently it point to `UserStack`
 
-#### (3):
+#### (3)
 
 Exception for `x0` and `x4`.
+
 - `x0`: hard code as 0.
 - `x4`: only for special case.
 
-#### (4):
+#### (4)
 
 `sp` will point to `UserStack` and `sscratch` point to `KernelStack`.
 
-#### (5):
+#### (5)
 
 - instruction: `sret`
 // (refer DeepSeek)
 - reason: `sret` will return the addr and modify CSR related state, in which it will change the level and return the `sepc` for U-level instruction.
 
-#### (6):
+#### (6)
 
 `sp` will point to `KernelStack` and `sscratch` will point to `UserStack`.
 
-#### (7):
+#### (7)
 
 // (refer DeepSeek, Oh! in Lab1!!)
 When U-level, app use `ecall` related, it will turn into Trap to S-level.

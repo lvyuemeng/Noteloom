@@ -33,7 +33,6 @@ We could set a **Protection bit** as `r` for read, `w` for write, `x` for execut
 
 Another way is to inverse our mind, rather take a slot on memory, we take slot on **MMU**, it can map its slot(now we call it **Page**) for real physical memory layout. To adjust, we can take slice for **Page** to form **Frame** which is a smaller unit to suit physical memory layout, each app can take many **Page Number** for a **Page Table**, record the map.
 
-
 ## Page Design
 
 ![alt text](/rCore-Blog/assets/Lab4-3.png)
@@ -183,7 +182,6 @@ In Each `MapArea` allocated for some key-value for virtual-physical addr, it wil
 
 ---
 
-
 ## Allocation Space
 
 To open SV39, we should write instruction for `satp`:
@@ -278,7 +276,7 @@ pub struct TrapContext {
 
 Notice that we also need to modify below to trigger `satp` and specify corresponding(U-level, S-level `satp`) physical page number to change state.
 
-```
+```text
 # __alltraps:
 
 # load kernel_satp into t0
@@ -303,7 +301,7 @@ csrw sscratch, a0
 
 To amend the problem of contigeous instructions after switch, we need to adjust memory layout for `trampoline` which is in the same location in U-level and S-level(**unified for all app to trap!**). It will be placed at highest virtual page.
 
-```
+```text
 # os/src/linker.ld
 
     stext = .;
@@ -394,6 +392,7 @@ pub struct TaskControlBlock {
 It will read data getting from elf, get trap contexr ppn, its kernel stack bottom and top, and then initiate trap context.
 
 Here the part of task control initiation:
+
 ```rust
 impl TaskContext {
     pub fn goto_trap_return() -> Self {
@@ -423,11 +422,3 @@ let trap_cx = task_control_block.get_trap_cx();
 );
 task_control_block
 ```
-
-
-
-
-
-
-
-

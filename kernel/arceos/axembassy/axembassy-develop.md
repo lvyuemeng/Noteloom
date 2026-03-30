@@ -13,6 +13,7 @@ author = ["nostalgia"]
 AxEmbassy module is the incorporation of Embassy and Arceos. Mainly for aiding Arceos by async runtime of Embassy.
 
 We know, usually there are 3 ways for executor implementation.
+
 - `SWI` software interrupt: Based on `InterruptExecutor`.
 - Single thread: Based on `Executor` without threads interaction, immediately trapped in async process.
 - Multi-thread: Based on `Executor` with threads interaction(waited to be designed)
@@ -31,27 +32,27 @@ In order to incorporate it, we should delve to `axtask` first.
 >#[repr(u8)]
 >#[derive(Debug, Clone, Copy, Eq, PartialEq)]
 >pub(crate) enum TaskState {
->    /// Task is running on some CPU.
->    Running = 1,
->    /// Task is ready to run on some scheduler's ready queue.
->    Ready = 2,
->    /// Task is blocked (in the wait queue or timer list),
->    /// and it has finished its scheduling process, it can be wake up by `notify()` on any run queue safely.
->    Blocked = 3,
->    /// Task is Suspended,
->    /// Not in wait queue.
->    Parked = 4,
->    /// Task is exited and waiting for being dropped.
->    Exited = 5,
+> /// Task is running on some CPU.
+> Running = 1,
+> /// Task is ready to run on some scheduler's ready queue.
+> Ready = 2,
+> /// Task is blocked (in the wait queue or timer list),
+> /// and it has finished its scheduling process, it can be wake up by `notify()` on any run queue safely.
+> Blocked = 3,
+> /// Task is Suspended,
+> /// Not in wait queue.
+> Parked = 4,
+> /// Task is exited and waiting for being dropped.
+> Exited = 5,
 >}
 >```
 
 >Here we implement `Parked` state which is new for async runtime task.
-
+>
 >The major problem is, if `executor` is at rest, we shouldn't let it occupy any `Running` state or high priority everytime in task scheduler. We need to `park` it while at rest.
-
+>
 >An unfortunate news is that there's no `Id` related schedule functionality in Arceos, that's means it usually comes with `AxTaskRef` as input rather manipulating through `TaskId`.
-
+>
 >A given way is:
 
 >```rust
@@ -59,7 +60,7 @@ In order to incorporate it, we should delve to `axtask` first.
 >```
 
 >But it's not enough.
-
+>
 >Thus we can create a `Registry` to record `TaskId`:
 
 >```rust
@@ -69,68 +70,70 @@ In order to incorporate it, we should delve to `axtask` first.
 >/// 
 >/// Should be called in the process of task spawn.
 >pub fn register_task(task: AxTaskRef) {
->    let mut tasks = TASK_REGISTRY.lock();
->    let id = task.id().as_u64();
->    tasks.insert(id, task);
->    debug!("Task {} registered", id);
+> let mut tasks = TASK_REGISTRY.lock();
+> let id = task.id().as_u64();
+> tasks.insert(id, task);
+> debug!("Task {} registered", id);
 >}
 
 >/// Unregister a task from the task registry.
->/// 
+>///
 >/// Should be called in the process of task exit.
 >pub fn unregister_task(id: u64) {
->    let mut tasks = TASK_REGISTRY.lock();
->    tasks.remove(&id);
->    debug!("Task {} unregistered", id);
+> let mut tasks = TASK_REGISTRY.lock();
+> tasks.remove(&id);
+> debug!("Task {} unregistered", id);
 >}
-
+>
 >/// Find a task by its ID.
 >pub fn find_task_by_id(id: u64) -> Option<AxTaskRef> {
->    let tasks = TASK_REGISTRY.lock();
->    tasks.get(&id).cloned()
+> let tasks = TASK_REGISTRY.lock();
+> tasks.get(&id).cloned()
 >}
->```
+>
+```text
 
 >With simple interface.
-
+>
 >The next thing is to create related method to park or unpark task in scheduler.
 
 >```rust
 >impl<G: BaseGuard> AxRunQueueRef<'_, G> {
->    pub fn unpark_task(&mut self, task: AxTaskRef, resched: bool) {
->        let task_id_name = task.id_name();
->        if self
->            .inner
->            .put_task_with_state(task, TaskState::Parked, resched)
->        {
->            // Since now, the task to be unblocked is in the `Ready` state.
->            let cpu_id = self.inner.cpu_id;
->            debug!("task unpark: {} on run_queue {}", task_id_name, cpu_id);
->            // Note: when the task is unblocked on another CPU's run queue,
->            // we just ignore the `resched` flag.
->            if resched && cpu_id == this_cpu_id() {
->                #[cfg(feature = "preempt")]
->                crate::current().set_preempt_pending(true);
->            }
->        }
->    }
+> pub fn unpark_task(&mut self, task: AxTaskRef, resched: bool) {
+> let task_id_name = task.id_name();
+> if self
+> .inner
+> .put_task_with_state(task, TaskState::Parked, resched)
+> {
+> // Since now, the task to be unblocked is in the `Ready` state.
+> let cpu_id = self.inner.cpu_id;
+> debug!("task unpark: {} on run_queue {}", task_id_name, cpu_id);
+> // Note: when the task is unblocked on another CPU's run queue,
+> // we just ignore the `resched` flag.
+> if resched && cpu_id == this_cpu_id() {
+> #[cfg(feature = "preempt")]
+> crate::current().set_preempt_pending(true);
+> }
+> }
+> }
 >}
 
 >impl<G: BaseGuard> CurrentRunQueueRef<'_, G> {
->    pub fn park_current_task(&mut self) {
->        let curr = &self.current_task;
->        assert!(curr.is_running());
->        assert!(!curr.is_idle());
-
->        // Ensure preemption is disabled
->        #[cfg(feature = "preempt")]
->        assert!(curr.can_preempt(1));
-
->        curr.set_state(TaskState::Parked);
->        self.inner.resched();
->    }
+> pub fn park_current_task(&mut self) {
+> let curr = &self.current_task;
+> assert!(curr.is_running());
+> assert!(!curr.is_idle());
+>
+> // Ensure preemption is disabled
+> #[cfg(feature = "preempt")]
+> assert!(curr.can_preempt(1));
+>
+> curr.set_state(TaskState::Parked);
+> self.inner.resched();
+> }
 >}
->```
+>
+```text
 >Above code is to manipulate `RunQueueRef` by `put_task_with_state` and `current_task` by ref of current task.
 
 >Finally, it's simple to:
@@ -138,17 +141,18 @@ In order to incorporate it, we should delve to `axtask` first.
 >```rust
 >/// Unpark a task by its id.
 >pub fn unpark_task(id: u64, resched: bool) {
->    if let Some(task) = find_task_by_id(id) {
->        select_run_queue::<NoPreemptIrqSave>(&task).unpark_task(task, resched);
->    } 
+> if let Some(task) = find_task_by_id(id) {
+> select_run_queue::<NoPreemptIrqSave>(&task).unpark_task(task, resched);
+> } 
 >}
 
 >/// Park the current task.
 >pub fn park_current_task() {
->    let mut cur_rq = current_run_queue::<NoPreemptIrqSave>();
->    cur_rq.park_current_task();
+> let mut cur_rq = current_run_queue::<NoPreemptIrqSave>();
+> cur_rq.park_current_task();
 >}
->```
+>
+```text
 
 >To park task.
 
@@ -158,7 +162,7 @@ Now we use `yield_now()` and depended on the `axtask` scheduler algorithm to dis
 
 > **[Deprecated]**
 > Recall `__pender` is the waker of executor to run. We thus inject `unpark` to `__pender` to let executor located thread runs. But how to indicate that executor should rest? We use a global `SIGNAL_WORK_THREAD_MODE`, which will turn to `false` after `poll()` if it's `true` before, otherwise it should be at `rest` because there's no work signaling it to `true`.
-
+>
 > Another problem is how to store the information of the thread executor located, we can store in context in first initiation.
 
 > ```rust
@@ -167,41 +171,42 @@ Now we use `yield_now()` and depended on the `axtask` scheduler algorithm to dis
 
 > #[unsafe(export_name = "__pender")]
 > fn __pender(_context: *mut ()) {
->     SIGNAL_WORK_THREAD_MODE.with_current(|m| {
->         m.store(true, Ordering::SeqCst);
->     });
->     let id = _context as u64;
->     unpark_task(id, true);
+> SIGNAL_WORK_THREAD_MODE.with_current(|m| {
+> m.store(true, Ordering::SeqCst);
+> });
+> let id = _context as u64;
+> unpark_task(id, true);
 > }
-
+>
 > impl Executor {
->     pub fn new() -> Self {
->         let cur_id = axtask::current().id().as_u64();
->         Self {
->             inner: raw::Executor::new(cur_id as *mut ()),
->             not_send: PhantomData,
->         }
->     }
-
->     pub fn run(&'static mut self, init: impl FnOnce(embassy_executor::Spawner)) -> ! {
->         init(self.inner.spawner());
-
->         loop {
->             unsafe {
->                 self.inner.poll();
->                 let polled = SIGNAL_WORK_THREAD_MODE.with_current(|m| m.load(Ordering::Acquire));
->                 if polled {
->                     SIGNAL_WORK_THREAD_MODE.with_current(|m| {
->                         m.store(false, Ordering::SeqCst);
->                     });
->                 } else {
->                     park_current_task();
->                 }
->             };
->         }
->     }
+> pub fn new() -> Self {
+> let cur_id = axtask::current().id().as_u64();
+> Self {
+> inner: raw::Executor::new(cur_id as *mut ()),
+> not_send: PhantomData,
 > }
-> ```
+> }
+>
+> pub fn run(&'static mut self, init: impl FnOnce(embassy_executor::Spawner)) -> ! {
+> init(self.inner.spawner());
+>
+> loop {
+> unsafe {
+> self.inner.poll();
+> let polled = SIGNAL_WORK_THREAD_MODE.with_current(|m| m.load(Ordering::Acquire));
+> if polled {
+> SIGNAL_WORK_THREAD_MODE.with_current(|m| {
+> m.store(false, Ordering::SeqCst);
+> });
+> } else {
+> park_current_task();
+> }
+> };
+> }
+> }
+> }
+>
+```text
 
 > Indeed, if there's no need to interact with threads, we just remove code related to threads.
 
@@ -264,54 +269,55 @@ However, to allow other threads to use such `spawner`, we need to let the runtim
 > We achieve this by a dirty way, we park `main` thread first and then unpark it in `spawn` initiation.
 
 > ```rust
->         #[cfg(feature = "executor-thread")]
->         pub fn init_spawn() {
->             use axtask::spawn_raw;
->             spawn_raw(init, "async".into(), axconfig::TASK_STACK_SIZE);
->         }
+> #[cfg(feature = "executor-thread")]
+> pub fn init_spawn() {
+> use axtask::spawn_raw;
+> spawn_raw(init, "async".into(), axconfig::TASK_STACK_SIZE);
+> }
 
->         #[cfg(feature = "executor-thread")]
->         pub fn init() {
->             use crate::executor_thread::Executor;
->             use static_cell::StaticCell;
-
->             static EXECUTOR: StaticCell<Executor> = StaticCell::new();
->             EXECUTOR
->                 .init_with(Executor::new)
->                 .run(|sp| sp.must_spawn(init_task()));
->         }
-
->         #[cfg(feature = "executor-thread")]
->         #[embassy_executor::task]
->         async fn init_task() {
->             use axtask::unpark_task;
->             use log::info;
-
->             let spawner = asynch::Spawner::for_current_executor().await;
->             asynch::set_spawner(spawner.make_send());
->             info!("spawner is set, unpark the main thread.");
->             unpark_task(2, true);
->         }
-> ```
+> #[cfg(feature = "executor-thread")]
+> pub fn init() {
+> use crate::executor_thread::Executor;
+> use static_cell::StaticCell;
+>
+> static EXECUTOR: StaticCell<Executor> = StaticCell::new();
+> EXECUTOR
+> .init_with(Executor::new)
+> .run(|sp| sp.must_spawn(init_task()));
+> }
+>
+> #[cfg(feature = "executor-thread")]
+> #[embassy_executor::task]
+> async fn init_task() {
+> use axtask::unpark_task;
+> use log::info;
+>
+> let spawner = asynch::Spawner::for_current_executor().await;
+> asynch::set_spawner(spawner.make_send());
+> info!("spawner is set, unpark the main thread.");
+> unpark_task(2, true);
+> }
+>
+```text
 
 > And such AxRuntime initiation process:
 
 > ```rust
 > pub extern "C" fn rust_main(cpu_id: usize, dtb: usize) -> ! {
->     #[cfg(feature = "multitask")]
->     {
->         axtask::init_scheduler();
->         axembassy::init_spawn();
->     }
-> 	...
->     unsafe {
->         #[cfg(feature = "multitask")]
->         {
->             // park main task to let embassy task initialize first
->             axtask::park_current_task()
->         }
->         main()
->     };
+> #[cfg(feature = "multitask")]
+> {
+> axtask::init_scheduler();
+> axembassy::init_spawn();
+> }
+> ...
+> unsafe {
+> #[cfg(feature = "multitask")]
+> {
+> // park main task to let embassy task initialize first
+> axtask::park_current_task()
+> }
+> main()
+> };
 > }
 > ```
 
@@ -346,7 +352,7 @@ We try to `yield_now()` the caller thread and hope the initiated thread will imp
 
 Embassy construct a ffi interface allowing a non-generic way to register a general time driver to schedule time tasks.
 
-Thanks to Embassy, to schedule time task, `embassy-timer-utils` provide `Queue`. 
+Thanks to Embassy, to schedule time task, `embassy-timer-utils` provide `Queue`.
 
 Inspect the logic of `Timer`, it will call the ffi interface `schedule_wake` which should be implemented by user.
 
@@ -445,6 +451,7 @@ impl Queue {
 ```
 
 We thus register the ffi provided by Embassy.
+
 ```rust
 time_driver_impl!(static AX_DRIVER: AxDriver = AxDriver::new());
 ```

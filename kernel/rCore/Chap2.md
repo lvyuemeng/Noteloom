@@ -1,22 +1,25 @@
 ## Chapter 2
 
-### Introduction 
+### Introduction
 
 ![Introduction](/rCore-Blog/assets/Lab2-1.png)
 
 It corresponds to `riscv`:
+
 - Privilege for `S`(guaranteed by `Supervisor Execution Environment` of `RustSBI`)
 - User for `U`(constructed in current chapter as `Application Execution Environment`)
 
 Reason:
+
 - Safety(Prevent app from accessing kernel)
 - Recoverable
 
 Workflow:
+
 - Start application and user-mode context
 - **Trap**(Called by system level) to handle system
-	- Goes wrong! Kill it!
-	- Finish! Next!
+  - Goes wrong! Kill it!
+  - Finish! Next!
 - **Restore** to user-mode context
 
 `riscv` designs following `CSR`(Control and Status Register) to handle this:
@@ -26,12 +29,14 @@ Workflow:
 ![CSR](/rCore-Blog/assets/Lab2-2.png)
 
 Begin **Trap**:
+
 - sstatus: `SPP` seg to the current level of CPU.
 - sepc: next addr after Trap finished.
 - scause/stval: Trap cause and additional info.
 - stvec: storage of entry addr of Trap
 
 > **stvec** is a 64-bit CSR, with:
+>
 > - MODE(Direct/Vectored) `[1:0]`(read from right to left): 2-bits
 > - BASE `[63:2]`: 62-bits
 
@@ -40,16 +45,19 @@ finally, it will return by instruction `sret` which will change level and jump b
 ### Construct Trap
 
 Design:
+
 - General register will be shared by U-level and S-level.
 - Maintain a reasonable state of `CSR`.
 - Separate workflow of U-level and S-level by stack
 
 Construct:
+
 - build `KernelStack` and `UserStack` for separation
 - in `KernelStack`, we store `TrapContext` in it, by asm and rust to control dispatch and handle, then store the code to `stvec` as the entry of Trap.
 - restore register for `UserStack` by push a new context refer to `UserStack`.
 
 build stack and push context:
+
 ```rust
 // stack struct ...
 
@@ -95,7 +103,7 @@ pub fn app_init_context(entry: usize, sp: usize) -> Self {
 
 We will design `__alltrap` and `__restore` for operation by asm and part of rust:
 
-``` 
+```text
 .altmacro
 .macro SAVE_GP n
     sd x\n, \n*8(sp)
@@ -115,6 +123,7 @@ __alltraps:
 ```
 
 To handle Trap context, we will use `riscv` lib:
+
 ```rust
 // os/Cargo.toml
 
@@ -157,7 +166,7 @@ unsafe {
 - Load app from memory layout, copy consecutively to `APP_BASE_ADDRESS`(Currently we have no ability to dynamically read address)
 - AppManager will run each app
 
-```
+```text
 # os/src/link_app.S
 
     .align 3
@@ -176,6 +185,7 @@ _num_app:
 ```
 
 Design it!
+
 ```rust
 // os/src/batch.rs
 
@@ -196,6 +206,7 @@ app_start[..=num_app].copy_from_slice(app_start_raw);
 ```
 
 Load App:
+
 ```rust
 // part of code of copying to kernel
 asm!("fence.i");
@@ -216,6 +227,7 @@ app_dst.copy_from_slice(app_src);
 ```
 
 Run each app!
+
 ```rust
 // os/src/batch.rs
 
@@ -247,4 +259,3 @@ trap::init()
 // load app
 batch::run_next_app()
 ```
-

@@ -3,11 +3,13 @@
 ### Conclusion
 
 Finish Task：
+
 - Inherit lab2.
 - implement `sys_spawn`
 - implement stride dispatch algorithm(by `BinaryHeap`)
 
 Thanks to:
+
 - AI: DeepSeek(Thanks to checkout and exposit part of error message.)
 - Asistant: Fontlos, 华华(help to figure out vague ci-test info.)
 

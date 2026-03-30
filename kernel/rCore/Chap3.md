@@ -21,8 +21,8 @@ We need to store **Task Context**
 Design:
 ![switch](/rCore-Blog/assets/Lab3-1.png)
 
-
 We will store these register in ctx:
+
 ```rust
 // os/src/task/context.rs
 
@@ -33,7 +33,7 @@ pub struct TaskContext {
 }
 ```
 
-```
+```text
 .altmacro
 .macro SAVE_SN n
     sd s\n, (\n+2)*8(a0)
@@ -84,7 +84,6 @@ unsafe {
 	);
 }rust
 ```
-
 
 ### Dispatch Design
 

@@ -28,6 +28,7 @@ fn main() {
 **Paging**: `feature = ["paging"]` is the way to evoke virtual memory management tu support `MMIO`. Located in `axruntime`.
 
 The workflow would be:
+
 - qemu fdt: from `0x0c00_0000` to `0x3000_0000`. Construct the space of device.
 - SBI: from `0x8000_0000` to `0x8020_0000`. RISC-V **Supervisor Binary Interface**, it construct a interface for programming language to manipulate device level things.
 - Kernel Image: from `0x8020_0000`. `_skernel` contains S-level things like static data, code etc... `_ekernel` is user thing.
@@ -55,7 +56,7 @@ Each entry of page table will map 1G(`0x4000_0000`) memory. From `0x8000_0000` t
 
 ## Task
 
-###	Example
+### Example
 
 ```rust
 let worker = thread::spawn(move || {
@@ -134,7 +135,3 @@ Each task will be in concurrency and dispatched by strategy. If it's blocked, it
 `on_timer_tick` will be trigger in time slice. When time ticker ticks, `run_queue` will check and suspend task if possible.
 
 We can make it more dynamic. Which means each task has priority and during the implementation of cpu, each task has a `vruntime` to be dynamically adjusted by `init_vruntime + (delta/weight(nice))` where `delta` and `nice` are dynamic adjustment number. `delta` will be incremented by `timer`, `weight(nice)` is actually the priority of the task. We ensure that task with lowest `vruntime` will be placed at top.
-
-
-
-

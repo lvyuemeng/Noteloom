@@ -7,6 +7,7 @@
 The execution environment is defined by the **Target Triplet**, which specifies the platform, CPU architecture, and library required for the build. For example: `x86_64-unknown-linux-gnu`.
 
 **Components of the Target Triplet:**
+
 - **Platform**: The specific operating system or runtime environment.
 - **CPU Architecture**: The underlying hardware architecture (e.g., x86_64, ARM).
 - **Library**: The standard library or runtime support required.
@@ -14,18 +15,21 @@ The execution environment is defined by the **Target Triplet**, which specifies 
 If the target platform contains no `std` or any support syscall, such platform called **bare-metal**, `Rust` contains a `core` lib independent of any platform support.
 
 If we change `.cargo/config` s.t.:
+
 ```toml
 # os/.cargo/config
 [build]
 target = "riscv64gc-unknown-none-elf"
 ```
+
 it called **cross compile** because the running platform is different form execution platform.
 
 #### *No Std* and *No Main*
 
-The basic functionality provided by `std` and `start` semantic is `panic_handler` and `main` entry. 
+The basic functionality provided by `std` and `start` semantic is `panic_handler` and `main` entry.
 
 To toggle it off with:
+
 ```rust
 #![no_std]
 #![no_main]
@@ -33,11 +37,12 @@ To toggle it off with:
 
 #### RISCV
 
-As for riscv, thing will be tough in here, we need to complete our own entry point, exit, and basic functionality like `print/println`. 
+As for riscv, thing will be tough in here, we need to complete our own entry point, exit, and basic functionality like `print/println`.
 
 First, we need to define `linker` and `entry` for stack allocation.
 
 Linker:
+
 ```bash
 # os/src/linker.ld
 OUTPUT_ARCH(riscv)
@@ -49,6 +54,7 @@ SECTIONS
 ```
 
 Stack Space:
+
 ```bash
 # os/src/entry.asm
     .section .text.entry
@@ -68,6 +74,7 @@ boot_stack_top:
 For riscv, we need to call `RustSBI`(a underlying specification for rust in riscv).
 
 After implement `sbi_call`, we could construct `put_char`:
+
 ```rust
 const SBI_CONSOLE_PUTCHAR: usize = 1;
 
@@ -81,6 +88,7 @@ pub fn console_putchar(c:usize) {
 ```
 
 With a formal interface for `write`:
+
 ```rust
 struct Stdout;
 
@@ -99,5 +107,3 @@ pub fn print(args: fmt::Arguments) {
 ```
 
 Now we construct basic functionality in `println`, you could also handle `panic_handler` and others...
-
-

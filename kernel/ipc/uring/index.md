@@ -28,7 +28,7 @@ Submission:
 Completion:
 
 - Kernel complete task, update CQ head.
-- User receive task,  update CQ tail.
+- User receive task, update CQ tail.
 
 [uring ref]: https://www.skyzh.dev/blog/2021-06-14-deep-dive-io-uring/
 
@@ -44,7 +44,7 @@ Completion:
 
 ![](./ring.png)
 
-Reserve commit to retain space before really modifying. 
+Reserve commit to retain space before really modifying.
 
 ---
 
@@ -57,6 +57,7 @@ struct Slot<T> {
     value: UnsafeCell<MaybeUninit<T>>,
 }
 ```
+
 A slot to initiate data and a stamp for atomic operation.
 
 ```rust
@@ -65,6 +66,7 @@ one_lap: usize,
 /// size: 001...0 where size - 1 = 00011... as modulo.
 mark_bit: usize,
 ```
+
 Thus we use `one_lap - 1 = 001111` with `idx & !(one_lap - 1)` to acquire the additional lap of wrapping around.
 
 Suppose a push operation. We first calculate the index and lap which is a wrapping around modulo of index.
@@ -126,6 +128,7 @@ else if stamp.wrapping_add(self.one_lap) == tail + 1 {
     tail = self.tail.load(Ordering::Relaxed);
 }
 ```
+
 Where we need the **latest** `slot` here.
 
 [ring ref]: https://kmdreko.github.io/posts/20191003/a-simple-lock-free-ring-buffer/
@@ -164,7 +167,6 @@ Based on original logic, user calling any kernel asynchronous task will put on t
 
 Kernel has `Executor` and `Reactor`
 
-
 [IPC ref]: https://github.com/loichyan/openoscamp-2025s/discussions/8
 
 ## Tokio-Uring
@@ -191,9 +193,9 @@ spawn_on_each_thread(async {
         // in the runtime that are flagged as with capacity
         // to avoid total starvation.
         current_worker::wait_for_capacity().await;
-        
+
         let socket = listener.accept().await;
-        
+
         spawn(async move { ... });
     }
 })
@@ -218,7 +220,7 @@ Thus runtime will take over the resource by:
 struct IoUringDriver {
     // Storage for state referenced by in-flight operations
     in_flight_operations: Slab<Operation>,
-    
+
     // The io-uring submission and completion queues.
     queues: IoUringQueues,
 }
@@ -245,7 +247,7 @@ enum Lifecycle {
 }
 ```
 
-- `Operation` struct keeps the data referenced by the operation submitted to kernel. 
+- `Operation` struct keeps the data referenced by the operation submitted to kernel.
 - Runtime will allocate the `Operation` to store data which submitted operation needs as `Submitted` state.
 - If runtime receive the completed results, it store the results and transitions to `Completed` state.
 - If future drops before the operation complete, drop function will remove the request otherwise it set the state to `Ignored` and submit a cancellation request to Kernel.
@@ -316,6 +318,7 @@ pub struct Runtime<P, U: Uring> {
     pub pending_submissions: RefCell<VecDeque<LocalWaker>>,
 }
 ```
+
 [![View Source Code](https://img.shields.io/badge/Source_Code-L15-blue?style=flat-square&logo=github)](https://github.com/loichyan/openoscamp-2025s/blob/976d3f16c1d1841463325c159b624e21f33dbbaa/examples/evering-utils/src/runtime.rs#L15)
 
 A runtime contains `uring`, `executor/reactor`, `driver`. We know `executor/reactor` can spawn asynchronous task or `Future` and wake executor by `Waker`. A uring can handle the connection between client and server(Or any terminology based on such communication model.) by submitting the task and receiving the `completion`. In order to construct a connection between `Future` and uring that *wakes* certain submitted task in *polling*, we need a `Driver` as a intermediation to tackle.
@@ -359,8 +362,8 @@ OpSign<T> {
     cancelled: AtomicBool,
 }
 ```
-We use a `AtomicBool` to indicate the discard signal when future `drop(fut)`. Thus when we will check the state and drop the data received.
 
+We use a `AtomicBool` to indicate the discard signal when future `drop(fut)`. Thus when we will check the state and drop the data received.
 
 [Unlucky][Evering ref], the repo of original doesn't suitably design the structure and everything messy here.
 
@@ -384,7 +387,7 @@ pub struct ShmBox<T: ?Sized>(NonNull<T>);
 
 Given a allocator, allocate a continuous memory range:
 
-```
+```text
 /// [`ShmHeader`] contains necessary metadata of a shared memory region.
 ///
 /// Memory layout of the entire shared memory is illustrated as below,

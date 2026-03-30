@@ -3,12 +3,14 @@
 ### Conclusion
 
 Finish Task:
+
 - Inherit previous chapters
 - Complete Safety Check Algorithm
 
 Thanks to:
-AI: 
-- Claude(exposit error message, provide suggestion of structure of `DeadDetect`, provide suggestion of index map from lock to `DeadDetect`); 
+AI:
+
+- Claude(exposit error message, provide suggestion of structure of `DeadDetect`, provide suggestion of index map from lock to `DeadDetect`);
 - DeepSeek(provide a FP style refactor of safety check algorithm, Give a fully detailed explanation of process and lock problem)
 
 ### Q1
@@ -53,10 +55,11 @@ Recall `exit_current_and_run_next`:
 ```
 
 Recycled Resource:
+
 - Thread Management:
   - TaskControlBlock
     - User stack
-	- Kernel stack
+    - Kernel stack
     - Trap Context
 - Memory Set
 - Process Management:
@@ -65,12 +68,12 @@ Recycled Resource:
 - Lock:
   - Mutex
   - Semaphore
-  
+
 `TaskControlBlock` of other threads in its reference:
 
 - collected `recycle_res`: remove `task_res` first.
 - In process `tasks`: really be cleared by `tasks.clear()`
-- In `TaskManager`:  remove by `remove_inactive_task(...)` to reduce reference.
+- In `TaskManager`: remove by `remove_inactive_task(...)` to reduce reference.
 - In Lock `wait_queue`: it's in single process and blocked task are removed when `PCB` deallocated.
 - In children process: all moved to `initproc` process to be ready deallocated.
 
@@ -83,7 +86,6 @@ Finally, all resources about task is removed and it will be recycled by rust.
 it use loop to repeatedly try modifying lock state, but it choose to block current which means current state will never be back in lock state after first time modification. Here, for example: `A` release lock and wake up `B`, but `C` acquire the lock results `B` in wait again, then `A` may repeat wake up `B`...
 
 Notice, `unlock` state is modified before pop queue, so there's the chance that `B` haven't been popped but `C` already modify to `lock` state, results `B` in wait again.
-
 
 `Mutex2`:
 

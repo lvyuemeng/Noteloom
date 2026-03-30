@@ -4,23 +4,25 @@
 
 We gonna abstract `Stdin` and `Stdout` by file, and insert into file descriptor. Therefore support **Pipe** operation and **IO Redirection** across each process.
 
-
 ### Everything Is a File
 
 The design philosophy of **Everything is a file** will generalize everything to file based on IO operations while omit concrete content semantics.
 
 Abstraction of IO hardware:
+
 - read-only: s.t. keyboard
 - write-only: s.t. screen
 - read-write: s.t. serial device
 
 Abstraction of IO operations(based on file descriptor):
+
 - open: open file while possessing it by certain process.
 - close: close file while discarding it by certain process.
 - read: read file into memory.
 - write: write file from memory.
 
 When a process is created, it owns three file as operation abstraction:
+
 - 0: Stdin
 - 1: Stdout
 - 2: Stderr(which we will merge with Stdout)
@@ -340,4 +342,3 @@ If we really want to redirect IO, we will combine `user_shell` and `sys_dup`.
 First, `sys_dup` will duplicate a new file descriptor already opened in this process.
 
 Then we parse user arguments, if there exist `>` or `<`, fork a new child process, open the file and close our corresponding `Stdin` and `Stdout` descriptor, using `dup` to hold the place of it by `file` itself! Then `exec` by original parsed arguments, and receive results in parent process.
-

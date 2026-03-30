@@ -29,7 +29,8 @@ RISC-V has 32 general purpose registers labeled `x0` to `x31`, and many symbolic
 - `sub`: Do as `addi` but subtract. (s.t. `sub a2 a1 a0` be `a2 = a1 - a0`)
 - `.set`: assign a symbol.(s.t. `.set n, 0` be `let n = 0`)
 - `.rept`: repeat a block of code.
-```
+
+```text
 .rept 3
     nop  # Insert 3 `nop` instructions
 .endr
@@ -55,10 +56,9 @@ RISC-V has 32 general purpose registers labeled `x0` to `x31`, and many symbolic
 
 - `mscratch`: Machine Scratch Register; Temporary storage for exception handlers.
 
-
 #### Macro
 
-```
+```text
 .altmacro          # Enable advanced macro syntax
 .macro macro_name arg1 arg2 ...
     <code using \arg1 or %n>
@@ -66,7 +66,8 @@ RISC-V has 32 general purpose registers labeled `x0` to `x31`, and many symbolic
 ```
 
 Example:
-```
+
+```text
 .altmacro
 .macro SAVE_SN n
     sd s\n, (\n+2)*8(a0)  # Save s{n} to a0 + (n+2)*8
@@ -77,7 +78,7 @@ Example:
 	SAVE_SN %n   # For n=0 to 11, expands to SAVE_SN 0, SAVE_SN 1, etc.
 .endr
 ```
-  
+
 ### Memory Layout
 
 - `.align <number>`: align data in memory with `2^n` bytes.
@@ -85,8 +86,8 @@ Example:
 - `.sections`: tell linker how to organize data in memory.
   - `.text`: executable code(like `__switch`)
     - `.text.entry`: subsection as entry point
-  - `.data`: initialized static data 
-	- `.data.stack`: subsection for stack memory
+  - `.data`: initialized static data
+    - `.data.stack`: subsection for stack memory
   - `.bss`: uninitialized memory for stack(only preserved space)
   - `.<verb>.<label>`: symbolic nomination for above `<verb>` as a section (like `.text.entry`)
 
@@ -105,7 +106,8 @@ Example:
 In RISC-V, stacks grow from higher addr to lower addr(push data will decrease `sp`), so **syntax** will be logic consistent as the **memory layout**.
 
 Example:
-```
+
+```text
 .section .text.entry     # Start of the "entry" code section
 .globl _start            # Make _start visible to the linker
 _start:                  # Entry point of the program
@@ -119,6 +121,3 @@ boot_stack_lower_bound:  # Label for the start of the stack space
 .globl boot_stack_top
 boot_stack_top:          # Label for the top of the stack
 ```
-
-
-

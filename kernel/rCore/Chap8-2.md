@@ -6,9 +6,10 @@ We will develop exclusion mechanism previously mentioned.
 
 Beside construction, we need to abstract possible situation of data sharing. A usual native thought is a thread want to modify one thing but due to thread switch, the data is already modified and we get wrong result. So based on this, we want a operation to be **Atomic**, which means the operation excluding others. Now we can alleviate this restriction and generalize this.
 
-### 
+###
 
 Generalization:
+
 - Allow multiple but finite thread can join one atomic operation.
 - Allow condition of atomic operation.
 
@@ -45,7 +46,7 @@ pub struct LockInner {
 }
 ```
 
-In such design, one lock can push one thread to  `wait_queue` to stop it, and pop front to start it. `data` is a generalization for various locks.
+In such design, one lock can push one thread to `wait_queue` to stop it, and pop front to start it. `data` is a generalization for various locks.
 
 Then, in one process, it owns many locks used in various conditions, one can easily take it as a generalization of many data(actually nothing related to real data) we want to share.
 
@@ -109,12 +110,13 @@ Is there any predefined operation in instructions that is atomic? Then we can us
 - AMO: Atomic memory operation
 - LR/SC: Load Reserved/Store Conditional
 
-**AMO**: will read the value in memory and write new value, then store the old value to target register(s.t. `amoadd.w rd, rs2, (rs1)`). 
+**AMO**: will read the value in memory and write new value, then store the old value to target register(s.t. `amoadd.w rd, rs2, (rs1)`).
 
 **LR/SC**: **LR** will read memory and store in target register, and leave the addr of this memory, then **SC** could check the addr and write data to this addr, output a condition(0/1) to target register.(s.t. `lr.w rd, (rs1)`, `sc.w rd, rs2, (rs1)`)
 
 We can use it to implement a atomic function:
-```
+
+```text
 # RISC-V sequence for implementing a TAS  at (s1)
 li t2, 1                 # t2 <-- 1
 Try: lr  t1, s1          # t1 <-- mem[s1]  (load reserved)
@@ -258,6 +260,7 @@ If the initiated count equal to `1`, we back to `mutex`!, which indicates sole t
 Actually, we could use it for **synchronization** operation, we set count to `0`, if one thread access, it will be blocked, and another thread will could release and add one to count, then the original thread finally could access. Then the second thread will always be advanced to first one.
 
 Here, the first is always advanced to second.
+
 ```rust
 const SEM_SYNC: usize = 0; //信号量ID
 unsafe fn first() -> ! {

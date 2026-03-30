@@ -130,6 +130,7 @@ We introduce a **idle process** that used to call other process.
 - Separate idle process for **start** and others for its own, then dispatch data won't occur in other process and make the dispatch process invisible for **Trap** for each process.
 
 The whole workflow would be:
+
 - idle process fetch task and switch
 - task run out of its time or finish
 - task switch to idle process
@@ -316,7 +317,8 @@ for app in apps.iter() {
 }
 
 ```
-```
+
+```text
 # link_app.S
 
 ...
@@ -327,6 +329,7 @@ _app_names:
 ```
 
 Construct `APP_NAMES` as global state in OS.
+
 ```rust
 // os/src/loader.rs
 
@@ -473,21 +476,3 @@ pub fn wait(exit_code: &mut i32) -> isize {
     }
 }
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
